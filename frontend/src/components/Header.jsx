@@ -18,11 +18,8 @@ export default function Header({ user, onSignOut, showTour }) {
   return (
     <header className="header">
       <div className="brand">
-        <img src="/icon.svg" alt="" width="34" height="34" />
-        <div>
-          <b>iSEED.</b>
-          <small>{t('app.tagline')}</small>
-        </div>
+        <img src="/art/logo.webp" alt="iSEED" className="logo" width="126" height="64" />
+        <small>{t('app.tagline')}</small>
       </div>
       <div className="header-right">
         {user && (

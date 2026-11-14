@@ -298,7 +298,21 @@
     "pin": "4-digit PIN",
     "pinHint": "Remember it: your name and PIN let you sign in on another phone.",
     "registerGo": "Sign up",
-    "loginGo": "Sign in"
+    "loginGo": "Sign in",
+    "step1": "You",
+    "step2": "Your place",
+    "step3": "Phone and PIN",
+    "stepOf": "Step {n} of {of}",
+    "next": "Next",
+    "back": "Back",
+    "villageFarmer": "Your water manager’s message reaches you by this village name.",
+    "villageManager": "Your own village; add the villages on your canal later.",
+    "phone": "Phone number",
+    "phoneDemo": "Demo for the judges: no SMS is sent and the number is not saved.",
+    "say": {
+      "farmer": "Which crop will still earn this year?",
+      "manager": "How much water will this year’s snow give?"
+    }
   },
   "role": {
     "farmer": "Farmer",

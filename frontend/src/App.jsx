@@ -122,7 +122,7 @@ export default function App() {
 
   if (!user) {
     return (
-      <div className="app">
+      <div className="app app-start">
         <Header />
         <main className="main"><StartScreen onDone={signIn} /></main>
       </div>
