@@ -19,7 +19,7 @@ iSEED is a risk signal, not a forecast: it never predicts river flow, a storm or
 
 - Snow water in March 2026 was below normal in every basin of Kyrgyzstan: Talas −20%, Naryn −31%, Chüy −41%, Issyk-Kul −49%.
 - FLDAS marks 2021 as a low-snow year in Talas and Chüy. In June 2021 farmers in Chüy protested over the lack of irrigation water (24.kg).
-- The satellite check agrees only partly. MODIS March snow cover above 2,000 m correlates with the FLDAS volume at r = 0.45 in Talas and 0.43 in Chüy (0.42–0.82 across basins), and it does not mark 2021 as low. Cover is not depth: in March most land above 2,000 m is white in any year. So the snow signal is not yet validated.
+- The satellite check agrees only partly. MODIS March snow cover above 2,000 m correlates with the FLDAS volume at r = 0.45 in Talas and 0.43 in Chüy (0.42–0.82 across basins), and it does not mark 2021 as low. Cover is not depth: in March most land above 2,000 m is white in any year. A second test chosen in advance, April–May snow cover (a deep snowpack should last longer into spring), did not agree better: r = 0.34 in Talas and 0.35 in Chüy (0.34–0.60 across basins), and it does not mark 2021 as low either. In Chüy the two agree on 5 low years (2008, 2014, 2020, 2024, 2025). So the snow signal is not yet validated; a river-gauge check is the next step.
 - A typical low-snow year in Talas has half the normal snow water.
 
 ## NASA data
@@ -87,7 +87,7 @@ The factor 0.5 in S says that half of a snow deficit shows up as a water deficit
 
 - **Factors:** the snow sensitivity (0.5), the canal position factors, the normal-year factor, field efficiency (0.6) and all field-check thresholds are assumptions. They need a water manager and an agronomist.
 - **Crop water need** uses FAO's typical stage lengths and crop coefficients (FAO-56 Tables 11–12), not values measured in Kyrgyzstan, and the Hargreaves formula, which needs only temperature.
-- **Prices and yields** are known only for beans in Talas (news reports, autumn 2026). For other crops the result shows water and soil only.
+- **Prices and yields** are known for beans, potato, sugar beet and winter wheat (national statistics, ministry and market reports, 2025–2026, each with its date and source in `backend/iseed/data/prices.json`). The wheat price is a retail price, so it overstates what a farmer gets. Maize, alfalfa/hay, barley and safflower have no reliable price yet; for them the result shows water and soil only.
 - **FLDAS is a model**, not a measurement, and mountain snowfall is hard to model. The MODIS snow-cover check agrees with it only moderately (see above), and there is no river-gauge check yet.
 - **Only one short year (2021) is confirmed** by a report. The other low-snow years are not checked against what farmers saw.
 - **Resolution:** the field check describes the ~500 m around a field; climate comes from a ~50 km cell; heavy rain is a daily total and misses short, sharp storms.

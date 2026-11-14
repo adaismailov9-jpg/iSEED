@@ -1,9 +1,54 @@
 {
   "beans": {
-    "yield_t_ha": [1.5, 1.84],
-    "price_som_kg": [50, 100],
+    "yield_t_ha": [
+      1.5,
+      1.84
+    ],
+    "price_som_kg": [
+      50,
+      100
+    ],
     "region": "talas",
     "date": "2026-11-14",
     "source": "Yield: Talas average 2026 and 2024 (topnews.kg). Price: autumn 2026 market low (naq.media, 12 Oct 2026) to planned state purchase (economist.kg, 23 Dec 2025)"
+  },
+  "potato": {
+    "yield_t_ha": [
+      17.6,
+      30.0
+    ],
+    "price_som_kg": [
+      15,
+      17
+    ],
+    "region": "kyrgyzstan",
+    "date": "2026-10-08",
+    "source": "Yield: national average 17.65 t/ha in 2025 (Kabar, 17 Nov 2025) to 30 t/ha for early potato in Manas district, Talas (economist.kg, 6 Jul 2026). Price: farm-gate 15-17 som/kg after the 2026 harvest (economist.kg, 8 Oct 2026)"
+  },
+  "sugarbeet": {
+    "yield_t_ha": [
+      55.0,
+      55.0
+    ],
+    "price_som_kg": [
+      5.4,
+      5.5
+    ],
+    "region": "kyrgyzstan",
+    "date": "2026-11-11",
+    "source": "Yield: 2026 plan of 650,000 t on 11,800 ha (Rossiyskaya Gazeta, 11 Nov 2026). Price: factory purchase 5,400-5,500 som/t, paid 30% in cash and 70% in sugar (economist.kg, 10 Oct 2026; Turmush)"
+  },
+  "wheat": {
+    "yield_t_ha": [
+      2.96,
+      4.0
+    ],
+    "price_som_kg": [
+      26.9,
+      26.9
+    ],
+    "region": "kyrgyzstan",
+    "date": "2026-10-07",
+    "source": "Yield: grain average 29.6 c/ha in 2025 (Kabar, 17 Nov 2025) to 30-40 c/ha in Manas district, Talas (economist.kg, 6 Jul 2026). Price: average retail price of feed wheat, early October 2026 (State Antimonopoly monitoring via economist.kg, 7 Oct 2026); farmers selling in bulk get less, so this is an upper bound"
   }
 }
