@@ -1,1 +1,5 @@
+# What Vercel installs for api/index.py. Keep in step with backend/requirements.txt (runtime part only).
 fastapi==0.115.5
+# PostgresStore, used when DATABASE_URL is set (Neon on Vercel)
+SQLAlchemy==2.1.8
+psycopg[binary]==3.3.9

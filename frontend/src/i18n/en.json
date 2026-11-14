@@ -357,7 +357,9 @@
     "wrong_role": "Only the other role can do this.",
     "no_basin": "This place is outside Kyrgyzstan's river basins.",
     "no_field": "This field was not found.",
-    "data_missing": "The data on the server is not ready yet."
+    "data_missing": "The data on the server is not ready yet.",
+    "too_many_tries": "Too many wrong PINs. Try again in 15 minutes.",
+    "wrong_pin": "The current PIN is wrong."
   },
   "position": {
     "start": "At the start of the canal",

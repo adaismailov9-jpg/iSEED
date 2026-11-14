@@ -174,7 +174,11 @@ Response: `{ s, normalTurns, expectedTurns, totalHa, demandM3, expectedM3, short
 
 ## Deploy
 
-One Vercel project from the repo root: `vercel.json` builds `frontend/` and serves `api/index.py` (the FastAPI app) at `/api/*`. Not deployed or tested yet. On Vercel, accounts are lost between cold starts until `PostgresStore` exists.
+One Vercel project from the repo root: `vercel.json` builds `frontend/` and serves `api/index.py` (the FastAPI app) at `/api/*`. Vercel installs the root `requirements.txt` (FastAPI and the Postgres packages). Not deployed yet.
+
+1. Neon: create the database; once, from a laptop: `cd backend && DATABASE_URL=<neon pooled url> .venv/bin/alembic upgrade head`.
+2. Vercel: set `DATABASE_URL` to the same URL. Without it the API falls back to SQLite in `/tmp`, and accounts vanish between cold starts.
+3. Deploy, then register a farmer and a manager on the live site and walk the whole flow once.
 
 ## Numbers
 
