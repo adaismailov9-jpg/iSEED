@@ -60,7 +60,13 @@ export default function StartScreen({ onDone }) {
   return (
     <div className="start">
       <figure className="start-art" aria-hidden="true">
-        <img key={character} src={ART[character]} alt="" className="start-character" />
+        {/* The field is drawn twice: whole behind the character, and only its front part in front,
+            so the character stands in the field and the place where the drawing stops is hidden. */}
+        <div className="start-scene">
+          <img src="/art/field.webp" alt="" className="start-field" />
+          <img key={character} src={ART[character]} alt="" className="start-character" />
+          <img src="/art/field.webp" alt="" className="start-field front" />
+        </div>
         <p key={`say-${character}`} className="start-bubble">{t(`start.say.${character}`)}</p>
       </figure>
 
@@ -88,7 +94,7 @@ export default function StartScreen({ onDone }) {
         {(mode === 'login' || step === 1) && (
           <label className="field-label">
             {t('start.name')}
-            <input className="input" value={user.name} onChange={(e) => set('name', e.target.value)} autoComplete="username" autoFocus />
+            <input className="input" value={user.name} onChange={(e) => set('name', e.target.value)} autoComplete="username" />
           </label>
         )}
 
@@ -110,7 +116,7 @@ export default function StartScreen({ onDone }) {
           <>
             <label className="field-label">
               {t('start.district')}
-              <select className="select" value={user.region} onChange={(e) => set('region', e.target.value)} autoFocus>
+              <select className="select" value={user.region} onChange={(e) => set('region', e.target.value)}>
                 <option value="" disabled>{t('start.choose')}</option>
                 {[...ALL_DISTRICTS].sort(byName).map((id) => <option key={id} value={id}>{t(`districts.${id}`)}</option>)}
               </select>
@@ -127,7 +133,7 @@ export default function StartScreen({ onDone }) {
           <label className="field-label">
             {t('start.phone')}
             <input className="input" type="tel" inputMode="tel" value={user.phone} onChange={(e) => set('phone', e.target.value.replace(/[^\d+ ]/g, ''))}
-              placeholder="+996 700 123 456" autoComplete="tel" autoFocus />
+              placeholder="+996 700 123 456" autoComplete="tel" />
             <span className="demo-note">{t('start.phoneDemo')}</span>
           </label>
         )}
