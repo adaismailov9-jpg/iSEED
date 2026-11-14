@@ -24,6 +24,21 @@ export function areaHa(points) {
 
 export const midpoint = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
 
+// Ray casting: is the point inside the ring?
+function inRing([lat, lng], ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [lat1, lng1] = ring[i];
+    const [lat2, lng2] = ring[j];
+    const crosses = lat1 > lat !== lat2 > lat && lng < ((lng2 - lng1) * (lat - lat1)) / (lat2 - lat1) + lng1;
+    if (crosses) inside = !inside;
+  }
+  return inside;
+}
+
+// A polygon is [outerRing, ...holes].
+export const inPolygon = (point, [outer, ...holes]) => inRing(point, outer) && !holes.some((hole) => inRing(point, hole));
+
 // A square of `ha` hectares around a point (4 corners).
 export function squareAround([lat, lng], ha = 1) {
   const dLat = (Math.sqrt(ha * 10000) / 2 / EARTH_R) * (180 / Math.PI);

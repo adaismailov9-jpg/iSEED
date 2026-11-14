@@ -4,7 +4,7 @@ import { api } from '../api/client';
 import { BASINS } from '../data/demo';
 import HindcastChart from '../components/HindcastChart';
 
-const SOURCE_KEYS = ['modis', 'power', 'basins', 'fao', 'stats', 'tiles'];
+const SOURCE_KEYS = ['modis', 'power', 'basins', 'fao', 'stats', 'tiles', 'border', 'elevation'];
 
 export default function AboutScreen({ basinId = 'chuy' }) {
   const { t } = useI18n();

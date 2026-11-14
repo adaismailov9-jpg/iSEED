@@ -6,7 +6,9 @@ import TabBar from './components/TabBar';
 import FieldScreen from './screens/FieldScreen';
 import PlanScreen from './screens/PlanScreen';
 import AboutScreen from './screens/AboutScreen';
+import AgronomistScreen from './screens/AgronomistScreen';
 import { MIN_POINTS, centroid, toGeoJSON } from './lib/geo';
+import { districtAt } from './lib/terrain';
 import { load, save } from './lib/storage';
 
 const EMPTY_ANSWERS = { previous: '', source: '', well: '', soil: '', priority: '' };
@@ -23,6 +25,7 @@ export default function App() {
   const [error, setError] = useState(false);
 
   const hasField = points.length >= MIN_POINTS;
+  const district = hasField ? districtAt(centroid(points)) : null; // picks the district agronomist
 
   useEffect(() => save('field', points), [points]);
   useEffect(() => save('answers', answers), [answers]);
@@ -66,6 +69,12 @@ export default function App() {
     if (result) setPlans((all) => all.map((p) => (p.id === id ? { ...p, input, result } : p)));
   }
 
+  // A saved field becomes the current one; like any new field, the questions start again.
+  function chooseField(corners) {
+    setPoints(corners);
+    setAnswers(EMPTY_ANSWERS);
+  }
+
   function deletePlan(id) {
     setPlans(plans.filter((p) => p.id !== id));
     setOpenId(null);
@@ -73,17 +82,18 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header>
-        <TabBar tab={tab} setTab={setTab} />
-      </Header>
+      <Header />
+      <TabBar tab={tab} setTab={setTab} />
       <main className={`main main-${tab}`}>
         {tab === 'field' && (
           <FieldScreen
             points={points}
             setPoints={setPoints}
+            plans={plans}
             basin={basin}
             answers={answers}
             setAnswers={setAnswers}
+            resetAnswers={() => setAnswers(EMPTY_ANSWERS)}
             onSubmit={addPlan}
             busy={busy}
             error={error}
@@ -98,6 +108,16 @@ export default function App() {
             deletePlan={deletePlan}
             busy={busy}
             error={error}
+            goField={() => setTab('field')}
+          />
+        )}
+        {tab === 'agro' && (
+          <AgronomistScreen
+            hasField={hasField}
+            district={district}
+            points={points}
+            plans={plans}
+            chooseField={chooseField}
             goField={() => setTab('field')}
           />
         )}
