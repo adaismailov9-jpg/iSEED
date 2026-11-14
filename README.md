@@ -77,7 +77,7 @@ The factor 0.5 in S says that half of a snow deficit shows up as a water deficit
 
 **Frost trend** — the last spring frost date of each year 1981–2025, tested with Mann–Kendall; a change is reported only when p < 0.05.
 
-**Two crops in one year** — winter wheat, then a short crop, offered only where the days between the wheat harvest and the first autumn frost cover the second crop plus 10 days.
+**Two crops in one year** — winter wheat, then a short crop. Wheat starts growing again when the weekly mean temperature reaches 5 °C and is harvested about 120 days later, kept between June and August; that gives mid-June around Osh, early July in Talas, late July in Naryn. A second crop is offered only where the days between the wheat harvest and the first autumn frost cover it plus 10 days, and only if the wheat is already sown.
 
 **Field check** — slope, summer greenness, soil, frost margin and heavy rain each give good / careful / not recommended; the verdict is the worst of them.
 

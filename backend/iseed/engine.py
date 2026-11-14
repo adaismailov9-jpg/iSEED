@@ -162,10 +162,20 @@ def crop_coefficient(crop, day):
     return kc_mid + (kc_end - kc_mid) * (day - ini - dev - mid) / late
 
 
+def wheat_regrowth(crop, climate):
+    """Day winter wheat starts growing again in spring: the first week warm enough (NASA POWER),
+    placed so that harvest falls inside the June-August window farmers report."""
+    temps = climate.get("weekMeanTempC")
+    week = next((w for w in range(4, 30) if temps and temps[w] is not None and temps[w] >= rule("wheat_regrowth_c")), 13)
+    window = rule("wheat_harvest_window")
+    harvest = min(window["to"], max(window["from"], week * 7 + 1 + crop["days"]))
+    return harvest - crop["days"]
+
+
 def season_start(crop, climate):
     """Day of year from which the crop draws irrigation water."""
     if crop["winter"]:
-        return rule("winter_restart_doy")
+        return wheat_regrowth(crop, climate)
     days = sowing_days(crop, climate)
     return days[0] if days else climate["lastSpringFrostDoy"] + 1
 
@@ -323,7 +333,7 @@ def scenarios(ctx):
 def double_crop(ctx, needs):
     """The best second crop that still matures before the autumn frost, or None where the season is too short."""
     climate, wheat = ctx["climate"], CROPS["wheat"]
-    harvest = rule("winter_restart_doy") + wheat["days"]
+    harvest = wheat_regrowth(wheat, climate) + wheat["days"]
     window = climate["firstAutumnFrostDoy"] - harvest
     fits = [c for c in CROPS.values() if not (c["winter"] or c["perennial"])
             and c["days"] + rule("double_crop_spare_days") <= window]

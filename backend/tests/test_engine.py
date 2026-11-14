@@ -131,9 +131,19 @@ def test_frost_trend_is_said_only_when_significant():
 def test_two_crops_only_where_the_season_is_long_enough():
     sown = ctx(climate=ET_CLIMATE, winterWheatSown=True)
     assert engine.farmer_options(sown)["doubleCrop"] is None  # Talas: 84 days after wheat
-    south = {**ET_CLIMATE, "firstAutumnFrostDoy": 310, "frostFreeDays": 220}
+    south = {**ET_CLIMATE, "firstAutumnFrostDoy": 330, "frostFreeDays": 220}
     double = engine.farmer_options(ctx(climate=south, plan="maize", winterWheatSown=True))["doubleCrop"]
-    assert double["first"] == "wheat" and double["second"] == "beans" and double["windowDays"] == 119
+    # warm enough (5 C) from week 13 -> regrowth on day 92, harvest 120 days later on day 212 (31 July)
+    assert double["first"] == "wheat" and double["second"] == "beans" and double["wheatHarvest"] == "07-31"
+    assert double["windowDays"] == 118
+
+
+def test_wheat_harvest_stays_inside_june_to_august():
+    wheat = engine.CROPS["wheat"]
+    for first_warm_week in (4, 13, 29):
+        temps = [0] * first_warm_week + [10] * (52 - first_warm_week)
+        harvest = engine.wheat_regrowth(wheat, {"weekMeanTempC": temps}) + wheat["days"]
+        assert 152 <= harvest <= 243
 
 
 def test_winter_wheat_is_offered_only_if_already_sown():

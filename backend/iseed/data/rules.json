@@ -134,11 +134,6 @@
     "estimate": true,
     "source": "Stage lengths and crop coefficients are FAO's typical values, not measured in Kyrgyzstan; to check against the tables and with an agronomist"
   },
-  "winter_restart_doy": {
-    "value": 91,
-    "estimate": true,
-    "source": "Winter wheat and its irrigation are counted from 1 April"
-  },
   "double_crop_spare_days": {
     "value": 10,
     "estimate": true,
@@ -156,5 +151,18 @@
     },
     "estimate": true,
     "source": "Winter wheat in Kyrgyzstan is sown in September-October (FAO Crop Calendar). After that it can be planned for next season only if it is already in the ground"
+  },
+  "wheat_regrowth_c": {
+    "value": 5,
+    "estimate": true,
+    "source": "Winter wheat starts growing again in spring once the weekly mean temperature reaches 5 C (NASA POWER) and is harvested about 120 days later (estimate)"
+  },
+  "wheat_harvest_window": {
+    "value": {
+      "from": 152,
+      "to": 243
+    },
+    "estimate": false,
+    "source": "Team knowledge: winter wheat in Kyrgyzstan is harvested between June and August (day 152 = 1 June, day 243 = 31 August)"
   }
 }
