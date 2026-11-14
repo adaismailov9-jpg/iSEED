@@ -1,29 +1,71 @@
-/* ============ Colours (from the design: cream, forest green, sage, clay) ============ */
+/* ============ Colours: fresh green, sun yellow, warm orange. Dark theme below. ============ */
 :root {
-  --bg: #f7f4ea;
-  --card: #fffdf7;
-  --text: #24331f;
-  --muted: #6b7363;
-  --line: #e6e1cf;
-  --green: #2f4b2a;
-  --green-light: #b9d77e;
-  --sage: #c6d4a5;
-  --sage-soft: #ecf1df;
-  --sand: #f3ead6;
-  --clay: #8a5a3c;
+  --bg: #f3f8ea;
+  --card: #ffffff;
+  --text: #1b2a17;
+  --muted: #5b6a55;
+  --line: #dfe8d2;
+  --green: #1f7a3c;      /* headings, buttons, active items */
+  --on-green: #ffffff;   /* text on a green background */
+  --green-light: #8fd14f;
+  --sage: #b6e08f;
+  --sage-soft: #e3f4d3;
+  --sand: #fdf1d3;
+  --clay: #c9531a;       /* the main "check" button */
+  --on-clay: #ffffff;
 
-  --fits: #3f7d34;
-  --tight: #c27a12;
-  --short: #b8432f;
+  --fits: #188a3b;
+  --tight: #b86e00;
+  --short: #d93a20;
 
-  --snow-low: #d98c1c;
-  --snow-normal: #a3ad94;
-  --snow-high: #3f6f9e;
+  --snow-low: #f29a1a;
+  --snow-normal: #9aa98e;
+  --snow-high: #2f86d6;
+
+  --need: #7f8a76;
+  --warn-bg: #fde6df;
+  --warn-text: #b32d16;
+  --demo-bg: #ffe9b8;
+  --demo-text: #8a5800;
 
   --radius: 22px;
-  --shadow: 0 1px 2px rgb(40 50 30 / 6%), 0 8px 24px rgb(40 50 30 / 8%);
+  --shadow: 0 1px 2px rgb(30 60 20 / 6%), 0 8px 24px rgb(30 60 20 / 10%);
   font-family: Manrope, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color: var(--text);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0f1711;
+  --card: #18231b;
+  --text: #e6f0e1;
+  --muted: #9cb096;
+  --line: #2a3a2d;
+  --green: #6fd685;
+  --on-green: #0c1a0f;
+  --green-light: #a5e26a;
+  --sage: #2e5236;
+  --sage-soft: #1f3324;
+  --sand: #262f22;
+  --clay: #f07a3c;
+  --on-clay: #1a0d05;
+
+  --fits: #4fcf6c;
+  --tight: #ffb72e;
+  --short: #ff6a4d;
+
+  --snow-low: #ffa93a;
+  --snow-normal: #7d8b74;
+  --snow-high: #5aa8f0;
+
+  --need: #8e9a86;
+  --warn-bg: #3d211b;
+  --warn-text: #ffb09e;
+  --demo-bg: #3d3115;
+  --demo-text: #ffd27a;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 8px 24px rgb(0 0 0 / 35%);
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -60,14 +102,16 @@ p { margin: 0 0 8px; }
 .brand small { display: block; font-size: 0.72rem; color: var(--muted); }
 .lang { display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--sand); }
 .lang button { border: 0; background: none; padding: 6px 10px; border-radius: 999px; font: inherit; font-size: 0.78rem; font-weight: 700; color: var(--muted); cursor: pointer; }
-.lang button.on { background: var(--green); color: #fff; }
+.lang button.on { background: var(--green); color: var(--on-green); }
+.lang .theme { width: 28px; padding: 0; display: grid; place-items: center; background: var(--card); color: var(--green); }
+.lang .help { width: 28px; padding: 0; margin-left: 4px; background: var(--card); color: var(--green); }
 
 /* Phone: tabs fixed at the bottom. Wide screen: a menu column on the left. */
 .tabbar { position: fixed; z-index: 1000; left: 0; right: 0; bottom: 0; display: flex; background: var(--card); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
 .tabbar button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border: 0; background: none; font: inherit; font-size: 0.75rem; font-weight: 600; color: var(--muted); cursor: pointer; }
 .tabbar button.on { color: var(--green); font-weight: 800; }
 .tabbar svg { padding: 4px; border-radius: 50%; box-sizing: content-box; }
-.tabbar button.on svg { background: var(--sage-soft); }
+.tabbar button.on svg { background: var(--green); color: var(--on-green); }
 
 .menu-toggle { display: none !important; } /* only on wide screens */
 
@@ -81,6 +125,7 @@ p { margin: 0 0 8px; }
   .tabbar button.on { background: var(--sage-soft); }
   .tabbar svg { background: var(--sand); }
   .tabbar .menu-toggle { display: flex !important; margin-top: auto; justify-content: center; }
+  .tabbar.open .menu-toggle { justify-content: flex-start; }
   .tabbar .menu-toggle svg { background: none; }
 }
 @media (max-width: 599px) {
@@ -100,8 +145,8 @@ p { margin: 0 0 8px; }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 18px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--text); font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
 .btn:disabled { opacity: 0.45; cursor: default; }
-.btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
-.btn.clay { background: var(--clay); border-color: var(--clay); color: #fff; }
+.btn.primary { background: var(--green); border-color: var(--green); color: var(--on-green); }
+.btn.clay { background: var(--clay); border-color: var(--clay); color: var(--on-clay); }
 .btn.small { min-height: 36px; padding: 6px 14px; font-size: 0.85rem; }
 .btn.floating { border-color: transparent; box-shadow: var(--shadow); }
 .btn.block { width: 100%; }
@@ -111,7 +156,7 @@ p { margin: 0 0 8px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font: inherit; font-weight: 600; color: var(--text); cursor: pointer; }
 .chip:hover { border-color: var(--sage); }
-.chip.on { background: var(--green); border-color: var(--green); color: #fff; }
+.chip.on { background: var(--green); border-color: var(--green); color: var(--on-green); }
 
 details.card summary { cursor: pointer; font-weight: 800; color: var(--green); }
 details.card[open] summary { margin-bottom: 10px; }
@@ -124,8 +169,8 @@ details.card[open] summary { margin-bottom: 10px; }
 
 .badge-wrap { position: relative; }
 .badge { border: 0; border-radius: 999px; padding: 1px 8px; font: inherit; font-size: 0.68rem; font-weight: 700; background: var(--sand); color: var(--muted); cursor: pointer; }
-.badge-demo { background: #f8e6c4; color: #8a5a10; }
-.badge-pop { position: absolute; z-index: 20; left: 0; top: calc(100% + 4px); width: min(280px, 80vw); padding: 8px 10px; border-radius: 12px; background: var(--green); color: #fff; font-size: 0.78rem; font-weight: 500; text-align: left; }
+.badge-demo { background: var(--demo-bg); color: var(--demo-text); }
+.badge-pop { position: absolute; z-index: 20; left: 0; top: calc(100% + 4px); width: min(280px, 80vw); padding: 8px 10px; border-radius: 12px; background: var(--green); color: var(--on-green); font-size: 0.78rem; font-weight: 500; text-align: left; }
 
 /* ============ Field screen ============ */
 /* Phone: map on top, questions below (the page scrolls). */
@@ -142,8 +187,8 @@ details.card[open] summary { margin-bottom: 10px; }
   .map-top { right: auto; width: 420px; }
 }
 
-.corner { background: #fff; border: 3px solid #ffd43b; border-radius: 50%; box-shadow: 0 0 0 2px rgb(0 0 0 / 35%); }
-.edge-dot { background: rgb(255 212 59 / 70%); border: 2px solid #fff; border-radius: 50%; }
+.corner { background: #fff; border: 3px solid #1e88ff; border-radius: 50%; box-shadow: 0 0 0 2px rgb(0 0 0 / 35%); }
+.edge-dot { background: rgb(30 136 255 / 75%); border: 2px solid #fff; border-radius: 50%; }
 
 .field-card { padding: 18px 20px; border-radius: var(--radius); background: var(--sage-soft); }
 .saved-fields { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
@@ -161,7 +206,7 @@ details.card[open] summary { margin-bottom: 10px; }
 .search { width: 100%; }
 .search-row { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 14px; border-radius: 999px; background: var(--sage); box-shadow: var(--shadow); color: var(--green); }
 .search-icon { flex: none; }
-.search input { flex: 1; min-width: 0; padding: 8px 14px; border: 0; border-radius: 999px; background: rgb(255 255 255 / 75%); font: inherit; color: var(--text); }
+.search input { flex: 1; min-width: 0; padding: 8px 14px; border: 0; border-radius: 999px; background: var(--card); font: inherit; color: var(--text); }
 .search input:focus { outline: 2px solid var(--green); }
 .search-message, .search-results { margin: 6px 0 0; padding: 8px 12px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow); font-size: 0.88rem; }
 .search-results { list-style: none; padding: 4px; }
@@ -171,7 +216,7 @@ details.card[open] summary { margin-bottom: 10px; }
 
 /* Message over the bottom of the map: "checking…" or a warning why a field can't go there */
 .map-message { position: absolute; z-index: 600; left: 12px; right: 12px; bottom: 76px; display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow); font-weight: 600; }
-.map-message.warning { background: #fbe9e4; color: #7a2a1c; border: 1px solid #f0c4b8; }
+.map-message.warning { background: var(--warn-bg); color: var(--warn-text); border: 1px solid var(--short); }
 .map-message button { margin-left: auto; border: 0; background: none; font-size: 1.3rem; line-height: 1; color: inherit; cursor: pointer; }
 @media (min-width: 900px) {
   .map-message { left: 50%; right: auto; width: min(460px, 90%); transform: translateX(-50%); }
@@ -180,7 +225,7 @@ details.card[open] summary { margin-bottom: 10px; }
 /* Satellite / map switch in the bottom-left corner of the map */
 .map-switch { position: absolute; z-index: 500; left: 12px; bottom: 24px; display: flex; padding: 4px; border-radius: 999px; background: var(--card); box-shadow: var(--shadow); }
 .map-switch button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 0; border-radius: 999px; background: none; font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--muted); cursor: pointer; }
-.map-switch button.on { background: var(--green); color: #fff; }
+.map-switch button.on { background: var(--green); color: var(--on-green); }
 
 /* Step-by-step questions */
 .steps { display: flex; flex-direction: column; gap: 10px; }
@@ -193,11 +238,14 @@ details.card[open] summary { margin-bottom: 10px; }
 .step.closed b { margin-left: auto; color: var(--green); }
 .step-title { color: var(--muted); font-weight: 600; }
 .step-num { display: inline-grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--sand); color: var(--green); font-size: 0.8rem; font-weight: 800; }
-.step-num.done { background: var(--green); color: #fff; }
+.step-num.done { background: var(--green); color: var(--on-green); }
 .submit { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
 
 /* ============ Planting plan ============ */
-.plan-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.plan-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 20px; align-items: start; }
+.plan-group { display: grid; gap: 10px; }
+.plan-group h3 { margin: 6px 0 0; font-size: 0.95rem; color: var(--muted); }
+.plan-group .alt.card { margin: 0; padding: 14px 20px; }
 .plan-card { width: 100%; font: inherit; color: inherit; text-align: left; cursor: pointer; border-top: 6px solid var(--level); }
 .plan-card:hover { border-color: var(--sage); border-top-color: var(--level); }
 .plan-card-head { display: flex; justify-content: space-between; gap: 8px; font-size: 1.1rem; color: var(--green); margin-bottom: 6px; }
@@ -215,14 +263,14 @@ details.card[open] summary { margin-bottom: 10px; }
 .meter-row { display: grid; grid-template-columns: 8em 1fr auto; align-items: center; gap: 8px; font-size: 0.82rem; }
 .meter-track { height: 10px; border-radius: 999px; background: var(--sand); overflow: hidden; }
 .meter-fill { height: 100%; border-radius: 999px; }
-.meter-fill.need { background: #7d8471; }
+.meter-fill.need { background: var(--need); }
 .meter-fill.supply { background: var(--level); }
 .tip { padding: 10px 12px; border-radius: 14px; background: var(--sage-soft); font-size: 0.9rem; }
 
 .season-pick { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: var(--muted); }
 .segmented { display: flex; padding: 4px; border-radius: 999px; background: var(--sand); }
 .segmented button { flex: 1; padding: 8px 6px; border: 0; border-radius: 999px; background: none; font: inherit; font-size: 0.82rem; font-weight: 600; color: var(--text); cursor: pointer; }
-.segmented button.on { background: var(--green); color: #fff; }
+.segmented button.on { background: var(--green); color: var(--on-green); }
 
 .alt { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; margin-top: 8px; border-radius: 16px; background: var(--sand); }
 
@@ -241,12 +289,12 @@ details.card[open] summary { margin-bottom: 10px; }
 /* ============ Agronomists ============ */
 .agronomist { border-top: 8px solid var(--green); display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
 .phone { font-size: 1.6rem; font-weight: 800; color: var(--green); text-decoration: none; letter-spacing: 0.02em; }
-.select { display: block; width: 100%; margin-top: 6px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font: inherit; font-weight: 600; }
+.select { display: block; width: 100%; margin-top: 6px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--text); font: inherit; font-weight: 600; }
 .hotline { background: var(--sage-soft); }
 
 /* ============ About screen / chart ============ */
 .chart-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-.chart-head select { font: inherit; font-size: 0.88rem; font-weight: 600; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); }
+.chart-head select { font: inherit; font-size: 0.88rem; font-weight: 600; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--text); }
 .chart svg { display: block; width: 100%; height: auto; }
 .chart .grid { stroke: var(--line); }
 .chart .axis { font-size: 9px; fill: var(--muted); }
@@ -268,4 +316,65 @@ details.card[open] summary { margin-bottom: 10px; }
 .sources { margin: 0; padding-left: 18px; font-size: 0.86rem; }
 .sources li { margin-bottom: 6px; }
 
-.leaflet-container { font: inherit; }
+.leaflet-container { font: inherit; background: var(--bg); }
+.map-mask { fill: var(--bg); }
+.map-border { stroke: var(--green); }
+
+/* Tour: one ring both dims the page (huge shadow) and frames the target. */
+.tour { position: fixed; inset: 0; z-index: 2000; }
+.tour-ring { position: fixed; border-radius: 18px; box-shadow: 0 0 0 9999px rgb(20 28 16 / 55%); transition: all 0.25s ease; pointer-events: none; }
+.tour-card { position: fixed; padding: 18px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); box-sizing: border-box; }
+.tour-head { display: flex; align-items: center; gap: 12px; }
+.tour-head small { color: var(--muted); font-weight: 600; }
+.tour-head h3 { margin: 2px 0 0; }
+.tour-mascot { display: grid; place-items: center; flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--sage-soft); font-size: 28px; }
+.tour-card p { margin: 12px 0 16px; }
+.tour-actions { display: flex; justify-content: space-between; align-items: center; }
+.tour-actions .link { color: var(--green); font-weight: 700; }
+.tour-actions .btn { margin-left: auto; }
+
+/* Share the plan */
+.share h3 { margin-top: 0; }
+.share-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.share-buttons .btn { justify-content: flex-start; }
+
+/* PDF = the browser's print: only the plan itself, no menus or buttons. */
+@media print {
+  .app { display: block; height: auto; }
+  .main { overflow: visible; padding: 0; }
+  .header, .tabbar, .tour, .row.top, .season-pick, .hotline, .share { display: none !important; }
+  .columns { display: block; }
+  .card { box-shadow: none; break-inside: avoid; }
+}
+
+/* Pump and crop rotation notes under the verdict */
+.verdict-note { padding: 10px 12px; border-radius: 14px; font-size: 0.9rem; background: var(--sand); }
+.verdict-note.warn { background: var(--warn-bg); color: var(--warn-text); }
+.verdict-note.good { background: var(--sage-soft); color: var(--fits); }
+
+/* Start screen and simple forms */
+.start-card, .form { display: flex; flex-direction: column; gap: 14px; }
+.start-card { max-width: 520px; width: 100%; margin: 0 auto; }
+.field-label { display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 0.9rem; }
+.input { width: 100%; padding: 10px 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--text); font: inherit; font-weight: 500; }
+.input:focus, .select:focus { outline: 2px solid var(--green); }
+textarea.input { resize: vertical; }
+.role-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.role { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border: 2px solid var(--line); border-radius: 16px; background: var(--card); color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.role span { font-size: 0.8rem; font-weight: 500; color: var(--muted); }
+.role.on { border-color: var(--green); background: var(--sage-soft); }
+.role.on b { color: var(--green); }
+
+/* Header: who is signed in */
+.header-right { display: flex; align-items: center; gap: 8px; }
+.profile { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--green); font: inherit; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+@media (max-width: 599px) { .profile span { display: none; } }
+
+/* Water manager */
+.turns { display: flex; align-items: center; gap: 18px; }
+.turns-arrow { font-size: 1.6rem; color: var(--muted); }
+.compare td.level-fits, .compare td.level-tight, .compare td.level-short { color: var(--level); font-weight: 700; }
+
+/* Manager's message as farmers see it */
+.season-message { padding: 14px 16px; border-radius: var(--radius); background: var(--sand); border-left: 6px solid var(--clay); }
+.season-message p { margin: 4px 0 0; font-weight: 600; }

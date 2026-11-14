@@ -4,7 +4,7 @@
   "description": "Seasonal water-risk signal from NASA snow data",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f7f4ea",
-  "theme_color": "#2f4b2a",
+  "background_color": "#f3f8ea",
+  "theme_color": "#1f7a3c",
   "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
 }

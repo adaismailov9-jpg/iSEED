@@ -7,7 +7,8 @@
     "field": "Field",
     "plan": "Planting plan",
     "agro": "Agronomists",
-    "about": "About the data"
+    "about": "About the data",
+    "canal": "Canal"
   },
   "lang": {
     "ky": "КЫР",
@@ -48,10 +49,9 @@
   "q": {
     "springOnly": "iSEED suggests spring crops only. Winter wheat is sown in autumn, before any snow falls.",
     "source": "Where does your water come from?",
-    "river": "River or canal",
-    "well": "Well",
+    "river": "Gravity canal or ditch",
+    "well": "Borehole or well",
     "rain": "Rain only",
-    "wellEnough": "Is the well water enough?",
     "enough": "Usually enough",
     "sometimes": "Sometimes short",
     "often": "Often short",
@@ -60,7 +60,16 @@
     "submit": "Pick a crop and add to plan",
     "needField": "First tap your field on the map.",
     "previous": "Previous crop",
-    "previousHint": "What grew on this field last season? iSEED picks a spring crop for this year from it."
+    "previousHint": "What grew on this field last season? iSEED picks a spring crop for this year from it.",
+    "pump": "Pump",
+    "plan": "What do you plan to sow?",
+    "planHint": "Pick a crop and iSEED checks whether it will have enough water. Not sure? iSEED picks one.",
+    "canal": "Where is your field on the canal?",
+    "canal_start": "At the start",
+    "canal_middle": "In the middle",
+    "canal_end": "At the end",
+    "usual": "In a normal year, is there enough water?",
+    "notSure": "Not sure"
   },
   "priority": {
     "water": "Saving water",
@@ -78,7 +87,10 @@
     "saved": "Saved on this phone, opens without internet.",
     "back": "All plans",
     "delete": "Delete",
-    "confirmDelete": "Delete this plan?"
+    "confirmDelete": "Delete this plan?",
+    "chosen": "Chosen plan",
+    "others": "Other options",
+    "forField": "Field: {field}"
   },
   "verdict": {
     "fits": "Enough water",
@@ -109,11 +121,9 @@
     "yourChoice": "Your choice"
   },
   "alt": {
-    "title": "Other options · your priority: {priority}",
     "less": "needs {pct}% less water",
     "more": "needs {pct}% more water",
-    "check": "Choose",
-    "none": "No other crop can grow on this field this season."
+    "check": "Choose"
   },
   "compare": {
     "title": "Compare all crops",
@@ -153,7 +163,8 @@
     "efficiency": "Field efficiency (furrow)",
     "well": "Well factor",
     "formula": "Need = (crop need − 0.7 × rain) × 10 × ha. Supply = 9,717 m³/ha × ha × snow × 0.82 × 0.6. Fit = supply ÷ need: ≥1.1 enough, 0.9–1.1 tight, <0.9 short.",
-    "notForecast": "The snow signal is a risk label, never a forecast. In published Naryn studies snow explains about 60% of seasonal flow; glaciers (up to half of July–August flow) and summer rain explain the rest."
+    "notForecast": "The snow signal is a risk label, never a forecast. In published Naryn studies snow explains about 60% of seasonal flow; glaciers (up to half of July–August flow) and summer rain explain the rest.",
+    "canalPosition": "Place on the canal"
   },
   "badge": {
     "estimate": "estimate",
@@ -294,5 +305,91 @@
   "menu": {
     "expand": "Open menu",
     "collapse": "Collapse menu"
+  },
+  "tour": {
+    "step": "{n} of {total}",
+    "skip": "Skip",
+    "next": "Next",
+    "done": "Got it",
+    "replay": "Show the tour again",
+    "langTitle": "Language",
+    "field": "Mark your field here: tap it on the map, drag the corners and answer a few questions.",
+    "plan": "Your advice appears here: what to plant on this field and whether there will be enough water this season.",
+    "agro": "Your district agronomist and saved fields — get in touch and show them your field.",
+    "about": "Where the data comes from: NASA satellite snow data and the history of each river basin.",
+    "lang": "Switch the language: Kyrgyz, Russian or English. The “?” button shows this tour again.",
+    "canal": "Your canal: snow in the basin, how many irrigation turns to expect and who will be short of water. The message to farmers is here too."
+  },
+  "share": {
+    "title": "Save or send",
+    "heading": "iSEED — planting plan",
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "note": {
+    "pump": {
+      "heavy": "Pump: if it stops for 10 days in July, {cropLower} suffers a heavy yield loss.",
+      "cut": "Pump: if it stops for 10 days in July, {cropLower} loses one hay cut.",
+      "light": "Pump: a 10-day stop in July is a small loss for {cropLower}."
+    },
+    "rotation": {
+      "same": "{crop} after {previous} is the same crop group: more pests and disease, tired soil.",
+      "legume": "Legumes after cereals are a plus: they leave nitrogen in the soil.",
+      "good": "{crop} grows well after {previous}."
+    }
+  },
+  "theme": {
+    "dark": "Dark theme",
+    "light": "Light theme"
+  },
+  "start": {
+    "title": "Welcome to iSEED",
+    "hint": "Tell us who you are so iSEED shows the right screens.",
+    "name": "Your name",
+    "role": "Who are you?",
+    "district": "District",
+    "choose": "Choose a district",
+    "village": "Village",
+    "go": "Start",
+    "local": "Saved on this phone only."
+  },
+  "role": {
+    "farmer": "Farmer",
+    "farmerHint": "Pick a crop for your field",
+    "manager": "Water manager",
+    "managerHint": "Season signal for your canal"
+  },
+  "profile": {
+    "change": "Change user",
+    "confirm": "Sign out and choose another user or role? Fields and plans on this phone are kept."
+  },
+  "canal": {
+    "title": "My canal",
+    "once": "Fill this in once — then the season signal appears here.",
+    "villages": "Villages on the canal",
+    "villagesHint": "For example: Kyzyl-Adyr, Ak-Dobo",
+    "hectares": "Irrigated area, ha",
+    "basin": "River basin",
+    "water": "How water is delivered",
+    "river": "Gravity",
+    "pump": "Pump",
+    "turns": "Usual number of irrigation turns",
+    "save": "Save canal",
+    "edit": "Edit",
+    "snow": "Snow in the basin vs normal",
+    "snowDate": "Computed {date} · season {year}",
+    "turnsTitle": "Irrigation turns",
+    "usual": "Usually",
+    "thisYear": "This year",
+    "shortTitle": "Who will have enough water",
+    "position": "Place on the canal"
+  },
+  "message": {
+    "title": "Season message to farmers",
+    "hint": "Farmers in these villages will see it: {villages}.",
+    "placeholder": "For example: irrigation on schedule this year, 4 turns. Starts on 10 May.",
+    "send": "Send",
+    "sent": "Sent {date}. Without a server the message shows on this phone only.",
+    "fromManager": "Water manager {name} · {date}"
   }
 }

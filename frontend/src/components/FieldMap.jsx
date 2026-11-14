@@ -4,13 +4,14 @@ import 'leaflet/dist/leaflet.css';
 import { MIN_POINTS, midpoint } from '../lib/geo';
 import KYRGYZSTAN from '../data/kyrgyzstan.json';
 
-// Only Kyrgyzstan: everything else is covered by a cream mask, and the map cannot be moved far away.
+// Only Kyrgyzstan: everything else is covered by a mask in the page colour, and the map cannot be moved far away.
 const WORLD = [[-89, -179], [-89, 179], [89, 179], [89, -179]];
 const KG_OUTLINES = KYRGYZSTAN.polygons.map(([outer]) => outer);
 const ENCLAVES = KYRGYZSTAN.polygons.flatMap(([, ...holes]) => holes); // neighbours' enclaves inside Kyrgyzstan
 const KG_BOUNDS = L.latLngBounds(KG_OUTLINES.flat());
-const MASK = { stroke: false, fillColor: '#f7f4ea', fillOpacity: 0.88, interactive: false };
-const BORDER = { color: '#2f4b2a', weight: 2.5, fill: false, interactive: false };
+// Colours come from CSS (.map-mask, .map-border), so they follow the light/dark theme.
+const MASK = { className: 'map-mask', stroke: false, fillOpacity: 0.88, interactive: false };
+const BORDER = { className: 'map-border', weight: 2.5, fill: false, interactive: false };
 
 // The two map backgrounds the farmer can switch between.
 const BASEMAPS = {
@@ -19,7 +20,7 @@ const BASEMAPS = {
 };
 const CORNER = L.divIcon({ className: 'corner', iconSize: [22, 22] });
 const EDGE_DOT = L.divIcon({ className: 'edge-dot', iconSize: [16, 16] });
-const STYLE = { color: '#ffd43b', weight: 3, fillOpacity: 0.2 };
+const STYLE = { color: '#1e88ff', weight: 3, fillOpacity: 0.2 };
 
 // Field editor:
 // - tap an empty map → onTapEmpty(position) places a field there;

@@ -7,7 +7,7 @@ const WATER_RANK = { fits: 2, tight: 1, short: 0 };
 
 // Crop rotation: which crop groups grow well after the previous one.
 const GOOD_AFTER = { cereal: ['legume'], legume: ['cereal'], root: ['cereal'], oilseed: ['cereal', 'legume'], fodder: ['cereal'] };
-const groupOf = (id) => (id === 'wheat' ? 'cereal' : CROPS.find((c) => c.id === id)?.group);
+export const groupOf = (id) => (id === 'wheat' ? 'cereal' : CROPS.find((c) => c.id === id)?.group);
 
 function rotationScore(group, previousGroup) {
   if (!previousGroup) return 0;
@@ -22,7 +22,7 @@ const PRIORITY_SCORE = {
   soil: (crop) => crop.rotation + (crop.group === 'legume' || crop.group === 'fodder' ? 1 : 0),
 };
 
-function evaluate(crop, { areaHa, source, well, snowLevel, climate }) {
+function evaluate(crop, { areaHa, source, canal, usual, snowLevel, climate }) {
   // 1. Water the crop needs
   const rainMm = climate.seasonRainMm * Math.min(1, crop.days / climate.seasonDays);
   const effRainMm = RULES.effectiveRain * rainMm;
@@ -30,9 +30,9 @@ function evaluate(crop, { areaHa, source, well, snowLevel, climate }) {
 
   // 2. Water the field can expect
   let supplyM3;
-  if (source === 'well') supplyM3 = needM3 * RULES.well[well];
+  if (source === 'well') supplyM3 = needM3 * RULES.well[usual];
   else if (source === 'rain') supplyM3 = effRainMm * 10 * areaHa;
-  else supplyM3 = RULES.basePerHa * areaHa * RULES.snowMultiplier[snowLevel] * RULES.canal * RULES.efficiency;
+  else supplyM3 = RULES.basePerHa * areaHa * RULES.snowMultiplier[snowLevel] * RULES.canal * RULES.efficiency * (RULES.canalPosition[canal] ?? 1);
 
   // 3. Fit
   const ratio = needM3 > 0 ? Math.min(10, supplyM3 / needM3) : 10;

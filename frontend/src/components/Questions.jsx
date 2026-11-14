@@ -3,15 +3,18 @@ import { useI18n } from '../i18n';
 import { CROPS } from '../data/crops';
 
 const PREVIOUS_CROPS = [...CROPS.map((c) => c.id), 'wheat', 'none'];
+const PLANNED_CROPS = [...CROPS.map((c) => c.id), 'unknown'];
 
-// The questions in order. The well question appears only when the water comes from a well.
+// The questions in order. The canal question appears only for canal or pump water.
 function buildSteps(answers, t) {
+  const crop = (id) => t(id === 'unknown' ? 'q.notSure' : `crops.${id}`);
+  const onCanal = answers.source === 'river' || answers.source === 'pump';
   return [
-    { key: 'previous', title: t('q.previous'), hint: t('q.previousHint'), options: PREVIOUS_CROPS, label: (id) => t(`crops.${id}`) },
-    { key: 'source', title: t('q.source'), options: ['river', 'well', 'rain'], label: (id) => t(`q.${id}`) },
-    ...(answers.source === 'well'
-      ? [{ key: 'well', title: t('q.wellEnough'), options: ['enough', 'sometimes', 'often'], label: (id) => t(`q.${id}`) }]
-      : []),
+    { key: 'previous', title: t('q.previous'), hint: t('q.previousHint'), options: PREVIOUS_CROPS, label: crop },
+    { key: 'plan', title: t('q.plan'), hint: t('q.planHint'), options: PLANNED_CROPS, label: crop },
+    { key: 'source', title: t('q.source'), options: ['river', 'pump', 'well', 'rain'], label: (id) => t(`q.${id}`) },
+    ...(onCanal ? [{ key: 'canal', title: t('q.canal'), options: ['start', 'middle', 'end'], label: (id) => t(`q.canal_${id}`) }] : []),
+    { key: 'usual', title: t('q.usual'), options: ['enough', 'sometimes', 'often', 'unknown'], label: (id) => t(id === 'unknown' ? 'q.notSure' : `q.${id}`) },
     { key: 'soil', title: t('q.soil'), options: ['sandy', 'medium', 'clay', 'unknown'], label: (id) => t(`soil.${id}`) },
     { key: 'priority', title: t('q.priority'), options: ['water', 'income', 'soil'], label: (id) => t(`priority.${id}`) },
   ];

@@ -2,7 +2,7 @@
 import KYRGYZSTAN from '../data/kyrgyzstan.json'; // border, OpenStreetMap via geoBoundaries
 import WATER from '../data/water.json'; // main lakes and reservoirs, OpenStreetMap
 import DISTRICTS from '../data/districts.json'; // districts (raions), geoBoundaries
-import { inPolygon } from './geo';
+import { centroid, inPolygon } from './geo';
 
 export const ALL_DISTRICTS = DISTRICTS.districts.map(({ id }) => id);
 
@@ -14,6 +14,12 @@ export function districtAt(point) {
 
   const distance = (d) => Math.min(...d.polygons.flat(2).map(([lat, lng]) => (lat - point[0]) ** 2 + (lng - point[1]) ** 2));
   return DISTRICTS.districts.reduce((best, d) => (distance(d) < distance(best) ? d : best)).id;
+}
+
+// Rough centre of a district (its largest outline): enough to pick the river basin.
+export function districtCenter(id) {
+  const { polygons } = DISTRICTS.districts.find((d) => d.id === id);
+  return centroid(polygons.map(([outer]) => outer).reduce((a, b) => (b.length > a.length ? b : a)));
 }
 
 export const MAX_FIELD_ELEVATION = 3000; // metres; above this Kyrgyzstan has almost no ploughland

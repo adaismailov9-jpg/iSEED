@@ -18,6 +18,8 @@ const realApi = {
   getBasin: (lat, lon) => request(`/basin?lat=${lat}&lon=${lon}`),
   getHindcast: (basin) => request(`/hindcast?basin=${basin}`),
   check: (body, lang) => request('/check', { ...body, lang }),
+  getSnow: (basin) => request(`/snow?basin=${basin}`),
+  manager: (canal) => request('/manager', canal),
 };
 
 export const api = isMock ? mockApi : realApi;

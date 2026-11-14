@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { useI18n } from '../i18n';
 import Verdict from '../components/Verdict';
-import Alternatives from '../components/Alternatives';
+import AltRow from '../components/AltRow';
 import CompareTable from '../components/CompareTable';
 import Evidence from '../components/Evidence';
+import PlanShare from '../components/PlanShare';
+import SeasonMessage from '../components/SeasonMessage';
 import { SEASONS } from '../data/demo';
 import { fmtDec } from '../lib/format';
 
 // Second tab: every field + crop the farmer added, saved on the phone.
 export default function PlanScreen({ plans, openId, setOpenId, updatePlan, deletePlan, busy, error, goField }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const open = plans.find((p) => p.id === openId);
 
   if (open) {
@@ -29,8 +31,26 @@ export default function PlanScreen({ plans, openId, setOpenId, updatePlan, delet
     <div className="screen">
       <h2>{t('tabs.plan')}</h2>
       <p className="hint">{t('plan.saved')}</p>
+      <SeasonMessage />
+      {error && <p className="error">{t('common.error')}</p>}
       <div className="plan-list">
-        {plans.map((plan) => <PlanCard key={plan.id} plan={plan} onOpen={() => setOpenId(plan.id)} />)}
+        {plans.map((plan) => (
+          <div key={plan.id} className="plan-group">
+            <h3>{t('plan.chosen')}</h3>
+            <PlanCard plan={plan} onOpen={() => setOpenId(plan.id)} />
+            {plan.result.alternatives.length > 0 && <h3>{t('plan.others')}</h3>}
+            {plan.result.alternatives.slice(0, 2).map((crop) => (
+              <AltRow
+                key={crop.id}
+                crop={crop}
+                className="card"
+                field={`${fmtDec(plan.result.input.areaHa, 2, lang)} ${t('units.ha')} · ${t(`basins.${plan.result.evidence.basin.id}`)}`}
+                onPick={(id) => updatePlan(plan.id, { crop: id })}
+                disabled={busy}
+              />
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -82,11 +102,11 @@ function PlanDetail({ plan, onBack, onUpdate, onDelete, busy, error }) {
               ))}
             </div>
           </div>
-          <a className="btn" href="tel:1210">{t('verdict.hotline')}</a>
+          <a className="btn hotline" href="tel:1210">{t('verdict.hotline')}</a>
+          <PlanShare plan={plan} />
         </div>
 
         <div className="column">
-          <Alternatives items={result.alternatives} priority={result.input.priority} onPick={(crop) => onUpdate({ crop })} disabled={busy} />
           <details className="card">
             <summary>{t('compare.title')}</summary>
             <CompareTable rows={result.all} chosenId={result.chosen.id} onPick={(crop) => onUpdate({ crop })} disabled={busy} />

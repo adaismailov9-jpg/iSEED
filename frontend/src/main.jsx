@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { I18nProvider } from './i18n';
 import App from './App';
+import { load } from './lib/storage';
 import './styles.css';
+
+document.documentElement.dataset.theme = load('theme', matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

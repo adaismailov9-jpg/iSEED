@@ -39,6 +39,9 @@ export default function Verdict({ result }) {
       </div>
 
       <p className="hint">{t('verdict.season', { year: evidence.basin.year })}</p>
+      {result.notes?.map((note) => (
+        <p key={note.text} className={`verdict-note ${note.kind}`}>{note.kind === 'good' ? '✓' : '⚠'} {note.text}</p>
+      ))}
       <p className="tip">
         <b>{t('verdict.tip')}:</b> {tip}
       </p>

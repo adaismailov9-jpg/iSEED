@@ -6,6 +6,7 @@ import Questions from '../components/Questions';
 import Badge from '../components/Badge';
 import Icon from '../components/Icon';
 import SavedFields from '../components/SavedFields';
+import SeasonMessage from '../components/SeasonMessage';
 import { MIN_POINTS, areaHa, centroid, squareAround } from '../lib/geo';
 import { MAX_FIELD_ELEVATION, whyNotHere } from '../lib/terrain';
 import { fmtDec, fmtInt, fmtPct } from '../lib/format';
@@ -88,6 +89,7 @@ export default function FieldScreen({ points, setPoints, plans, basin, answers, 
       </div>
 
       <aside className="panel">
+        <SeasonMessage />
         <section className="field-card">
           <h2>{t('field.title')}</h2>
           <p className="hint">{t(hasField ? 'field.editHint' : 'field.hint')}</p>
