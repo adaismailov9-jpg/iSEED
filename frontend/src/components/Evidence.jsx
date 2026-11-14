@@ -1,5 +1,5 @@
 import { useI18n } from '../i18n';
-import { fmtDec, fmtInt, fmtPct } from '../lib/format';
+import { fmtDec, fmtInt, fmtPct, snowDirection } from '../lib/format';
 import Badge from './Badge';
 
 function Row({ label, children }) {
@@ -24,7 +24,7 @@ export default function Evidence({ result }) {
     <div className="evidence">
       <h4>{t('evidence.snow')} <Badge source={t('sources.fldas')} /></h4>
       <Row label={t('evidence.basin')}>{t(`basins.${snow.basin}`)}</Row>
-      <Row label={t('evidence.level')}>{t(`levels.${snow.level}`)} ({fmtPct(snow.anomaly)})</Row>
+      <Row label={t('evidence.level')}>{t(`levels.${snowDirection(snow.anomaly)}`)} ({fmtPct(snow.anomaly)})</Row>
       <Row label={t('evidence.month')}>{snow.month}</Row>
       <Row label={t('evidence.dry')}>{fmtPct(scenarios.dry.snowAnomaly)} · S {fmtDec(scenarios.dry.s, 2, lang)} · P {fmtDec(scenarios.dry.p, 2, lang)}</Row>
       <Row label={t('evidence.normal')}>S {fmtDec(scenarios.normal.s, 2, lang)} · P {fmtDec(scenarios.normal.p, 2, lang)}</Row>

@@ -5,7 +5,7 @@ import { ErrorText } from '../components/Texts';
 import Badge from '../components/Badge';
 import { CROP_IDS } from '../data/ids';
 import { districtCenter } from '../lib/terrain';
-import { fmtInt, fmtPct, fmtShare } from '../lib/format';
+import { fmtInt, fmtPct, fmtShare, snowDirection } from '../lib/format';
 
 // Water manager's tab: the canal is described once (saved on the server), then the season signal for it.
 export default function ManagerScreen({ user, onSignOut }) {
@@ -142,7 +142,7 @@ function CanalSignal({ result }) {
 
       <section className="card">
         <h3>{t('canal.snow')} <Badge source={t('sources.fldas')} /></h3>
-        <span className={`snow-chip snow-${snow.level}`}>{t(`levels.${snow.level}`)} · {fmtPct(snow.anomaly)}</span>
+        <span className={`snow-chip snow-${snowDirection(snow.anomaly)}`}>{t(`levels.${snowDirection(snow.anomaly)}`)} · {fmtPct(snow.anomaly)}</span>
         <p className="hint">{t('canal.snowDate', { month: snow.month })}</p>
         {snow.south && <p className="verdict-note">{t('season.south')}</p>}
       </section>

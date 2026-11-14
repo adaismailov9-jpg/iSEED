@@ -6,7 +6,7 @@ import PlanShare from '../components/PlanShare';
 import SeasonMessage, { MessageBox } from '../components/SeasonMessage';
 import { ErrorText, waterLeftText } from '../components/Texts';
 import Badge from '../components/Badge';
-import { fitLevel, fmtDay, fmtDec, fmtInt, fmtPct, fmtShare } from '../lib/format';
+import { fitLevel, fmtDay, fmtDec, fmtInt, fmtPct, fmtShare, snowDirection } from '../lib/format';
 
 const shortFitOf = (result) => result.evidence.rules.short_fit.value;
 
@@ -135,7 +135,7 @@ function PlanDetail({ plan, onBack, onPick, onDelete, busy, error }) {
           <section className="card">
             <h3>{t('season.title')}</h3>
             <p>
-              {t('season.snow', { basin: t(`basins.${snow.basin}`), level: t(`levelsInline.${snow.level}`), pct: fmtPct(snow.anomaly), month: snow.month })}{' '}
+              {t('season.snow', { basin: t(`basins.${snow.basin}`), level: t(`levelsInline.${snowDirection(snow.anomaly)}`), pct: fmtPct(snow.anomaly), month: snow.month })}{' '}
               <Badge source={t('sources.fldas')} />
             </p>
             <p className="hint">{t('season.dryYear', { pct: fmtPct(dryYear.anomaly), years: dryYear.years.join(', ') })}</p>

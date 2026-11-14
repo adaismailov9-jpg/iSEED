@@ -14,13 +14,13 @@ import { districtAt } from './lib/terrain';
 import { load, save } from './lib/storage';
 
 const TABS = { farmer: ['field', 'plan', 'agro', 'about'], manager: ['canal', 'about'] };
-const EMPTY_ANSWERS = { previous: '', plan: '', winterWheat: '', source: '', position: '', normalYear: '', soil: '' };
+const EMPTY_ANSWERS = { previous: '', previous2: '', plan: '', winterWheat: '', source: '', position: '', normalYear: '', soil: '' };
 
 // The farmer's answers in the shape POST /farmer expects.
 function farmerRequest(points, a) {
   return {
     geometry: toGeoJSON(points),
-    lastCrops: a.previous && a.previous !== 'none' ? [a.previous] : [],
+    lastCrops: [a.previous, a.previous2].filter((c) => c && c !== 'none'), // last season first
     plan: a.plan,
     winterWheatSown: a.winterWheat === 'yes',
     source: a.source,

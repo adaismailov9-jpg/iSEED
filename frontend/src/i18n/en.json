@@ -48,6 +48,8 @@
   "q": {
     "previous": "Last crop",
     "previousHint": "What grew on this field last season?",
+    "previous2": "And the season before?",
+    "previous2Hint": "Two seasons show which crops the soil needs a rest from.",
     "plan": "What do you plan to sow?",
     "planHint": "iSEED checks this crop and suggests options that save water or care for the soil.",
     "winterWheat": "Did you sow winter wheat this autumn?",
@@ -344,7 +346,7 @@
     "hint": "Farmers in these villages will see it: {villages}.",
     "placeholder": "For example: irrigation on schedule this year, 4 turns. Starts on 10 May.",
     "send": "Send",
-    "sent": "Sent {date}. Without a server the message shows on this phone only.",
+    "sent": "Sent {date}. Farmers registered in your villages see it at the top of their result.",
     "fromManager": "Water manager {name} · {date}"
   },
   "errors": {

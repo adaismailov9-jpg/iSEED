@@ -4,6 +4,10 @@ export const fmtInt = (n, lang) =>
 
 export const fmtDec = (n, digits, lang) => (lang === 'en' ? n.toFixed(digits) : n.toFixed(digits).replace('.', ','));
 
+// Below / near / above normal from the snow anomaly, the same number the water factor uses.
+// (The tercile level from snow.json can call -20% "normal", which reads as a contradiction.)
+export const snowDirection = (anomaly) => (anomaly <= -0.05 ? 'low' : anomaly >= 0.05 ? 'high' : 'normal');
+
 export const fmtPct = (x) => `${x > 0 ? '+' : ''}${Math.round(x * 100)}%`; // change: +12%, −20%
 
 export const fmtShare = (x) => `${Math.round(x * 100)}%`; // share: 81%

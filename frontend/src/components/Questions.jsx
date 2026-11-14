@@ -8,6 +8,7 @@ function buildSteps(answers, t) {
   const onCanal = answers.source === 'gravity' || answers.source === 'pump';
   return [
     { key: 'previous', title: t('q.previous'), hint: t('q.previousHint'), options: [...CROP_IDS, 'none'], label: crop },
+    { key: 'previous2', title: t('q.previous2'), hint: t('q.previous2Hint'), options: [...CROP_IDS, 'none'], label: crop },
     { key: 'plan', title: t('q.plan'), hint: t('q.planHint'), options: CROP_IDS, label: crop },
     { key: 'winterWheat', title: t('q.winterWheat'), hint: t('q.winterWheatHint'), options: ['yes', 'no'], label: (id) => t(`q.${id}`) },
     { key: 'source', title: t('q.source'), options: ['gravity', 'pump', 'well'], label: (id) => t(`q.${id}`) },

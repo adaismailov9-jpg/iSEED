@@ -22,7 +22,7 @@ export default function FieldCheck({ check }) {
       <ul>
         {check.checks.map((c) => (
           <li key={c.id} className={`level-${c.level}`}>
-            <span className="dot" /> {t(`check.${c.id}.${c.level}`, textVars(c, t, lang))} <Badge source={t(`sources.${c.source}`)} />
+            <span className="dot" /> {t(`check.${c.id}.${c.level}`, textVars(c, t, lang))} <Badge kind="source" label={t(`sources.${c.source}`).split(' — ')[0]} source={t(`sources.${c.source}`)} />
           </li>
         ))}
       </ul>

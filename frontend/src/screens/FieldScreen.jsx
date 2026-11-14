@@ -11,7 +11,7 @@ import SeasonMessage from '../components/SeasonMessage';
 import { ErrorText } from '../components/Texts';
 import { MIN_POINTS, areaHa, centroid, squareAround } from '../lib/geo';
 import { MAX_FIELD_ELEVATION, whyNotHere } from '../lib/terrain';
-import { fmtDec, fmtInt, fmtPct } from '../lib/format';
+import { fmtDec, fmtInt, fmtPct, snowDirection } from '../lib/format';
 
 // First tab: the questions (left on wide screens) and the field on the map (right).
 export default function FieldScreen({ points, setPoints, plans, place, user, answers, setAnswers, resetAnswers, onSubmit, busy, error }) {
@@ -126,8 +126,8 @@ function BasinInfo({ place }) {
       <div className="label">{t('basin.label')}</div>
       <div className="basin-name">{t(`basins.${basin}`)}</div>
       <div className="label">{t('basin.snow')} <Badge source={t('sources.fldas')} /></div>
-      <span className={`snow-chip snow-${snow.level}`}>
-        {t(`levels.${snow.level}`)} · {fmtPct(snow.anomaly)}
+      <span className={`snow-chip snow-${snowDirection(snow.anomaly)}`}>
+        {t(`levels.${snowDirection(snow.anomaly)}`)} · {fmtPct(snow.anomaly)}
       </span>
     </div>
   );
