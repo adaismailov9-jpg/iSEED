@@ -1,0 +1,26 @@
+"""The declarative base every table class inherits from."""
+from datetime import datetime
+
+from sqlalchemy import DateTime, MetaData
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.orm import DeclarativeBase
+
+# Predictable constraint names (ck_users_phone_e164, fk_fields_user_id_users, ...).
+# Alembic needs stable names to change or drop a constraint in a later migration.
+NAMING_CONVENTION = {
+    "ix": "ix_%(table_name)s_%(column_0_N_name)s",
+    "uq": "uq_%(table_name)s_%(column_0_N_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s",
+}
+
+
+class Base(DeclarativeBase):
+    metadata = MetaData(naming_convention=NAMING_CONVENTION)
+
+    # Python type in Mapped[...] -> column type in Postgres.
+    type_annotation_map = {
+        dict: JSONB,                         # JSON stored in binary form, queryable
+        datetime: DateTime(timezone=True),   # timestamptz: always stored in UTC
+    }
