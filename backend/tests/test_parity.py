@@ -90,6 +90,18 @@ def scenario(store, monkeypatch):
     call("snow", "GET", "/snow", params={"basin": "talas"})
     call("crops", "GET", "/crops")
 
+    # security: owner-only fields, logout, PIN limit
+    call("farmer on someone else's field", "POST", "/farmer", "bakyt", json={"fieldId": first["id"], **ANSWERS})
+    call("saved field without sign-in", "POST", "/farmer", json={"fieldId": first["id"], **ANSWERS})
+    call("copy a field via /fields", "POST", "/fields", "bakyt", json={"fieldId": first["id"]})
+    call("fieldId not a number", "POST", "/farmer", "aibek", json={"fieldId": "1", **ANSWERS})
+    call("logout", "POST", "/logout", "bakyt")
+    call("after logout", "GET", "/fields", "bakyt")
+    for guess in ("0000", "1111", "3333", "4444", "5555"):  # Asan's PIN is 2222
+        call(f"wrong pin {guess}", "POST", "/login", json={"name": "Asan", "pin": guess})
+    call("locked, right pin", "POST", "/login", json={"name": "Asan", "pin": "2222"})
+    call("other name still fine", "POST", "/login", json={"name": "Mirab", "pin": "4321"})
+
     # last, because a rejected sign-up uses up an id in Postgres (ids may skip; see module docstring)
     call("name taken", "POST", "/register", json={"name": "Aibek", "role": "manager", "region": "Chüy", "village": "X", "pin": "9999"})
     return steps
@@ -113,3 +125,7 @@ def test_sqlite_and_postgres_give_the_same_answers(tmp_path, monkeypatch, pg_sto
     assert bodies["message for 'Elsewhere'"]["message"] is None
     assert bodies["farmer inline, canal village"]["message"]["manager"] == "Mirab"
     assert bodies["farmer inline, no manager"]["message"] is None
+    assert statuses["farmer on someone else's field"] == 404 and statuses["saved field without sign-in"] == 401
+    assert statuses["copy a field via /fields"] == 422 and statuses["fieldId not a number"] == 422
+    assert statuses["logout"] == 200 and statuses["after logout"] == 401
+    assert statuses["locked, right pin"] == 429 and statuses["other name still fine"] == 200

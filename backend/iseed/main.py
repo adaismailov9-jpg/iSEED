@@ -1,16 +1,23 @@
 """iSEED API. Shapes are in CLAUDE.md. Routes answer at /x (dev proxy) and /api/x (Vercel)."""
+import os
+from datetime import timedelta
 from functools import lru_cache
 
 from fastapi import APIRouter, FastAPI, Header, Request
 from fastapi.responses import JSONResponse
 
-from . import engine, geo
+from . import engine, geo, storage
 from .climate import basin_at, climate_at, load, rain_at
 from .grid import site_at
 from .storage import open_store
 
 VERSION = "0.2.0"
 MESSAGE_MAX = 280
+# /login limit: a 4-digit PIN has only 10,000 values, so wrong guesses are counted in the store
+# (shared by every server instance). Over the limit, /login answers 429 until old failures age out.
+LOGIN_WINDOW = timedelta(minutes=15)
+LOGIN_MAX_PER_NAME = 5    # wrong PINs for one name
+LOGIN_MAX_PER_IP = 20     # wrong PINs from one address, across names (stops "1234 for everyone")
 app = FastAPI(title="iSEED")
 api = APIRouter()
 store = lru_cache(open_store)  # opened on first use
@@ -34,8 +41,22 @@ def need(body, key, allowed=None):
     return value
 
 
+def token_of(authorization):
+    return (authorization or "").removeprefix("Bearer ").strip()
+
+
+def client_ip(request: Request):
+    """The caller's address. On Vercel the platform sets X-Forwarded-For; elsewhere a client could
+    fake that header, so it is ignored and the socket address is used."""
+    if os.environ.get("VERCEL"):
+        forwarded = request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+        if forwarded:
+            return forwarded
+    return request.client.host if request.client else "unknown"
+
+
 def user_of(authorization, role=None, required=True):
-    token = (authorization or "").removeprefix("Bearer ").strip()
+    token = token_of(authorization)
     user = store().user_for_token(token) if token else None
     if not user and required:
         raise ApiError(401, "not_signed_in", "Sign in first")
@@ -77,11 +98,17 @@ def climate_evidence(climate):
     return {k: climate[k] for k in keys}
 
 
-def place(body, authorization=None):
-    """Where the request is about: a saved field, an outline, or a point with hectares."""
+def place(body, user=None):
+    """Where the request is about: a saved field (only the signed-in owner's), an outline, or a point with hectares."""
     if body.get("fieldId") is not None:
-        field = store().field(body["fieldId"])
-        if not field:
+        field_id = body["fieldId"]
+        if not isinstance(field_id, int) or isinstance(field_id, bool):
+            raise ApiError(422, "bad_input", "'fieldId' must be a whole number")
+        if not user:
+            raise ApiError(401, "not_signed_in", "Sign in to use a saved field")
+        field = store().field(field_id)
+        # Someone else's field gets the same answer as a missing one, so ids reveal nothing.
+        if not field or field["userId"] != user["id"]:
             raise ApiError(404, "no_field", "This field does not exist")
         return field
     if body.get("geometry"):
@@ -120,11 +147,24 @@ def register(body: dict):
 
 
 @api.post("/login")
-def login(body: dict):
-    user = store().check_pin(need(body, "name"), str(need(body, "pin")))
+def login(body: dict, request: Request):
+    name, pin, ip = str(need(body, "name")), str(need(body, "pin")), client_ip(request)
+    by_name, by_ip = store().failed_logins(name, ip, storage.utcnow() - LOGIN_WINDOW)
+    if by_name >= LOGIN_MAX_PER_NAME or by_ip >= LOGIN_MAX_PER_IP:
+        raise ApiError(429, "too_many_tries", "Too many wrong PINs. Try again in 15 minutes")
+    user = store().check_pin(name, pin)
     if not user:
+        store().add_failed_login(name, ip)
         raise ApiError(401, "wrong_login", "Wrong name or PIN")
+    store().clear_failed_logins(name)
     return {"token": store().create_session(user["id"]), "user": user}
+
+
+@api.post("/logout")
+def logout(authorization: str = Header(None)):
+    user_of(authorization)  # 401 if the token is missing, wrong or expired
+    store().delete_session(token_of(authorization))
+    return {"ok": True}
 
 
 # --- data
@@ -170,6 +210,8 @@ def hindcast(basin: str):
 @api.post("/fields")
 def add_field(body: dict, authorization: str = Header(None)):
     user = user_of(authorization, required=False)
+    if body.get("fieldId") is not None:  # this route makes a new field; a fieldId here would copy a saved one
+        raise ApiError(422, "bad_input", "Send 'geometry', or 'lat', 'lon' and 'areaHa', not 'fieldId'")
     field = place(body)
     field["fieldCheck"] = engine.field_check(field["site"])
     if user:
@@ -235,7 +277,7 @@ def message(village: str):
 @api.post("/farmer")
 def farmer(body: dict, authorization: str = Header(None)):
     user = user_of(authorization, required=False)
-    field = place(body)
+    field = place(body, user)
     plan = need(body, "plan", tuple(engine.CROPS))
     rain = rain_at(field["lat"], field["lon"])
     dry = dry_year(field["basin"])

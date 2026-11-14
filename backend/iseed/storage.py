@@ -1,4 +1,4 @@
-"""Where users, sessions, fields, canals and season messages live.
+"""Where users, sessions, fields, canals, season messages and wrong-PIN records live.
 
 The API talks only to the Store methods below. SQLiteStore is for local work; the database
 lane adds PostgresStore with the same methods (Vercel functions keep no files).
@@ -9,17 +9,33 @@ import json
 import os
 import secrets
 import sqlite3
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+SESSION_DAYS = 30          # a sign-in lasts 30 days, then the user signs in again
+FAILURES_KEPT = timedelta(days=1)  # wrong-PIN records older than this are deleted
+
+# Sessions keep only a SHA-256 hash of the token, so a copy of the database holds no usable token.
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, role TEXT NOT NULL,
   region TEXT NOT NULL, village TEXT NOT NULL, pin TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS sessions (token TEXT PRIMARY KEY, user_id INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, user_id INTEGER NOT NULL, expires REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS fields (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL, data TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS canals (user_id INTEGER PRIMARY KEY, data TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS messages (user_id INTEGER PRIMARY KEY, text TEXT NOT NULL, date TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS login_failures (name TEXT NOT NULL, ip TEXT NOT NULL, at REAL NOT NULL);
+CREATE INDEX IF NOT EXISTS ix_login_failures_name_at ON login_failures (name, at);
+CREATE INDEX IF NOT EXISTS ix_login_failures_ip_at ON login_failures (ip, at);
 """
+
+
+def utcnow():
+    """The clock both stores use (tests move it forward)."""
+    return datetime.now(timezone.utc)
+
+
+def token_hash(token):
+    return hashlib.sha256(token.encode()).hexdigest()
 
 
 def hash_pin(pin, salt=None):
@@ -39,6 +55,11 @@ class SQLiteStore:
     def __init__(self, path):
         self.db = sqlite3.connect(path, check_same_thread=False)
         self.db.row_factory = sqlite3.Row
+        # An older iseed.db kept plain-text tokens: drop that table (everyone simply signs in again).
+        columns = [r["name"] for r in self.db.execute("PRAGMA table_info(sessions)")]
+        if columns and "token_hash" not in columns:
+            with self.db:
+                self.db.execute("DROP TABLE sessions")
         self.db.executescript(SCHEMA)
 
     def _user(self, row):
@@ -60,14 +81,42 @@ class SQLiteStore:
         return self._user(row) if row and pin_matches(pin, row["pin"]) else None
 
     def create_session(self, user_id):
-        token = secrets.token_urlsafe(24)
+        """A new token. Only its hash is stored; expired sessions are cleaned up on the way."""
+        token, now = secrets.token_urlsafe(24), utcnow()
         with self.db:
-            self.db.execute("INSERT INTO sessions VALUES (?,?)", (token, user_id))
+            self.db.execute("DELETE FROM sessions WHERE expires <= ?", (now.timestamp(),))
+            self.db.execute("INSERT INTO sessions VALUES (?,?,?)",
+                            (token_hash(token), user_id, (now + timedelta(days=SESSION_DAYS)).timestamp()))
         return token
 
     def user_for_token(self, token):
+        """The user of a valid, unexpired session, else None."""
         return self._user(self.db.execute(
-            "SELECT u.* FROM users u JOIN sessions s ON s.user_id=u.id WHERE s.token=?", (token,)).fetchone())
+            "SELECT u.* FROM users u JOIN sessions s ON s.user_id=u.id WHERE s.token_hash=? AND s.expires > ?",
+            (token_hash(token), utcnow().timestamp())).fetchone())
+
+    def delete_session(self, token):
+        """Sign out: this token stops working; the user's other sessions stay."""
+        with self.db:
+            self.db.execute("DELETE FROM sessions WHERE token_hash=?", (token_hash(token),))
+
+    # wrong-PIN records, for the /login limit
+    def failed_logins(self, name, ip, since):
+        """(wrong PINs for this name, wrong PINs from this IP) after `since`."""
+        s = since.timestamp()
+        count = "SELECT count(*) FROM login_failures WHERE {} = ? AND at > ?"
+        return (self.db.execute(count.format("name"), (name.strip(), s)).fetchone()[0],
+                self.db.execute(count.format("ip"), (ip, s)).fetchone()[0])
+
+    def add_failed_login(self, name, ip):
+        now = utcnow()
+        with self.db:
+            self.db.execute("DELETE FROM login_failures WHERE at <= ?", ((now - FAILURES_KEPT).timestamp(),))
+            self.db.execute("INSERT INTO login_failures VALUES (?,?,?)", (name.strip(), ip, now.timestamp()))
+
+    def clear_failed_logins(self, name):
+        with self.db:
+            self.db.execute("DELETE FROM login_failures WHERE name=?", (name.strip(),))
 
     # fields
     def save_field(self, user_id, data):

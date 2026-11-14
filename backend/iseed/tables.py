@@ -4,7 +4,7 @@ The same five tables as SQLiteStore's SCHEMA, with Postgres types: JSON is JSONB
 date is a real DATE, and every row hangs off its user with a foreign key, so deleting a user
 deletes their sessions, fields, canal and message.
 """
-from sqlalchemy import BigInteger, CheckConstraint, Column, Date, DateTime, ForeignKey, Identity, MetaData, Table, Text, func
+from sqlalchemy import BigInteger, CheckConstraint, Column, Date, DateTime, ForeignKey, Identity, Index, MetaData, Table, Text, func
 from sqlalchemy.dialects.postgresql import JSONB
 
 # Predictable constraint names, so a later migration can find and change them.
@@ -39,9 +39,21 @@ users = Table(
 
 sessions = Table(
     "sessions", metadata,
-    Column("token", Text, primary_key=True),
+    Column("token_hash", Text, primary_key=True),  # SHA-256 of the token; the token itself is never stored
     _user_fk(index=True),
     _created(),
+    Column("expires_at", DateTime(timezone=True), nullable=False),
+    CheckConstraint("token_hash ~ '^[0-9a-f]{64}$'", name="token_is_hash"),  # refuses a plain token by mistake
+)
+
+login_failures = Table(  # one row per wrong PIN, for the /login limit; rows older than a day are deleted
+    "login_failures", metadata,
+    Column("id", BigInteger, Identity(), primary_key=True),
+    Column("name", Text, nullable=False),
+    Column("ip", Text, nullable=False),
+    Column("at", DateTime(timezone=True), nullable=False),
+    Index("ix_login_failures_name_at", "name", "at"),
+    Index("ix_login_failures_ip_at", "ip", "at"),
 )
 
 fields = Table(

@@ -170,3 +170,89 @@ def test_deleting_a_user_deletes_everything_of_theirs(pg_store):
         counts = db.execute(text("SELECT (SELECT count(*) FROM sessions) + (SELECT count(*) FROM fields)"
                                  " + (SELECT count(*) FROM canals) + (SELECT count(*) FROM messages)")).scalar_one()
     assert counts == 0
+
+
+# ---------------------------------------------------------------- session security (both stores)
+
+from datetime import timedelta  # noqa: E402
+
+from conftest import count_rows, stored_session_tokens  # noqa: E402
+
+
+def test_token_is_stored_only_as_its_hash(store):
+    token = store.create_session(farmer(store)["id"])
+    assert stored_session_tokens(store) == [storage.token_hash(token)]
+    assert token not in stored_session_tokens(store)
+    assert store.user_for_token(storage.token_hash(token)) is None  # the stored hash is not a usable token
+
+
+def test_session_lasts_30_days(store, clock):
+    user = farmer(store)
+    token = store.create_session(user["id"])
+    clock.forward(days=29, hours=23)
+    assert store.user_for_token(token) == user
+    clock.forward(hours=2)
+    assert store.user_for_token(token) is None
+
+
+def test_expired_sessions_are_cleaned_up(store, clock):
+    user = farmer(store)
+    store.create_session(user["id"])
+    clock.forward(days=31)
+    store.create_session(user["id"])
+    assert count_rows(store, "sessions") == 1
+
+
+def test_delete_session_ends_only_that_session(store):
+    user = farmer(store)
+    phone, laptop = store.create_session(user["id"]), store.create_session(user["id"])
+    store.delete_session(phone)
+    assert store.user_for_token(phone) is None
+    assert store.user_for_token(laptop) == user
+
+
+def test_failed_logins_are_counted_per_name_and_ip(store, clock):
+    since = clock() - timedelta(minutes=15)
+    store.add_failed_login("Aibek", "1.1.1.1")
+    store.add_failed_login(" Aibek ", "1.1.1.1")
+    store.add_failed_login("Bakyt", "1.1.1.1")
+    store.add_failed_login("Aibek", "2.2.2.2")
+    assert store.failed_logins("Aibek", "1.1.1.1", since) == (3, 3)
+    assert store.failed_logins("Bakyt", "2.2.2.2", since) == (1, 1)
+    clock.forward(minutes=16)
+    assert store.failed_logins("Aibek", "1.1.1.1", clock() - timedelta(minutes=15)) == (0, 0)
+    store.clear_failed_logins("Aibek")
+    assert store.failed_logins("Aibek", "1.1.1.1", since) == (0, 1)  # only Bakyt's remains on 1.1.1.1
+
+
+def test_old_failure_records_are_deleted(store, clock):
+    store.add_failed_login("Aibek", "1.1.1.1")
+    clock.forward(days=2)
+    store.add_failed_login("Aibek", "1.1.1.1")
+    assert count_rows(store, "login_failures") == 1
+
+
+def test_old_sqlite_file_with_plain_tokens_is_upgraded(tmp_path):
+    import sqlite3
+    path = str(tmp_path / "old.db")
+    old = sqlite3.connect(path)
+    old.executescript("""
+        CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, role TEXT NOT NULL,
+          region TEXT NOT NULL, village TEXT NOT NULL, pin TEXT NOT NULL);
+        CREATE TABLE sessions (token TEXT PRIMARY KEY, user_id INTEGER NOT NULL);
+    """)
+    old.execute("INSERT INTO users VALUES (1, 'Aibek', 'farmer', 'Talas', 'Kök-Say', ?)", (storage.hash_pin("1234"),))
+    old.execute("INSERT INTO sessions VALUES ('plain-old-token', 1)")
+    old.commit()
+    old.close()
+    store = storage.SQLiteStore(path)
+    assert store.user_for_token("plain-old-token") is None  # old plain-text sessions are gone
+    assert store.check_pin("Aibek", "1234")["id"] == 1      # accounts are kept
+    assert store.user_for_token(store.create_session(1))["name"] == "Aibek"
+
+
+def test_database_refuses_a_plain_token(pg_store):
+    farmer(pg_store)
+    with pytest.raises(IntegrityError, match="ck_sessions_token_is_hash"):
+        with pg_store.engine.begin() as db:
+            db.execute(text("INSERT INTO sessions (token_hash, user_id, expires_at) VALUES ('plain', 1, now())"))

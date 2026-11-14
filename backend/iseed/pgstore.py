@@ -6,14 +6,15 @@ not here: run `alembic upgrade head` once per database.
 """
 import os
 import secrets
-from datetime import date
+from datetime import date, timedelta
 
-from sqlalchemy import Engine, create_engine, func, insert, select
+from sqlalchemy import Engine, create_engine, delete, func, insert, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.pool import NullPool
 
+from . import storage
 from . import tables as t
-from .storage import hash_pin, pin_matches, same_place
+from .storage import hash_pin, pin_matches, same_place, token_hash
 
 USER = (t.users.c.id, t.users.c.name, t.users.c.role, t.users.c.region, t.users.c.village)
 
@@ -59,16 +60,46 @@ class PostgresStore:
         return None
 
     def create_session(self, user_id):
-        token = secrets.token_urlsafe(24)
+        """A new token. Only its hash is stored; expired sessions are cleaned up on the way."""
+        token, now = secrets.token_urlsafe(24), storage.utcnow()
         with self.engine.begin() as db:
-            db.execute(insert(t.sessions).values(token=token, user_id=user_id))
+            db.execute(delete(t.sessions).where(t.sessions.c.expires_at <= now))
+            db.execute(insert(t.sessions).values(token_hash=token_hash(token), user_id=user_id,
+                                                 expires_at=now + timedelta(days=storage.SESSION_DAYS)))
         return token
 
     def user_for_token(self, token):
-        stmt = select(*USER).join(t.sessions, t.sessions.c.user_id == t.users.c.id).where(t.sessions.c.token == token)
+        """The user of a valid, unexpired session, else None."""
+        s = t.sessions
+        stmt = (select(*USER).join(s, s.c.user_id == t.users.c.id)
+                .where(s.c.token_hash == token_hash(token), s.c.expires_at > storage.utcnow()))
         with self.engine.connect() as db:
             row = db.execute(stmt).mappings().first()
         return dict(row) if row else None
+
+    def delete_session(self, token):
+        """Sign out: this token stops working; the user's other sessions stay."""
+        with self.engine.begin() as db:
+            db.execute(delete(t.sessions).where(t.sessions.c.token_hash == token_hash(token)))
+
+    # wrong-PIN records, for the /login limit
+    def failed_logins(self, name, ip, since):
+        """(wrong PINs for this name, wrong PINs from this IP) after `since`."""
+        f = t.login_failures
+        count = lambda col, value: select(func.count()).where(col == value, f.c.at > since).scalar_subquery()  # noqa: E731
+        with self.engine.connect() as db:
+            row = db.execute(select(count(f.c.name, name.strip()), count(f.c.ip, ip))).one()
+        return row[0], row[1]
+
+    def add_failed_login(self, name, ip):
+        now, f = storage.utcnow(), t.login_failures
+        with self.engine.begin() as db:
+            db.execute(delete(f).where(f.c.at <= now - storage.FAILURES_KEPT))
+            db.execute(insert(f).values(name=name.strip(), ip=ip, at=now))
+
+    def clear_failed_logins(self, name):
+        with self.engine.begin() as db:
+            db.execute(delete(t.login_failures).where(t.login_failures.c.name == name.strip()))
 
     # fields
     def save_field(self, user_id, data):

@@ -42,7 +42,7 @@ cd scripts && ../backend/.venv/bin/pip install earthengine-api numpy   # then: e
 
 ## API rules
 
-- JSON, camelCase keys. Errors: `{ "code": "...", "message": "..." }` with codes `bad_input`, `not_signed_in`, `wrong_role`, `wrong_login`, `name_taken`, `no_basin`, `no_field`, `data_missing`.
+- JSON, camelCase keys. Errors: `{ "code": "...", "message": "..." }` with codes `bad_input`, `not_signed_in`, `wrong_role`, `wrong_login`, `name_taken`, `too_many_tries`, `no_basin`, `no_field`, `data_missing`.
 - Every route answers at `/x` (Vite dev proxy strips `/api`) and at `/api/x` (Vercel).
 - Signed-in requests send `Authorization: Bearer <token>`.
 - The API returns codes and numbers (`"kind": "saver"`, `"level": "careful"`); the frontend turns codes into text through i18n keys.
@@ -53,14 +53,16 @@ cd scripts && ../backend/.venv/bin/pip install earthengine-api numpy   # then: e
 ## Accounts
 
 - `POST /register` `{ name, role: "farmer" | "manager", region, village, pin: "1234" }` → `{ token, user: { id, name, role, region, village } }`. `409 name_taken`.
-- `POST /login` `{ name, pin }` → same. `401 wrong_login`.
+- `POST /login` `{ name, pin }` → same. `401 wrong_login`. After 5 wrong PINs for one name, or 20 from one address, within 15 minutes: `429 too_many_tries` (even with the right PIN) until 15 minutes pass. Show "wait and try again", not "wrong PIN".
+- `POST /logout` (signed in) → `{ ok: true }`: that token stops working; other devices stay signed in.
+- A token lasts 30 days. After that, signed-in routes answer `401 not_signed_in`: send the user to sign in again.
 
 A farmer sees the season message of the manager whose village, or one of whose canal villages, has the same name as the farmer's village (case and spaces ignored).
 
 ## Field
 
 ### POST /fields
-Request: `{ "geometry": <GeoJSON Polygon> }` or `{ "lat", "lon", "areaHa" }`. Signed in → saved, and the answer has an `id`.
+Request: `{ "geometry": <GeoJSON Polygon> }` or `{ "lat", "lon", "areaHa" }` (`fieldId` is refused here: `422 bad_input`). Signed in → saved, and the answer has an `id`.
 
 ```json
 { "id": 1, "lat": 42.5205, "lon": 72.3005, "areaHa": 0.91, "elevM": 1268, "basin": "talas",
@@ -81,7 +83,7 @@ Signed in → `{ "fields": [ ...as above ] }`.
 ## Farmer
 
 ### POST /farmer
-Request: the field as `{ "fieldId": 1 }`, or `{ "geometry" }`, or `{ "lat", "lon", "areaHa" }`, plus:
+Request: the field as `{ "fieldId": 1 }` (signed in, own fields only: `401 not_signed_in` without a token, `404 no_field` for a missing field or someone else's), or `{ "geometry" }`, or `{ "lat", "lon", "areaHa" }`, plus:
 ```json
 { "position": "start | middle | end", "source": "gravity | pump | well",
   "normalYear": "enough | sometimes | often | unknown",
