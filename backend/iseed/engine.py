@@ -107,7 +107,7 @@ def _option(kind, crop, usual, plan, ctx):
             "rotation": rotation_note(crop, ctx["lastCrops"]),
         },
         "frostOk": crop["winter"] or crop["perennial"] or crop["days"] <= ctx["climate"]["frostFreeDays"],
-        "sowing": sowing_window(crop, ctx["climate"]),
+        "sowing": sowing_window(crop, ctx["climate"], ctx.get("rain")),
         "pumpGap": pump_gap(crop) if ctx["source"] == "pump" else None,
     }
 
@@ -167,7 +167,7 @@ def _md(doy):
     return (date(2027, 1, 1) + timedelta(days=int(doy) - 1)).strftime("%m-%d")
 
 
-def sowing_window(crop, climate):
+def sowing_window(crop, climate, rain=None):
     weeks = climate.get("weekMeanTempC")
     if crop["winter"] or crop["minSowTempC"] is None or not weeks:
         return None
@@ -182,7 +182,63 @@ def sowing_window(crop, climate):
         flower = earliest + crop["daysToFlower"]
         hot = climate["weekHotDays"][min(51, (flower - 1) // 7)]
         out["flowering"] = {"date": _md(flower), "hotDays": hot, "tooHot": hot >= rule("heat_days_week")}
+    if rain:
+        # Sowing weeks: from the earliest date, at most `sowing_weeks`, never past the latest date.
+        first = (earliest - 1) // 7
+        last = min(first + rule("sowing_weeks") - 1, max(first, (latest - 1) // 7), 51)
+        share = rain["weekHeavyShare"]
+        best = min(range(first, last + 1), key=lambda w: (share[w], w))
+        out["heavyRain"] = {
+            "maxShare": max(share[first:last + 1]),
+            "suggested": _md(max(earliest, best * 7 + 1)),
+            "riskyWeeks": [_md(w * 7 + 1) for w in range(first, last + 1) if share[w] >= rule("heavy_rain_share")["no"]],
+        }
     return out
+
+
+# Step 8. Field check: can I plant here? Each check is good / careful / no; the verdict is the worst.
+LEVELS = ("good", "careful", "no")
+
+
+def soil_class(site):
+    cut = rule("soil_class")
+    if not site or site["sandPct"] + site["clayPct"] == 0:
+        return "unknown"
+    if site["sandPct"] >= cut["sandy_sand_pct"]:
+        return "sandy"
+    return "clay" if site["clayPct"] >= cut["clay_clay_pct"] else "medium"
+
+
+def field_check(site, soil_answer=None, crop=None, climate=None, sowing=None):
+    """`site` comes from the grids; the crop checks (frost, heavy rain) are added when a crop is given."""
+    checks = []
+    add = lambda cid, level, value, source: checks.append({"id": cid, "level": level, "value": value, "source": source})
+    if site:
+        slope, cut = site["slopeDeg"], rule("slope_deg")
+        hay = crop and crop["perennial"]
+        level = "good" if slope < cut["careful"] else "careful" if slope <= cut["no"] or hay else "no"
+        add("slope", level, slope, "srtm")
+
+        half = site["ndviYears"] / 2
+        level = "good" if site["greenYears"] > half else "no" if site["bareYears"] > half else "careful"
+        add("green", level, {"greenYears": site["greenYears"], "bareYears": site["bareYears"], "years": site["ndviYears"]}, "modis")
+
+    soil = soil_answer if soil_answer in ("sandy", "medium", "clay") else soil_class(site)
+    if soil != "unknown":
+        add("soil", "good" if soil == "medium" else "careful", soil, "farmer" if soil == soil_answer else "soilgrids")
+
+    if crop and climate and not (crop["winter"] or crop["perennial"]):
+        spare = climate["frostFreeDays"] - crop["days"]
+        add("frost", "good" if spare >= rule("frost_spare_days") else "careful" if spare >= 0 else "no", spare, "power")
+    if sowing and sowing.get("heavyRain"):
+        share, cut = sowing["heavyRain"]["maxShare"], rule("heavy_rain_share")
+        steep = site and site["slopeDeg"] > rule("slope_deg")["careful"]
+        level = "good" if share < cut["careful"] else "no" if share > cut["no"] and steep else "careful"
+        add("heavyRain", level, share, "imerg")
+
+    if not checks:
+        return None
+    return {"verdict": max((c["level"] for c in checks), key=LEVELS.index), "checks": checks}
 
 
 # Step 2. Water manager: what the basin's snow means for his canal

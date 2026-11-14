@@ -49,3 +49,13 @@ def basin_at(lat, lon):
             if _in_ring(lat, lon, outer) and not any(_in_ring(lat, lon, h) for h in holes):
                 return f["properties"]["id"]
     return None
+
+
+def rain_at(lat, lon):
+    """Heavy-rain weeks of the nearest GPM IMERG cell. None if the data is not built."""
+    data = load("rain_weeks.json")
+    if not data:
+        return None
+    k = math.cos(math.radians(lat))
+    cell = min(data["cells"], key=lambda c: (c["lat"] - lat) ** 2 + ((c["lon"] - lon) * k) ** 2)
+    return {**cell, "source": data["source"], "window": data["window"], "heavyMm": data["heavyMm"], "computed": data["computed"]}
