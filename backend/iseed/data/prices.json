@@ -1,0 +1,9 @@
+{
+  "beans": {
+    "yield_t_ha": [1.5, 1.84],
+    "price_som_kg": [50, 100],
+    "region": "talas",
+    "date": "2026-11-14",
+    "source": "Yield: Talas average 2026 and 2024 (topnews.kg). Price: autumn 2026 market low (naq.media, 12 Oct 2026) to planned state purchase (economist.kg, 23 Dec 2025)"
+  }
+}

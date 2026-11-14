@@ -1,0 +1,18 @@
+{
+  "snow_factor": {"value": {"low": 0.75, "normal": 1.0, "high": 1.1}, "estimate": true,
+    "source": "Assumption; to calibrate with the water manager's short years and the hindcast"},
+  "pump_softening": {"value": 0.5, "estimate": true,
+    "source": "Assumption: S_pump = 1 - 0.5 x (1 - S); a big river rarely runs dry"},
+  "position_factor": {"value": {"start": {"normal": 1.0, "low": 1.0}, "middle": {"normal": 1.0, "low": 0.85}, "end": {"normal": 0.9, "low": 0.6}}, "estimate": true,
+    "source": "Assumption; to confirm with the water manager"},
+  "normal_year_factor": {"value": {"enough": 1.1, "sometimes": 0.9, "often": 0.7, "unknown": 1.0}, "estimate": true,
+    "source": "Farmer's answer to: in a normal year, is water enough?"},
+  "effective_rain": {"value": 0.7, "estimate": true, "source": "FAO: about 70% of season rain is useful to the crop"},
+  "field_efficiency": {"value": 0.6, "estimate": true, "source": "FAO, typical furrow irrigation"},
+  "short_fit": {"value": 0.9, "estimate": true, "source": "Fit below 0.9 counts as falling short"},
+  "saver_share": {"value": 0.7, "estimate": true, "source": "Water-saver: net need at most 70% of the plan"},
+  "season_days": {"value": 183, "estimate": false, "source": "April-September"},
+  "heat_c": {"value": 35, "estimate": true, "source": "Days above 35 C harm flowering"},
+  "heat_days_week": {"value": 5, "estimate": true, "source": "5 or more hot days in the flowering week"},
+  "frost_spare_days": {"value": 10, "estimate": true, "source": "Days to spare between crop season and frost-free season"}
+}
