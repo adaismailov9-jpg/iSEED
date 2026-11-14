@@ -7,6 +7,7 @@ out of 10 and weekly frost / heat / temperature (1981-2025). No login needed.
   python scripts/power_job.py 42.52 72.24      # one point (Talas), merged into the file
 """
 import json
+import math
 import sys
 import time
 import urllib.request
@@ -37,6 +38,20 @@ def fetch(lat, lon):
             time.sleep(10 * (attempt + 1))
 
 
+def extraterrestrial_radiation(lat, doy):
+    """Ra in MJ per m2 per day (FAO-56, equation 21)."""
+    phi = math.radians(lat)
+    dr = 1 + 0.033 * math.cos(2 * math.pi * doy / 365)
+    delta = 0.409 * math.sin(2 * math.pi * doy / 365 - 1.39)
+    ws = math.acos(max(-1.0, min(1.0, -math.tan(phi) * math.tan(delta))))
+    return 24 * 60 / math.pi * 0.0820 * dr * (ws * math.sin(phi) * math.sin(delta) + math.cos(phi) * math.cos(delta) * math.sin(ws))
+
+
+def hargreaves_et0(tmax, tmin, ra):
+    """Reference evapotranspiration, mm per day (FAO-56, equation 52). Needs only temperature."""
+    return max(0.0, 0.0023 * ((tmax + tmin) / 2 + 17.8) * math.sqrt(max(0.0, tmax - tmin)) * ra * 0.408)
+
+
 def percentile(values, share):
     """Nearest-rank percentile."""
     ordered = sorted(values)
@@ -52,13 +67,18 @@ def summarise(lat, lon, res):
     ok = lambda v: v is not None and v > -900
     days = []  # (year, day of year, week, tmax, tmin)
     season_rain = {y: 0.0 for y in RAIN_YEARS}
+    week_rain = [0.0] * 52
+    ra = [extraterrestrial_radiation(lat, d) for d in range(367)]
     for k in tmin:
         year = int(k[:4])
-        if year in season_rain and "04" <= k[4:6] <= "09" and ok(rain[k]):
-            season_rain[year] += rain[k]
+        doy = date(year, int(k[4:6]), int(k[6:])).timetuple().tm_yday
+        week = min(51, (doy - 1) // 7)
+        if year in season_rain and ok(rain[k]):
+            week_rain[week] += rain[k]
+            if "04" <= k[4:6] <= "09":
+                season_rain[year] += rain[k]
         if ok(tmin[k]) and ok(tmax[k]):
-            doy = date(year, int(k[4:6]), int(k[6:])).timetuple().tm_yday
-            days.append((year, doy, min(51, (doy - 1) // 7), tmax[k], tmin[k]))
+            days.append((year, doy, week, tmax[k], tmin[k]))
 
     n = len(YEARS)
     bands = []
@@ -69,8 +89,12 @@ def summarise(lat, lon, res):
         frost_weeks = set()
         hot = [0] * 52
         temp_sum, temp_n = [0.0] * 52, [0] * 52
+        et0_sum, et0_n = [0.0] * 52, [0] * 52
         for year, doy, week, hi, lo in days:
             hi, lo = hi + shift, lo + shift
+            if year in season_rain:
+                et0_sum[week] += hargreaves_et0(hi, lo, ra[doy])
+                et0_n[week] += 1
             if lo < 0:
                 frost_weeks.add((year, week))
                 if doy < 183:
@@ -92,12 +116,14 @@ def summarise(lat, lon, res):
             "weekFrostShare": [round(c / n, 2) for c in frost],
             "weekHotDays": [round(c / n, 1) for c in hot],  # mean days above 35 C
             "weekMeanTempC": [round(s / c, 1) if c else None for s, c in zip(temp_sum, temp_n)],
+            "weekEt0MmDay": [round(s / c, 2) if c else 0 for s, c in zip(et0_sum, et0_n)],  # Hargreaves, 2001-2025
         })
     return {
         "lat": lat,
         "lon": lon,
         "cellElevM": round(cell_elev),
         "seasonRainMm": round(sum(season_rain.values()) / len(season_rain)),
+        "weekRainMm": [round(mm / len(season_rain), 1) for mm in week_rain],  # mean rain per week, 2001-2025
         "bands": bands,
     }
 
@@ -132,7 +158,7 @@ def main():
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(json.dumps({
         "source": "NASA POWER daily point API (AG community), T2M_MAX, T2M_MIN, PRECTOTCORR",
-        "window": "1981-2025 (frost, heat, temperature); 2001-2025 (rain)",
+        "window": "1981-2025 (frost, heat, temperature); 2001-2025 (rain, reference evapotranspiration)",
         "note": "Temperature is shifted from the POWER cell's mean height to each band by 6.5 C per km (estimate); rain is the cell value",
         "computed": date.today().isoformat(),
         "seasonDays": 183,

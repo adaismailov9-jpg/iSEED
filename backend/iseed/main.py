@@ -411,6 +411,7 @@ def farmer(body: dict, authorization: str = Header(None)):
         "normalYear": need(body, "normalYear", ("enough", "sometimes", "often", "unknown")),
         "plan": plan,
         "lastCrops": [c for c in body.get("lastCrops", []) if c in engine.CROPS][:2],
+        "winterWheatSown": body.get("winterWheatSown") is True,
         "climate": climate_or_fail(field["lat"], field["lon"], field["elevM"]),
         "rain": rain,
     }

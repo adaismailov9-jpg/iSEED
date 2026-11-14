@@ -128,5 +128,41 @@
     "value": -0.5,
     "estimate": true,
     "source": "Used only where a field is outside every basin: the mean of low-snow years in Talas and Chuy (FLDAS 2001-2025)"
+  },
+  "crop_tables": {
+    "value": "FAO-56 Tables 11 and 12",
+    "estimate": true,
+    "source": "Stage lengths and crop coefficients are FAO's typical values, not measured in Kyrgyzstan; to check against the tables and with an agronomist"
+  },
+  "double_crop_spare_days": {
+    "value": 10,
+    "estimate": true,
+    "source": "A second crop must mature 10 days before the first autumn frost"
+  },
+  "trend_p": {
+    "value": 0.05,
+    "estimate": false,
+    "source": "Mann-Kendall trend test, two-sided"
+  },
+  "winter_sowing": {
+    "value": {
+      "from": "09-01",
+      "to": "10-31"
+    },
+    "estimate": true,
+    "source": "Winter wheat in Kyrgyzstan is sown in September-October (FAO Crop Calendar). After that it can be planned for next season only if it is already in the ground"
+  },
+  "wheat_regrowth_c": {
+    "value": 5,
+    "estimate": true,
+    "source": "Winter wheat starts growing again in spring once the weekly mean temperature reaches 5 C (NASA POWER) and is harvested about 120 days later (estimate)"
+  },
+  "wheat_harvest_window": {
+    "value": {
+      "from": 152,
+      "to": 243
+    },
+    "estimate": false,
+    "source": "Team knowledge: winter wheat in Kyrgyzstan is harvested between June and August (day 152 = 1 June, day 243 = 31 August)"
   }
 }

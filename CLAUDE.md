@@ -97,9 +97,9 @@ Request: the field as `{ "fieldId": 1 }` (signed in, own fields only: `401 not_s
 { "position": "start | middle | end", "source": "gravity | pump | well",
   "normalYear": "enough | sometimes | often | unknown",
   "soil": "sandy | medium | clay | unknown",
-  "lastCrops": ["beans", "wheat"], "plan": "beans" }
+  "lastCrops": ["beans", "wheat"], "plan": "beans", "winterWheatSown": false }
 ```
-`lastCrops` is last season first; may be empty. `soil` is optional (SoilGrids is the default).
+`lastCrops` is last season first; may be empty. `soil` is optional (SoilGrids is the default). `winterWheatSown` (optional, default false): ask "Did you sow winter wheat this autumn?" — winter wheat is sown in September–October, so it is offered (as an option or as the first of two crops) only when the answer is yes.
 
 Response:
 ```json
@@ -109,7 +109,8 @@ Response:
   "fieldCheck": { "verdict": "careful", "checks": [...] },
   "options": [{
     "kind": "plan | saver | builder", "crop": "beans", "highlight": false,
-    "netNeedMm": 344.5,
+    "need": { "grossMm": 520.0, "rainMm": 90.0, "netMm": 457.0, "source": "hargreaves | typical" },
+    "netNeedMm": 457.0,
     "normal": { "fit": 0.99, "yieldFactor": 0.989, "supplyMm": 341.1, "income": { "low": 148275, "high": 363768 } },
     "dry":    { "fit": 0.495, "yieldFactor": 0.419, "supplyMm": 170.5, "income": { "low": 62888, "high": 154284 } },
     "priceKnown": true,
@@ -123,6 +124,8 @@ Response:
   }],
   "planEarnsMost": true,
   "scenarios": { "normal": { "snowAnomaly": 0.0, "s": 1.0, "p": 0.9 }, "dry": { "snowAnomaly": -0.497, "s": 0.752, "p": 0.602 } },
+  "doubleCrop": null,
+  "frostTrend": { "significant": false, "p": 0.21, "daysEarlier": 4, "from": "1981-1990", "to": "2016-2025" },
   "dryYear": { "anomaly": -0.497, "years": [2006, 2008, 2014, 2018, 2020, 2021, 2024], "basin": "talas" },
   "basin": "talas",
   "snow": { ...as GET /snow },
@@ -132,6 +135,9 @@ Response:
 - `normal` / `dry`: a normal year and a typical low-snow year at his place on the canal. The dry year is the mean of the basin's own low-snow years (`dryYear.years`); `scenarios` has the factors used. `income` is gross income in som for the whole field; `null` when `priceKnown` is false.
 - `waterLeftM3` is against his plan; negative = the option takes more water.
 - `sowing` is `null` for winter wheat. Dates are `MM-DD`. `heavyRain.maxShare` is the share of years with a day of 20 mm or more in the sowing weeks; `riskyWeeks` are week starts at 30% or more.
+- `need`: crop water need from NASA POWER (`hargreaves`: crop coefficient × reference evapotranspiration over the crop's own season) or FAO's typical value (`typical`). `netMm` is after useful rain.
+- `doubleCrop`: `null` where the season is too short, else `{ first: "wheat", second, wheatHarvest: "MM-DD", windowDays, netNeedMm, waterLeftM3 }` — winter wheat then a short summer crop, as an extra option.
+- `frostTrend`: say "the last frost now comes about `daysEarlier` days earlier than in the 1980s" only when `significant` is true; otherwise "no clear change".
 - `pumpGap` is `heavy | cut | light | unknown` when the source is a pump, else `null`.
 - `message` is `null` when not signed in or no manager has posted for his village.
 - `evidence.rules[x]` is `{ value, estimate, source }`: this feeds the "estimate" badges.
@@ -159,12 +165,16 @@ Response: `{ s, normalTurns, expectedTurns, totalHa, demandM3, expectedM3, short
 
 | File | Script | Source |
 |---|---|---|
-| `climate.json` | `power_job.py` | NASA POWER daily 1981–2025, 0.5° grid; temperature shifted to field height by 6.5 °C per km (estimate) |
+| `climate.json` | `power_job.py` | NASA POWER daily 1981–2025, 0.5° grid: frost dates, weekly temperature, heat, rain and Hargreaves reference evapotranspiration; temperature shifted to field height by 6.5 °C per km (estimate) |
 | `rain_weeks.json` | `rain_job.py` | NASA GPM IMERG daily 2001–2025 (through the POWER API), same grid |
 | `snow.json` | `snow_job.py` | NASA FLDAS monthly snow water, land above 2,000 m, per basin, 2001–2026 |
 | `snow_check.json` | `modis_job.py` | NASA MODIS MOD10A1 March snow cover per basin, and its agreement with FLDAS |
 | `basins.geojson` | `build_basins.py` | HydroBASINS level 5 |
 | `grid/*` | `raster_job.py` | NASA SRTM (height, slope), NASA MODIS MOD13Q1 (summer greenness 2013–2025), SoilGrids (sand, clay; not NASA), 0.005° cells |
+
+## Deploy
+
+One Vercel project from the repo root: `vercel.json` builds `frontend/` and serves `api/index.py` (the FastAPI app) at `/api/*`. Set `VITE_USE_MOCK=false`. Not deployed or tested yet. On Vercel, accounts are lost between cold starts until `PostgresStore` exists.
 
 ## Numbers
 

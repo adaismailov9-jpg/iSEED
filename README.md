@@ -61,7 +61,9 @@ S (season)   = 1 + 0.5 × anomaly, kept between 0.5 and 1.1
                pump on a big river: S = 1 − 0.5 × (1 − S);   well: S = 1
 P (position) = share of the allocation reaching the field: start 1.0, middle 1.0 → 0.85, end 0.9 → 0.6
                (normal year → low-snow year, a straight line between S = 1 and S = 0.75)
-net need     = crop water need − 0.7 × season rain                       (mm)
+need         = Σ over the crop's season:  Kc (FAO-56) × ET0                (mm)
+               ET0 by Hargreaves from NASA POWER daily Tmax, Tmin and latitude, 2001–2025
+net need     = need − 0.7 × rain over the same days                      (mm)
 supply       = net need of his usual crop × A × S × P                    (A: is water enough in a normal year?)
 fit          = min(1, supply ÷ net need of the crop)
 yield        = 1 − Ky × (1 − fit)                                        (FAO Irrigation and Drainage Paper 33)
@@ -73,6 +75,10 @@ The factor 0.5 in S says that half of a snow deficit shows up as a water deficit
 
 **Sowing window** — earliest: after the last spring frost in 9 years out of 10, once the weekly mean temperature reaches the crop's minimum. Latest: the crop still matures before the first autumn frost in 9 years out of 10.
 
+**Frost trend** — the last spring frost date of each year 1981–2025, tested with Mann–Kendall; a change is reported only when p < 0.05.
+
+**Two crops in one year** — winter wheat, then a short crop. Wheat starts growing again when the weekly mean temperature reaches 5 °C and is harvested about 120 days later, kept between June and August; that gives mid-June around Osh, early July in Talas, late July in Naryn. A second crop is offered only where the days between the wheat harvest and the first autumn frost cover it plus 10 days, and only if the wheat is already sown.
+
 **Field check** — slope, summer greenness, soil, frost margin and heavy rain each give good / careful / not recommended; the verdict is the worst of them.
 
 **Height correction** — a NASA POWER cell is about 50 km wide and averages valley and mountains. The cell over Talas has a mean height of 2,154 m; the town is at 1,237 m. We shift temperature to the field's height by 6.5 °C per km. Without it Talas would have 82 frost-free days; with it, 149.
@@ -80,7 +86,7 @@ The factor 0.5 in S says that half of a snow deficit shows up as a water deficit
 ## What is estimated, and what we do not know
 
 - **Factors:** the snow sensitivity (0.5), the canal position factors, the normal-year factor, field efficiency (0.6) and all field-check thresholds are assumptions. They need a water manager and an agronomist.
-- **Crop water need** is a typical seasonal value from FAO tables, not computed from local evapotranspiration.
+- **Crop water need** uses FAO's typical stage lengths and crop coefficients (FAO-56 Tables 11–12), not values measured in Kyrgyzstan, and the Hargreaves formula, which needs only temperature.
 - **Prices and yields** are known only for beans in Talas (news reports, autumn 2026). For other crops the result shows water and soil only.
 - **FLDAS is a model**, not a measurement, and mountain snowfall is hard to model. The MODIS snow-cover check agrees with it only moderately (see above), and there is no river-gauge check yet.
 - **Only one short year (2021) is confirmed** by a report. The other low-snow years are not checked against what farmers saw.
@@ -92,7 +98,7 @@ The factor 0.5 in S says that half of a snow deficit shows up as a water deficit
 ```bash
 cd backend
 python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python -m pytest                              # 17 tests
+.venv/bin/python -m pytest
 .venv/bin/uvicorn iseed.main:app --reload --port 8000   # API
 
 cd frontend && npm install && npm run dev               # http://localhost:5173

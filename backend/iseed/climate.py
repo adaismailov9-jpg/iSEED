@@ -25,6 +25,7 @@ def climate_at(lat, lon, elev_m):
     return {
         **band,
         "seasonRainMm": cell["seasonRainMm"],
+        "weekRainMm": cell.get("weekRainMm"),
         "seasonDays": data["seasonDays"],
         "cell": {"lat": cell["lat"], "lon": cell["lon"], "elevM": cell["cellElevM"]},
         "heightKnown": elev_m is not None,
