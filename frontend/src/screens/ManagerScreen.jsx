@@ -3,6 +3,8 @@ import { useI18n } from '../i18n';
 import { api } from '../api/client';
 import { ErrorText } from '../components/Texts';
 import Badge from '../components/Badge';
+import Guide from '../components/Guide';
+import { CanalDiagram, SnowMountain } from '../components/Art';
 import { CROP_IDS } from '../data/ids';
 import { districtCenter } from '../lib/terrain';
 import { fmtInt, fmtPct, fmtShare, snowDirection } from '../lib/format';
@@ -48,6 +50,7 @@ export default function ManagerScreen({ user, onSignOut }) {
 
   return (
     <div className="screen">
+      <Guide role="manager" tip={result && !result.enough ? 'manager.short' : 'manager.signal'} />
       <section className="card">
         <div className="row top">
           <h2>{t('canal.title')}</h2>
@@ -83,6 +86,7 @@ function CanalForm({ initial, onSave, error }) {
 
   return (
     <div className="screen">
+      <Guide role="manager" tip="manager.canal" />
       <form className="card form" onSubmit={submit}>
         <h2>{t('canal.title')}</h2>
         <p className="hint">{t('canal.once')}</p>
@@ -142,6 +146,7 @@ function CanalSignal({ result }) {
 
       <section className="card">
         <h3>{t('canal.snow')} <Badge source={t('sources.fldas')} /></h3>
+        <SnowMountain anomaly={snow.anomaly} size={96} label={t(`levels.${snowDirection(snow.anomaly)}`)} />
         <span className={`snow-chip snow-${snowDirection(snow.anomaly)}`}>{t(`levels.${snowDirection(snow.anomaly)}`)} · {fmtPct(snow.anomaly)}</span>
         <p className="hint">{t('canal.snowDate', { month: snow.month })}</p>
         {snow.south && <p className="verdict-note">{t('season.south')}</p>}
@@ -158,6 +163,9 @@ function CanalSignal({ result }) {
 
       <section className="card">
         <h3>{t('canal.positionsTitle', { crop: t(`crops.${mainCrop}`) })} <Badge source={t('canal.positionSource')} /></h3>
+        <div className="q-canal">
+          <CanalDiagram fits={Object.fromEntries(positions.map((p) => [p.position, p.fit]))} width={320} labels={{ title: t('canal.positionsTitle', { crop: t(`crops.${mainCrop}`) }) }} />
+        </div>
         <table className="compare">
           <tbody>
             {positions.map((p) => (

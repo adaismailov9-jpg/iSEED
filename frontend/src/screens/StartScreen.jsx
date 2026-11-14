@@ -8,7 +8,7 @@ const ROLES = ['farmer', 'manager'];
 const STEPS = 3; // 1: name and role · 2: district and village · 3: phone and PIN
 const EMPTY = { name: '', role: '', region: '', village: '', phone: '', pin: '' };
 // The character beside the form follows the chosen role.
-const ART = { farmer: '/art/farmer.webp', manager: '/art/mirab.webp' };
+const ART = { farmer: '/art/farmer-full.webp', manager: '/art/mirab-full.webp' };
 
 // First visit: register in three short steps, or sign in with name and PIN.
 export default function StartScreen({ onDone }) {
@@ -60,13 +60,7 @@ export default function StartScreen({ onDone }) {
   return (
     <div className="start">
       <figure className="start-art" aria-hidden="true">
-        {/* The field is drawn twice: whole behind the character, and only its front part in front,
-            so the character stands in the field and the place where the drawing stops is hidden. */}
-        <div className="start-scene">
-          <img src="/art/field.webp" alt="" className="start-field" />
-          <img key={character} src={ART[character]} alt="" className="start-character" />
-          <img src="/art/field.webp" alt="" className="start-field front" />
-        </div>
+        <img key={character} src={ART[character]} alt="" className={`start-character start-${character}`} />
         <p key={`say-${character}`} className="start-bubble">{t(`start.say.${character}`)}</p>
       </figure>
 

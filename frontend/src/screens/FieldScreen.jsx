@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useI18n } from '../i18n';
 import FieldMap from '../components/FieldMap';
 import PlaceSearch from '../components/PlaceSearch';
-import Questions from '../components/Questions';
+import Questions, { buildSteps } from '../components/Questions';
+import Guide from '../components/Guide';
+import { SnowMountain } from '../components/Art';
 import Badge from '../components/Badge';
 import FieldCheck from '../components/FieldCheck';
 import Icon from '../components/Icon';
@@ -25,6 +27,9 @@ export default function FieldScreen({ points, setPoints, plans, place, user, ans
 
   const shown = moving ?? points;
   const hasField = points.length >= MIN_POINTS;
+  // The guide's tip follows the farmer: find the field, then each question, then the button.
+  const nextQuestion = buildSteps(answers, t).find((step) => !answers[step.key]);
+  const tip = !hasField ? 'farmer.map' : nextQuestion ? `farmer.q.${nextQuestion.key}` : 'farmer.ready';
 
   function commit(next) {
     setMoving(null);
@@ -90,6 +95,7 @@ export default function FieldScreen({ points, setPoints, plans, place, user, ans
       </div>
 
       <aside className="panel">
+        <Guide role="farmer" tip={tip} />
         <SeasonMessage village={user.village} />
         <section className="field-card">
           <h2>{t('field.title')}</h2>
@@ -123,6 +129,7 @@ function BasinInfo({ place }) {
   const { basin, snow } = place;
   return (
     <div className="basin">
+      <SnowMountain anomaly={snow.anomaly} size={72} label={t(`levels.${snowDirection(snow.anomaly)}`)} />
       <div className="label">{t('basin.label')}</div>
       <div className="basin-name">{t(`basins.${basin}`)}</div>
       <div className="label">{t('basin.snow')} <Badge source={t('sources.fldas')} /></div>

@@ -6,6 +6,8 @@ import PlanShare from '../components/PlanShare';
 import SeasonMessage, { MessageBox } from '../components/SeasonMessage';
 import { ErrorText, waterLeftText } from '../components/Texts';
 import Badge from '../components/Badge';
+import Guide from '../components/Guide';
+import { CanalDiagram, CropIcon, SnowMountain } from '../components/Art';
 import { fitLevel, fmtDay, fmtDec, fmtInt, fmtPct, fmtShare, snowDirection } from '../lib/format';
 
 const shortFitOf = (result) => result.evidence.rules.short_fit.value;
@@ -23,6 +25,7 @@ export default function PlanScreen({ plans, user, openId, setOpenId, updatePlan,
   if (plans.length === 0) {
     return (
       <div className="screen empty">
+        <Guide role="farmer" tip="farmer.noPlans" />
         <SeasonMessage village={user.village} />
         <p>{t('plan.empty')}</p>
         <button className="btn primary" onClick={goField}>{t('plan.goField')}</button>
@@ -32,6 +35,7 @@ export default function PlanScreen({ plans, user, openId, setOpenId, updatePlan,
 
   return (
     <div className="screen">
+      <Guide role="farmer" tip="farmer.plans" />
       <h2>{t('tabs.plan')}</h2>
       <p className="hint">{t('plan.saved')}</p>
       <SeasonMessage village={user.village} />
@@ -64,7 +68,7 @@ function OtherOption({ option, shortFit, fieldName, onPick, busy }) {
     <div className={`alt card level-${fitLevel(option.normal.fit, shortFit)}`}>
       <div>
         <div className="eyebrow">{t(`option.${option.kind}`)}</div>
-        <b><span className="dot" /> {t(`crops.${option.crop}`)}</b>
+        <b className="alt-crop"><CropIcon id={option.crop} size={34} /> <span className="dot" /> {t(`crops.${option.crop}`)}</b>
         <div className="hint">{t('option.water', { pct: fmtShare(option.normal.fit) })} · {waterLeftText(option.waterLeftM3, t, lang)}</div>
         <div className="hint">{t('plan.forField', { field: fieldName })}</div>
       </div>
@@ -80,7 +84,7 @@ function PlanCard({ plan, fieldName, onOpen }) {
   return (
     <button className={`card plan-card level-${level}`} onClick={onOpen}>
       <div className="plan-card-head">
-        <b>{t(`crops.${options[0].crop}`)}</b>
+        <b className="alt-crop"><CropIcon id={options[0].crop} size={40} /> {t(`crops.${options[0].crop}`)}</b>
         <span className="plan-verdict"><span className="dot" /> {t(`verdict.${level}`)}</span>
       </div>
       <div className="hint">{fieldName} · {plan.date}</div>
@@ -101,8 +105,17 @@ function PlanDetail({ plan, onBack, onPick, onDelete, busy, error }) {
         <button className="btn small" onClick={onBack}>← {t('plan.back')}</button>
         <button className="btn small danger" onClick={() => window.confirm(t('plan.confirmDelete')) && onDelete()}>{t('plan.delete')}</button>
       </div>
+      <Guide role="farmer" tip="farmer.result" />
       <ErrorText code={error} />
       <MessageBox message={message} />
+
+      <header className="result-hero">
+        <CropIcon id={options[0].crop} size={64} />
+        <div>
+          <div className="eyebrow">{t('result.for', { ha: fmtDec(result.field.areaHa, 2, lang), basin: t(`basins.${result.field.basin}`) })}</div>
+          <h2>{t('result.title')}</h2>
+        </div>
+      </header>
 
       <div className="options">
         {options.map((o) => (
@@ -134,6 +147,15 @@ function PlanDetail({ plan, onBack, onPick, onDelete, busy, error }) {
         <div className="column">
           <section className="card">
             <h3>{t('season.title')}</h3>
+            <div className="season-art">
+              <SnowMountain anomaly={snow.anomaly} size={110} label={t(`levels.${snowDirection(snow.anomaly)}`)} />
+              {plan.input.source !== 'well' && plan.input.position && (
+                <div>
+                  <CanalDiagram you={plan.input.position} width={220} labels={{ title: t('position.' + plan.input.position) }} />
+                  <p className="hint center">{t('result.youAre', { place: t(`position.${plan.input.position}`) })}</p>
+                </div>
+              )}
+            </div>
             <p>
               {t('season.snow', { basin: t(`basins.${snow.basin}`), level: t(`levelsInline.${snowDirection(snow.anomaly)}`), pct: fmtPct(snow.anomaly), month: snow.month })}{' '}
               <Badge source={t('sources.fldas')} />

@@ -173,7 +173,7 @@ export default function App() {
           />
         )}
         {tab === 'canal' && <ManagerScreen user={user} onSignOut={signOut} />}
-        {tab === 'about' && <AboutScreen basinId={place?.basin} />}
+        {tab === 'about' && <AboutScreen basinId={place?.basin} role={user.role} />}
       </main>
       {tour && <Tour onClose={closeTour} />}
     </div>

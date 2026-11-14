@@ -4,10 +4,11 @@ import { api } from '../api/client';
 import { ErrorText } from '../components/Texts';
 import { BASIN_IDS } from '../data/ids';
 import HindcastChart from '../components/HindcastChart';
+import Guide from '../components/Guide';
 
 const SOURCE_KEYS = ['fldas', 'modis', 'imerg', 'power', 'srtm', 'modisNdvi', 'soilgrids', 'hydrobasins', 'tiles', 'border'];
 
-export default function AboutScreen({ basinId }) {
+export default function AboutScreen({ basinId, role }) {
   const { t } = useI18n();
   const [basin, setBasin] = useState(basinId ?? 'talas');
   const [data, setData] = useState(null);
@@ -28,6 +29,7 @@ export default function AboutScreen({ basinId }) {
 
   return (
     <div className="screen">
+      <Guide role={role} tip="about" />
       <section className="card">
         <h2>{t('tabs.about')}</h2>
         <p>{t('about.intro')}</p>

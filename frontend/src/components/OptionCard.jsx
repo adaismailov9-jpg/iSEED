@@ -3,6 +3,7 @@ import { fitLevel, fmtShare, fmtSomRange } from '../lib/format';
 import { waterLeftText } from './Texts';
 import Badge from './Badge';
 import SowingWindow from './SowingWindow';
+import { CropIcon } from './Art';
 
 // One option of POST /farmer: his plan, the water saver or the soil builder.
 export default function OptionCard({ option, shortFit, onPick, busy }) {
@@ -15,7 +16,10 @@ export default function OptionCard({ option, shortFit, onPick, busy }) {
         <div className="eyebrow">{t(`option.${kind}`)}</div>
         {highlight && <span className="pill">💧 {t('option.highlight')}</span>}
       </div>
-      <h3 className="option-crop">{t(`crops.${crop}`)}</h3>
+      <div className="option-title">
+        <CropIcon id={crop} size={56} />
+        <h3 className="option-crop">{t(`crops.${crop}`)}</h3>
+      </div>
 
       <div className="years">
         <Year label={t('option.normal')} data={normal} shortFit={shortFit} priceKnown={priceKnown} />

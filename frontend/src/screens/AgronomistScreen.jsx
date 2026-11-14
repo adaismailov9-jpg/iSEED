@@ -4,6 +4,7 @@ import Badge from '../components/Badge';
 import SavedFields from '../components/SavedFields';
 import { AGRONOMISTS, MINISTRY_HOTLINE } from '../data/agronomists';
 import { ALL_DISTRICTS } from '../lib/terrain';
+import Guide from '../components/Guide';
 
 // Fourth tab: the agronomist of the field's district is picked automatically.
 // Choosing a saved field switches to its district; any other district can be chosen too.
@@ -18,6 +19,7 @@ export default function AgronomistScreen({ hasField, district, points, plans, ch
 
   return (
     <div className="screen">
+      <Guide role="farmer" tip="farmer.agro" />
       <h2>{t('agro.title')}</h2>
       <SavedFields plans={plans} points={points} onPick={chooseField} />
 

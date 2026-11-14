@@ -69,7 +69,8 @@
     "soil": "What is your soil like?",
     "soilHint": "Not sure? iSEED takes the soil from the SoilGrids satellite map.",
     "submit": "Work out the options",
-    "needField": "First tap your field on the map."
+    "needField": "First tap your field on the map.",
+    "progress": "{n} of {of} answered"
   },
   "plan": {
     "empty": "Your planting plan is empty. Choose a field and a crop on the first tab.",
@@ -475,5 +476,42 @@
     "frostEarlier": "The last spring frost now comes about {days} days earlier than in the 1980s.",
     "frostSame": "No clear change in the date of the last spring frost.",
     "south": "In the south, water depends not only on snow but also on reservoirs and interstate agreements."
+  },
+  "guide": {
+    "show": "Show the tips",
+    "hide": "Hide the tips",
+    "name": {
+      "farmer": "Bakyt ata · farmer",
+      "manager": "Aibek · mirab"
+    },
+    "farmer": {
+      "map": "Find your village in the search, then tap your field on the map. I’ll check the land for you.",
+      "q": {
+        "previous": "What grew here last season? It tells us what the soil is tired of.",
+        "previous2": "And the season before. Two seasons show which crop family needs a rest.",
+        "plan": "Pick the crop you plan to sow. I’ll compare it with two others.",
+        "winterWheat": "Winter wheat is sown in autumn. If it’s already in the ground, I can count it.",
+        "source": "Where does your water come from? With a well, snow doesn’t change your answer.",
+        "position": "At the end of the canal, a dry year hits first. Show me where your field is.",
+        "normalYear": "In a normal year, is the water enough? Your own experience sets how much water you get.",
+        "soil": "Not sure about the soil? Pick “Don’t know” and I’ll use the soil map."
+      },
+      "ready": "All done! Tap the button and I’ll show you three crops for next season.",
+      "result": "Each card shows a normal and a dry year. The blue card leaves the most water for the neighbours at the end of the canal. Tap “estimate” to see where a number comes from.",
+      "plans": "Your saved checks. Open one to see the three options again.",
+      "noPlans": "No results yet. Mark your field and answer a few questions first.",
+      "agro": "Your district’s agronomist is picked from your field. If nobody answers, call 1210."
+    },
+    "manager": {
+      "canal": "Describe your canal once: villages, hectares, pump or gravity, and your usual water turns.",
+      "signal": "This is your season from NASA snow data. Send your farmers a short message below.",
+      "short": "Water is short this season: the red part of the canal falls short first. Tell your farmers below."
+    },
+    "about": "The bars are March snow for each year. Orange years had little snow; a triangle marks a reported shortage."
+  },
+  "result": {
+    "for": "{ha} ha · {basin} basin",
+    "title": "Three options for next season",
+    "youAre": "Your field: {place}"
   }
 }
