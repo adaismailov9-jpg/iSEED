@@ -8,9 +8,10 @@ const DICTS = { ky, ru, en };
 export const LANGS = ['ky', 'ru', 'en'];
 
 // translate('ky', 'alt.less', { pct: 20 }) → "20% азыраак суу талап кылат"
-export function translate(lang, key, vars = {}) {
+// `fallback`: another key to use when `key` is missing (e.g. an error code the app does not know).
+export function translate(lang, key, vars = {}, fallback) {
   const text = key.split('.').reduce((obj, k) => obj?.[k], DICTS[lang]);
-  if (typeof text !== 'string') return key;
+  if (typeof text !== 'string') return fallback ? translate(lang, fallback, vars) : key;
   return text.replace(/\{(\w+)\}/g, (match, name) => vars[name] ?? match);
 }
 
@@ -24,7 +25,7 @@ export function I18nProvider({ children }) {
     save('lang', lang);
   }, [lang]);
 
-  const t = (key, vars) => translate(lang, key, vars);
+  const t = (key, vars, fallback) => translate(lang, key, vars, fallback);
   return <I18nContext.Provider value={{ lang, setLang, t }}>{children}</I18nContext.Provider>;
 }
 

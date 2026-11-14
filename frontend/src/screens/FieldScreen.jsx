@@ -4,16 +4,17 @@ import FieldMap from '../components/FieldMap';
 import PlaceSearch from '../components/PlaceSearch';
 import Questions from '../components/Questions';
 import Badge from '../components/Badge';
+import FieldCheck from '../components/FieldCheck';
 import Icon from '../components/Icon';
 import SavedFields from '../components/SavedFields';
 import SeasonMessage from '../components/SeasonMessage';
+import { ErrorText } from '../components/Texts';
 import { MIN_POINTS, areaHa, centroid, squareAround } from '../lib/geo';
 import { MAX_FIELD_ELEVATION, whyNotHere } from '../lib/terrain';
 import { fmtDec, fmtInt, fmtPct } from '../lib/format';
-import { SOURCES } from '../data/rules';
 
 // First tab: the questions (left on wide screens) and the field on the map (right).
-export default function FieldScreen({ points, setPoints, plans, basin, answers, setAnswers, resetAnswers, onSubmit, busy, error }) {
+export default function FieldScreen({ points, setPoints, plans, place, user, answers, setAnswers, resetAnswers, onSubmit, busy, error }) {
   const { t, lang } = useI18n();
   const [moving, setMoving] = useState(null); // corners while a handle is being dragged
   const [focus, setFocus] = useState(null);
@@ -89,7 +90,7 @@ export default function FieldScreen({ points, setPoints, plans, basin, answers, 
       </div>
 
       <aside className="panel">
-        <SeasonMessage />
+        <SeasonMessage village={user.village} />
         <section className="field-card">
           <h2>{t('field.title')}</h2>
           <p className="hint">{t(hasField ? 'field.editHint' : 'field.hint')}</p>
@@ -101,31 +102,32 @@ export default function FieldScreen({ points, setPoints, plans, basin, answers, 
                 <div className="hint">{t('field.corners', { n: shown.length })}</div>
                 <button className="btn small" onClick={() => startOver([])}>{t('field.clear')}</button>
               </div>
-              <BasinInfo basin={basin} />
+              <BasinInfo place={place} />
             </div>
           )}
+          {place && !place.error && <FieldCheck check={place.fieldCheck} />}
           <SavedFields plans={plans} points={points} onPick={pickSaved} />
         </section>
 
         <Questions key={round} answers={answers} setAnswers={setAnswers} onSubmit={onSubmit} hasField={hasField} busy={busy} />
-        {error && <p className="error">{t('common.error')}</p>}
+        <ErrorText code={error} />
       </aside>
     </div>
   );
 }
 
-function BasinInfo({ basin }) {
+function BasinInfo({ place }) {
   const { t } = useI18n();
-  if (!basin) return <div className="muted">{t('basin.loading')}</div>;
+  if (!place) return <div className="muted">{t('basin.loading')}</div>;
+  if (place.error) return <ErrorText code={place.error} />;
+  const { basin, snow } = place;
   return (
     <div className="basin">
       <div className="label">{t('basin.label')}</div>
-      <div className="basin-name">
-        {t(`basins.${basin.id}`)} {basin.demo && <Badge kind="demo" source={SOURCES.snow} />}
-      </div>
-      <div className="label">{t('basin.snow')}</div>
-      <span className={`snow-chip snow-${basin.level}`}>
-        {t(`levels.${basin.level}`)} · {fmtPct(basin.anomaly)}
+      <div className="basin-name">{t(`basins.${basin}`)}</div>
+      <div className="label">{t('basin.snow')} <Badge source={t('sources.fldas')} /></div>
+      <span className={`snow-chip snow-${snow.level}`}>
+        {t(`levels.${snow.level}`)} · {fmtPct(snow.anomaly)}
       </span>
     </div>
   );

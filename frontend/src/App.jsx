@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useI18n } from './i18n';
-import { api } from './api/client';
+import { api, rememberSession } from './api/client';
 import Header from './components/Header';
 import TabBar from './components/TabBar';
 import FieldScreen from './screens/FieldScreen';
@@ -15,42 +14,62 @@ import { districtAt } from './lib/terrain';
 import { load, save } from './lib/storage';
 
 const TABS = { farmer: ['field', 'plan', 'agro', 'about'], manager: ['canal', 'about'] };
-const EMPTY_ANSWERS = { previous: '', plan: '', source: '', canal: '', usual: '', soil: '', priority: '' };
+const EMPTY_ANSWERS = { previous: '', plan: '', winterWheat: '', source: '', position: '', normalYear: '', soil: '' };
+
+// The farmer's answers in the shape POST /farmer expects.
+function farmerRequest(points, a) {
+  return {
+    geometry: toGeoJSON(points),
+    lastCrops: a.previous && a.previous !== 'none' ? [a.previous] : [],
+    plan: a.plan,
+    winterWheatSown: a.winterWheat === 'yes',
+    source: a.source,
+    position: a.source === 'well' ? 'start' : a.position, // a well does not depend on the canal
+    normalYear: a.normalYear,
+    soil: a.soil,
+  };
+}
 
 export default function App() {
-  const { lang } = useI18n();
-  const [profile, setProfile] = useState(load('profile', null)); // name, role, district, village
-  const [tab, setTab] = useState(profile ? TABS[profile.role][0] : 'field');
+  const [session, setSession] = useState(load('session', null)); // { token, user: { name, role, region, village } }
+  const user = session?.user;
+  const [tab, setTab] = useState(user ? TABS[user.role][0] : 'field');
   const [points, setPoints] = useState(load('field', []));
-  const [answers, setAnswers] = useState(load('answers', EMPTY_ANSWERS));
-  const [plans, setPlans] = useState(load('plans', [])); // the planting plan, kept on the phone
+  const [answers, setAnswers] = useState(load('farmerAnswers', EMPTY_ANSWERS));
+  const [plans, setPlans] = useState(load('farmerPlans', [])); // results of POST /farmer, kept on the phone
   const [openId, setOpenId] = useState(null);
-  const [basin, setBasin] = useState(null);
+  const [place, setPlace] = useState(null); // { basin, snow, fieldCheck } of the current field, or { error }
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null); // error code of the last request
   const [tour, setTour] = useState(!load('tourDone', false)); // shown once, on the first visit
 
   const hasField = points.length >= MIN_POINTS;
   const district = hasField ? districtAt(centroid(points)) : null; // picks the district agronomist
 
   useEffect(() => save('field', points), [points]);
-  useEffect(() => save('answers', answers), [answers]);
-  useEffect(() => save('plans', plans), [plans]);
+  useEffect(() => save('farmerAnswers', answers), [answers]);
+  useEffect(() => save('farmerPlans', plans), [plans]);
 
-  // Look up the basin when the field changes.
+  // When the field changes: its river basin with the snow signal, and the field check (slope, greenness, soil).
   useEffect(() => {
-    setBasin(null);
-    if (hasField) api.getBasin(...centroid(points)).then(setBasin);
+    setPlace(null);
+    if (!hasField) return;
+    let current = true;
+    Promise.all([api.basin(...centroid(points)), api.checkField(toGeoJSON(points))])
+      .then(([basin, field]) => current && setPlace({ basin: basin.basin, snow: basin.snow, fieldCheck: field.fieldCheck }))
+      .catch((err) => current && setPlace({ error: err.code }));
+    return () => (current = false);
   }, [points, hasField]);
 
-  // Ask the API for a verdict; returns null on error.
-  async function check(input) {
+  // Ask the API for the farmer's options; returns null on error.
+  async function askFarmer(input) {
     setBusy(true);
-    setError(false);
+    setError(null);
     try {
-      return await api.check(input, lang);
-    } catch {
-      setError(true);
+      return await api.farmer(input);
+    } catch (err) {
+      if (err.code === 'not_signed_in') signOut(); // the server forgot the session
+      setError(err.code);
       return null;
     } finally {
       setBusy(false);
@@ -58,11 +77,8 @@ export default function App() {
   }
 
   async function addPlan() {
-    const { previous, source, canal, usual, soil, priority } = answers;
-    const crop = answers.plan === 'unknown' ? undefined : answers.plan; // a planned crop is checked; otherwise iSEED recommends one
-    const onCanal = source === 'river' || source === 'pump';
-    const input = { geometry: toGeoJSON(points), previous, crop, source, canal: onCanal ? canal : undefined, usual, soil, priority, season: 'current' };
-    const result = await check(input);
+    const input = farmerRequest(points, answers);
+    const result = await askFarmer(input);
     if (!result) return;
     const plan = { id: Date.now(), date: new Date().toISOString().slice(0, 10), input, result };
     setPlans([plan, ...plans]);
@@ -73,7 +89,7 @@ export default function App() {
   async function updatePlan(id, changes) {
     const plan = plans.find((p) => p.id === id);
     const input = { ...plan.input, ...changes };
-    const result = await check(input);
+    const result = await askFarmer(input);
     if (result) setPlans((all) => all.map((p) => (p.id === id ? { ...p, input, result } : p)));
   }
 
@@ -84,14 +100,14 @@ export default function App() {
   }
 
   function signIn(next) {
-    save('profile', next);
-    setProfile(next);
-    setTab(TABS[next.role][0]);
+    rememberSession(next);
+    setSession(next);
+    setTab(TABS[next.user.role][0]);
   }
 
   function signOut() {
-    save('profile', null);
-    setProfile(null);
+    rememberSession(null);
+    setSession(null);
   }
 
   function closeTour() {
@@ -104,7 +120,7 @@ export default function App() {
     setOpenId(null);
   }
 
-  if (!profile) {
+  if (!user) {
     return (
       <div className="app">
         <Header />
@@ -115,15 +131,16 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header profile={profile} onSignOut={signOut} showTour={() => setTour(true)} />
-      <TabBar tabs={TABS[profile.role]} tab={tab} setTab={setTab} />
+      <Header user={user} onSignOut={signOut} showTour={() => setTour(true)} />
+      <TabBar tabs={TABS[user.role]} tab={tab} setTab={setTab} />
       <main className={`main main-${tab}`}>
         {tab === 'field' && (
           <FieldScreen
             points={points}
             setPoints={setPoints}
             plans={plans}
-            basin={basin}
+            place={place}
+            user={user}
             answers={answers}
             setAnswers={setAnswers}
             resetAnswers={() => setAnswers(EMPTY_ANSWERS)}
@@ -135,6 +152,7 @@ export default function App() {
         {tab === 'plan' && (
           <PlanScreen
             plans={plans}
+            user={user}
             openId={openId}
             setOpenId={setOpenId}
             updatePlan={updatePlan}
@@ -154,8 +172,8 @@ export default function App() {
             goField={() => setTab('field')}
           />
         )}
-        {tab === 'canal' && <ManagerScreen profile={profile} />}
-        {tab === 'about' && <AboutScreen basinId={basin?.id} />}
+        {tab === 'canal' && <ManagerScreen user={user} onSignOut={signOut} />}
+        {tab === 'about' && <AboutScreen basinId={place?.basin} />}
       </main>
       {tour && <Tour onClose={closeTour} />}
     </div>

@@ -1,22 +1,25 @@
 import { useState } from 'react';
 import { useI18n } from '../i18n';
-import { fmtDec, fmtM3 } from '../lib/format';
+import { fmtDec, fmtShare, fmtSomRange } from '../lib/format';
 import Icon from './Icon';
 
 // The plan as plain text, for messengers and the clipboard.
 function planText(plan, t, lang) {
-  const { verdict, chosen, tip, evidence, input } = plan.result;
-  return [
+  const { field, options } = plan.result;
+  const lines = [
     `${t('share.heading')} · ${plan.date}`,
-    `${t(`crops.${chosen.id}`)} — ${t(`verdict.${verdict.level}`)}`,
-    `${t('field.area')}: ${fmtDec(input.areaHa, 2, lang)} ${t('units.ha')} · ${t(`basins.${evidence.basin.id}`)}`,
-    '',
-    verdict.sentence,
-    verdict.reason,
-    `${t('verdict.need')}: ${fmtM3(chosen.needM3, lang)} ${t('units.m3')}`,
-    `${t('verdict.supply')}: ${fmtM3(chosen.supplyM3, lang)} ${t('units.m3')}`,
-    `${t('verdict.tip')}: ${tip}`,
-  ].join('\n');
+    `${t('field.area')}: ${fmtDec(field.areaHa, 2, lang)} ${t('units.ha')} · ${t(`basins.${field.basin}`)}`,
+  ];
+  for (const o of options) {
+    const income = (year) => (o.priceKnown ? ` · ${fmtSomRange(o[year].income, lang)} ${t('units.som')}` : '');
+    lines.push(
+      '',
+      `${t(`option.${o.kind}`)}: ${t(`crops.${o.crop}`)}`,
+      `${t('option.normal')}: ${t('option.water', { pct: fmtShare(o.normal.fit) })}${income('normal')}`,
+      `${t('option.dry')}: ${t('option.water', { pct: fmtShare(o.dry.fit) })}${income('dry')}`
+    );
+  }
+  return lines.join('\n');
 }
 
 // Save the plan as PDF (the browser's print dialog) or send it as text.

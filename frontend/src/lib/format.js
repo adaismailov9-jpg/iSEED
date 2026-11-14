@@ -1,11 +1,26 @@
 // Kyrgyz and Russian: "9 717" and "6,5". English: "9,717" and "6.5".
 export const fmtInt = (n, lang) =>
-  Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, lang === 'en' ? ',' : ' ');
+  Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, lang === 'en' ? ',' : ' ');
 
 export const fmtDec = (n, digits, lang) => (lang === 'en' ? n.toFixed(digits) : n.toFixed(digits).replace('.', ','));
 
-export const fmtM3 = (n, lang) => fmtInt(Math.round(n / 100) * 100, lang); // volumes are estimates
+export const fmtPct = (x) => `${x > 0 ? '+' : ''}${Math.round(x * 100)}%`; // change: +12%, −20%
 
-export const fmtPct = (x) => `${x > 0 ? '+' : ''}${Math.round(x * 100)}%`;
+export const fmtShare = (x) => `${Math.round(x * 100)}%`; // share: 81%
 
-export const fmtRatio = (r, lang) => (r >= 10 ? '≥10' : fmtDec(r, 2, lang));
+// Income is an estimate: round to 1,000 som. "59 000–144 000"
+export const fmtSomRange = ({ low, high }, lang) =>
+  `${fmtInt(Math.round(low / 1000) * 1000, lang)}–${fmtInt(Math.round(high / 1000) * 1000, lang)}`;
+
+// API dates are "MM-DD": show "6 мая" / "6 May".
+export function fmtDay(mmdd, lang) {
+  const [m, d] = mmdd.split('-').map(Number);
+  try {
+    return new Date(2027, m - 1, d).toLocaleDateString(lang, { day: 'numeric', month: 'long' });
+  } catch {
+    return mmdd;
+  }
+}
+
+// Fit (share of the water need the field gets) as a colour level. shortFit comes from the API's rules.
+export const fitLevel = (fit, shortFit) => (fit >= 0.99 ? 'fits' : fit >= shortFit ? 'tight' : 'short');

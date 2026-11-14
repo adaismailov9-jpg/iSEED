@@ -1,7 +1,6 @@
 {
   "app": {
-    "tagline": "Seasonal water risk from NASA snow data",
-    "demo": "Prototype: demo data"
+    "tagline": "Seasonal water risk from NASA snow data"
   },
   "tabs": {
     "field": "Field",
@@ -47,39 +46,28 @@
     "high": "above normal"
   },
   "q": {
-    "springOnly": "iSEED suggests spring crops only. Winter wheat is sown in autumn, before any snow falls.",
+    "previous": "Last crop",
+    "previousHint": "What grew on this field last season?",
+    "plan": "What do you plan to sow?",
+    "planHint": "iSEED checks this crop and suggests options that save water or care for the soil.",
+    "winterWheat": "Did you sow winter wheat this autumn?",
+    "winterWheatHint": "It is sown in September–October. If yes, iSEED also checks two crops in one year.",
+    "yes": "Yes",
+    "no": "No",
     "source": "Where does your water come from?",
-    "river": "Gravity canal or ditch",
+    "gravity": "Gravity canal or ditch",
+    "pump": "Pump",
     "well": "Borehole or well",
-    "rain": "Rain only",
+    "position": "Where is your field on the canal?",
+    "normalYear": "In a normal year, is there enough water?",
     "enough": "Usually enough",
     "sometimes": "Sometimes short",
     "often": "Often short",
+    "unknown": "Not sure",
     "soil": "What is your soil like?",
-    "priority": "What matters most to you?",
-    "submit": "Pick a crop and add to plan",
-    "needField": "First tap your field on the map.",
-    "previous": "Previous crop",
-    "previousHint": "What grew on this field last season? iSEED picks a spring crop for this year from it.",
-    "pump": "Pump",
-    "plan": "What do you plan to sow?",
-    "planHint": "Pick a crop and iSEED checks whether it will have enough water. Not sure? iSEED picks one.",
-    "canal": "Where is your field on the canal?",
-    "canal_start": "At the start",
-    "canal_middle": "In the middle",
-    "canal_end": "At the end",
-    "usual": "In a normal year, is there enough water?",
-    "notSure": "Not sure"
-  },
-  "priority": {
-    "water": "Saving water",
-    "income": "Income",
-    "soil": "Soil health"
-  },
-  "income": {
-    "1": "low income",
-    "2": "medium income",
-    "3": "high income"
+    "soilHint": "Not sure? iSEED takes the soil from the SoilGrids satellite map.",
+    "submit": "Work out the options",
+    "needField": "First tap your field on the map."
   },
   "plan": {
     "empty": "Your planting plan is empty. Choose a field and a crop on the first tab.",
@@ -96,75 +84,36 @@
     "fits": "Enough water",
     "tight": "Water is tight",
     "short": "Not enough water",
-    "sentence": {
-      "fits": "{crop} on this {ha} ha field: enough water this year.",
-      "tight": "{crop} on this {ha} ha field: water will be tight this year.",
-      "short": "{crop} on this {ha} ha field: water may run short this year.",
-      "frost": "{crop} on this {ha} ha field: the growing season here is too short."
-    },
-    "reason": {
-      "river": "Snow in the {basin} basin is {levelText}; {cropLower} needs about {need} m³ and the field can expect about {supply} m³.",
-      "well": "Water comes from a well, so the snow signal does not change this answer; {cropLower} needs about {need} m³ and the well gives about {supply} m³.",
-      "rain": "Rain only: useful rain gives about {supply} m³, while {cropLower} needs about {need} m³ more.",
-      "frost": "{crop} needs {days} days, but the frost-free season here is about {ffd} days."
-    },
-    "need": "Water needed",
-    "supply": "Water expected",
-    "ratio": "Fit",
-    "season": "Snow value: February–March {year}. This is a risk signal, not a forecast.",
-    "pickSeason": "Check against the snow of:",
-    "current": "{year} · last full season",
-    "example": "{year} · low-snow example",
-    "tip": "Next season",
-    "hotline": "Farmer hotline: 1210",
-    "recommended": "Recommended after: {previous}",
-    "yourChoice": "Your choice"
+    "hotline": "Farmer hotline: 1210"
   },
   "alt": {
-    "less": "needs {pct}% less water",
-    "more": "needs {pct}% more water",
     "check": "Choose"
   },
-  "compare": {
-    "title": "Compare all crops",
-    "crop": "Crop",
-    "need": "Water, m³",
-    "ratio": "Fit",
-    "frost": "Season too short"
-  },
-  "tip": {
-    "cereal": "After a cereal, a legume such as chickpea or beans restores nitrogen.",
-    "legume": "After a legume, nitrogen stays in the soil: barley or maize will do well.",
-    "root": "After potato or beet, sow a cereal to break the disease cycle.",
-    "oilseed": "Sow sunflower on the same field only once in 6–7 years; follow it with a cereal or a legume.",
-    "fodder": "After alfalfa, maize or a cereal makes good use of the nitrogen it leaves."
-  },
   "evidence": {
-    "title": "What this answer is based on",
-    "snow": "Snow signal (NASA MODIS)",
+    "title": "What the answer is based on",
+    "snow": "Snow signal",
     "basin": "Basin",
     "level": "Level",
-    "anomaly": "Difference from norm",
-    "date": "Computed on",
-    "early": "Snow so far this winter",
-    "earlyText": "{pct} vs norm, as of {date}",
+    "month": "Month computed",
+    "dry": "Dry year: snow, S, P",
+    "normal": "Normal year: S, P",
+    "need": "Water needed: {crop}",
+    "needSource": {
+      "hargreaves": "NASA POWER: crop coefficient × evapotranspiration over its season (Hargreaves)",
+      "typical": "Typical FAO value"
+    },
+    "gross": "Total",
+    "rain": "From rain",
+    "net": "To irrigate",
     "climate": "Climate (NASA POWER)",
-    "frostFree": "Frost-free season",
-    "rain": "Season rain (Apr–Sep)",
-    "effRain": "Useful rain for this crop",
-    "soilWet": "Root-zone soil wetness",
-    "years": "Years",
-    "soilInfo": "Soil: {soil}. Shown for information only, not used in the calculation.",
-    "numbers": "Numbers in the calculation",
-    "cropNeed": "Crop water need per season",
-    "base": "Average water per irrigated hectare",
-    "snowMultiplier": "Snow multiplier",
-    "canal": "Canal factor (losses ≈18%)",
-    "efficiency": "Field efficiency (furrow)",
-    "well": "Well factor",
-    "formula": "Need = (crop need − 0.7 × rain) × 10 × ha. Supply = 9,717 m³/ha × ha × snow × 0.82 × 0.6. Fit = supply ÷ need: ≥1.1 enough, 0.9–1.1 tight, <0.9 short.",
-    "notForecast": "The snow signal is a risk label, never a forecast. In published Naryn studies snow explains about 60% of seasonal flow; glaciers (up to half of July–August flow) and summer rain explain the rest.",
-    "canalPosition": "Place on the canal"
+    "frostFree": "Frost-free period",
+    "seasonRain": "Season rain",
+    "height": "Height",
+    "years": "Data years",
+    "rainData": "Heavy rain (NASA GPM IMERG)",
+    "prices": "Yields and prices",
+    "estimates": "Estimated assumptions ({n})",
+    "notForecast": "This is a risk signal, not a forecast."
   },
   "badge": {
     "estimate": "estimate",
@@ -172,51 +121,52 @@
     "source": "Source"
   },
   "about": {
-    "intro": "iSEED turns NASA satellite snow data into a seasonal water-risk signal for each river basin in Kyrgyzstan.",
-    "chart": "February–March snow cover, 2003–2026",
+    "intro": "iSEED turns NASA data on snow, climate and heavy rain into a seasonal water-risk signal for fields in Kyrgyzstan.",
+    "chart": "Snow water in March, km³ (NASA FLDAS)",
     "low": "Low snow",
     "normal": "Normal",
     "high": "High snow",
-    "norm": "Norm (2003–2025)",
-    "shortage": "Known water shortage (Orto-Tokoy reservoir low)",
-    "missNote": "Shortage years the signal misses are shown too: glacier melt and summer heat explain them.",
-    "seasonNote": "It is November: next season's snow has not fallen yet. The app shows the last full season (February–March 2026) as the worked example, and snow so far this winter as an early signal.",
+    "norm": "Normal",
+    "shortage": "Water-shortage year",
+    "missNote": "Shortage years that snow does not explain are shown too: glaciers, heat or canal repairs also matter.",
+    "modisCheck": "MODIS satellite check: agreement r = {r}; low snow in both sources: {both}.",
     "sources": "Data sources",
-    "demoNote": "In this prototype the snow, basin, climate and income numbers are demo data. The real values are computed by the scripts in scripts/ during the event.",
+    "computed": "Data computed: {date}.",
     "src": {
-      "modis": "NASA MODIS MOD10A1 v6.1: daily snow cover, 500 m. NASA open data.",
-      "power": "NASA POWER (AG): temperature, rain, soil wetness. Free, cite NASA POWER.",
-      "basins": "HydroBASINS level 5 (HydroSHEDS): basin boundaries. Free with attribution.",
-      "fao": "FAO-56 (Tables 11, 12) and the FAO Crop Calendar for Kyrgyzstan: crop water need.",
-      "stats": "National statistics: 6.19 km³ irrigation water (2024), ≈637,000 ha irrigated, 1.7–2.3 km³ losses.",
-      "tiles": "Esri World Imagery and OpenStreetMap (ODbL): the map. Photon (OpenStreetMap data): place search.",
-      "border": "geoBoundaries (OpenStreetMap, ODbL): the border of Kyrgyzstan. Lakes and reservoirs: OpenStreetMap (ODbL).",
-      "elevation": "Open-Meteo Elevation API (Copernicus DEM, 90 m): height of the spot, fields above 3,000 m are refused."
+      "fldas": "NASA FLDAS — snow water per basin, 2001–2026",
+      "modis": "NASA MODIS MOD10A1 — March snow cover, a check on FLDAS",
+      "imerg": "NASA GPM IMERG — heavy rain by week, 2001–2025",
+      "power": "NASA POWER — temperature, frost, rain, evapotranspiration, 1981–2025",
+      "srtm": "NASA SRTM — height and slope",
+      "modisNdvi": "NASA MODIS MOD13Q1 — summer greenness of fields, 2013–2025",
+      "soilgrids": "SoilGrids — sand and clay in the soil (not NASA)",
+      "hydrobasins": "HydroBASINS — river basin borders (not NASA)",
+      "tiles": "Map: Esri imagery and OpenStreetMap",
+      "border": "Border and districts: geoBoundaries, OpenStreetMap"
     }
   },
   "crops": {
-    "barley": "Barley",
-    "maize": "Maize",
-    "potato": "Potato",
-    "sunflower": "Sunflower",
     "beans": "Beans",
-    "chickpea": "Chickpea",
-    "sugarbeet": "Sugar beet",
     "alfalfa": "Alfalfa",
+    "maize": "Maize",
+    "sugarbeet": "Sugar beet",
+    "potato": "Potato",
     "wheat": "Wheat",
-    "none": "Nothing / don't know"
+    "barley": "Barley",
+    "safflower": "Safflower",
+    "none": "Nothing / not sure"
   },
   "basins": {
-    "chuy": "Chüy",
     "talas": "Talas",
+    "chuy": "Chüy",
     "issykkul": "Issyk-Kul",
-    "naryn_upper": "Upper Naryn",
-    "naryn_toktogul": "Toktogul (Middle Naryn)",
-    "atbashy": "At-Bashy",
-    "chatkal": "Chatkal",
+    "naryn": "Naryn",
     "karadarya": "Kara-Darya",
-    "batken": "Batken (Sokh–Isfara)",
-    "saryjaz": "Sary-Jaz"
+    "syrdarya_south": "South (Syr Darya)",
+    "saryjaz": "Sary-Jaz",
+    "alay": "Alay",
+    "aksay": "Ak-Sai",
+    "karkyra": "Karkyra"
   },
   "soil": {
     "sandy": "Sandy",
@@ -228,7 +178,11 @@
     "ha": "ha",
     "m3": "m³",
     "mm": "mm",
-    "days": "days"
+    "days": "days",
+    "som": "som",
+    "m": "m",
+    "tHa": "t/ha",
+    "somKg": "som/kg"
   },
   "common": {
     "loading": "Loading…",
@@ -326,32 +280,23 @@
     "copy": "Copy",
     "copied": "Copied"
   },
-  "note": {
-    "pump": {
-      "heavy": "Pump: if it stops for 10 days in July, {cropLower} suffers a heavy yield loss.",
-      "cut": "Pump: if it stops for 10 days in July, {cropLower} loses one hay cut.",
-      "light": "Pump: a 10-day stop in July is a small loss for {cropLower}."
-    },
-    "rotation": {
-      "same": "{crop} after {previous} is the same crop group: more pests and disease, tired soil.",
-      "legume": "Legumes after cereals are a plus: they leave nitrogen in the soil.",
-      "good": "{crop} grows well after {previous}."
-    }
-  },
   "theme": {
     "dark": "Dark theme",
     "light": "Light theme"
   },
   "start": {
     "title": "Welcome to iSEED",
-    "hint": "Tell us who you are so iSEED shows the right screens.",
+    "register": "Sign up",
+    "login": "Sign in",
     "name": "Your name",
     "role": "Who are you?",
     "district": "District",
     "choose": "Choose a district",
     "village": "Village",
-    "go": "Start",
-    "local": "Saved on this phone only."
+    "pin": "4-digit PIN",
+    "pinHint": "Remember it: your name and PIN let you sign in on another phone.",
+    "registerGo": "Sign up",
+    "loginGo": "Sign in"
   },
   "role": {
     "farmer": "Farmer",
@@ -365,24 +310,34 @@
   },
   "canal": {
     "title": "My canal",
-    "once": "Fill this in once — then the season signal appears here.",
-    "villages": "Villages on the canal",
-    "villagesHint": "For example: Kyzyl-Adyr, Ak-Dobo",
-    "hectares": "Irrigated area, ha",
-    "basin": "River basin",
+    "edit": "Edit",
+    "once": "Fill this in once — the canal is saved and the season signal appears here.",
+    "villages": "Villages on the canal and their irrigated area",
+    "villageName": "Village",
+    "villageHa": "Area, ha",
+    "remove": "Remove village",
+    "addVillage": "Add a village",
     "water": "How water is delivered",
-    "river": "Gravity",
+    "gravity": "Gravity",
     "pump": "Pump",
     "turns": "Usual number of irrigation turns",
+    "mainCrop": "Main crop on the canal",
+    "mainCropIs": "main crop: {crop}",
     "save": "Save canal",
-    "edit": "Edit",
+    "enough": "Enough water for {crop} along the whole canal",
+    "notEnough": "Not everyone will have enough water for {crop}",
+    "water3": "Expected {total} against a need of {need} for {ha} ha.",
+    "short": "Short by {m3}",
     "snow": "Snow in the basin vs normal",
-    "snowDate": "Computed {date} · season {year}",
+    "snowDate": "Computed for {month}. A risk signal, not a forecast.",
     "turnsTitle": "Irrigation turns",
+    "turnsSource": "Usual turns × the season factor S from snow",
     "usual": "Usually",
     "thisYear": "This year",
-    "shortTitle": "Who will have enough water",
-    "position": "Place on the canal"
+    "positionsTitle": "Who will have enough water: {crop}",
+    "positionSource": "Share of water that reaches this place on the canal (estimate)",
+    "posShort": "Short",
+    "posOk": "Enough"
   },
   "message": {
     "title": "Season message to farmers",
@@ -391,5 +346,116 @@
     "send": "Send",
     "sent": "Sent {date}. Without a server the message shows on this phone only.",
     "fromManager": "Water manager {name} · {date}"
+  },
+  "errors": {
+    "offline": "No connection to the server. Check the internet and try again.",
+    "server": "Something went wrong. Please try again.",
+    "name_taken": "This name is taken. Sign in or choose another name.",
+    "wrong_login": "Wrong name or PIN.",
+    "bad_input": "Please check what you entered.",
+    "not_signed_in": "Please sign in again.",
+    "wrong_role": "Only the other role can do this.",
+    "no_basin": "This place is outside Kyrgyzstan's river basins.",
+    "no_field": "This field was not found.",
+    "data_missing": "The data on the server is not ready yet."
+  },
+  "position": {
+    "start": "At the start of the canal",
+    "middle": "In the middle",
+    "end": "At the end"
+  },
+  "check": {
+    "title": "Field check",
+    "none": "No check for this place: it is outside the data grid.",
+    "around": "Slope, greenness and soil describe about 500 m around the field, not the field alone.",
+    "verdict": {
+      "good": "You can plant here",
+      "careful": "You can, with care",
+      "no": "Better not to plant here"
+    },
+    "slope": {
+      "good": "Slope {value}° — the field is flat.",
+      "careful": "Slope {value}° — water can wash away soil and seed.",
+      "no": "Slope {value}° — too steep: only hay or alfalfa."
+    },
+    "green": {
+      "good": "Green in summer {greenYears} of {years} years — the land is farmed.",
+      "careful": "Green in summer only {greenYears} of {years} years — check that this is farmland.",
+      "no": "Bare in summer {bareYears} of {years} years — this does not look like farmland."
+    },
+    "soil": {
+      "good": "Soil: {soil} — suitable.",
+      "careful": "Soil: {soil} — sand dries fast, clay holds water: water it differently.",
+      "no": "Soil: {soil} — poorly suited."
+    },
+    "frost": {
+      "good": "Days to spare before the autumn frost: {days}.",
+      "careful": "Only {days} days to spare before the frost — sow on time.",
+      "no": "The crop will not finish before the frost: {days} days short."
+    },
+    "heavyRain": {
+      "good": "Heavy rain in the sowing weeks in {pct} of years.",
+      "careful": "Heavy rain in the sowing weeks in {pct} of years: it can wash out the seed.",
+      "no": "Heavy rain in the sowing weeks in {pct} of years, on a slope: high risk of wash-out."
+    }
+  },
+  "sources": {
+    "srtm": "NASA SRTM — height and slope",
+    "modis": "NASA MODIS — summer greenness, 2013–2025",
+    "soilgrids": "SoilGrids — sand and clay (not NASA)",
+    "farmer": "Your answer",
+    "power": "NASA POWER — climate 1981–2025",
+    "imerg": "NASA GPM IMERG — heavy rain 2001–2025",
+    "fldas": "NASA FLDAS — snow water, March"
+  },
+  "option": {
+    "plan": "Your plan",
+    "saver": "Water saver",
+    "builder": "Soil builder",
+    "highlight": "Leaves the most water for the end of the canal",
+    "normal": "Normal year",
+    "dry": "Dry year",
+    "water": "Water for {pct} of the need",
+    "noPrice": "Price unknown here",
+    "gross": "Gross income for the whole field; costs not counted. The price is a separate risk.",
+    "priceSource": "Yields and prices: see “What the answer is based on”",
+    "waterLeft": "Leaves {m3} m³ in the canal compared with your plan",
+    "waterMore": "Takes {m3} m³ more water than your plan",
+    "nitrogen": "Leaves nitrogen in the soil",
+    "rotationPlus": "Good rotation after your last crop",
+    "rotationWarning": "Same crop group again: more pests and disease",
+    "bareMonths": "Bare soil {n} months a year",
+    "pump": {
+      "heavy": "If the pump stops for 10 days in July: a heavy yield loss.",
+      "cut": "If the pump stops for 10 days in July: one hay cut is lost.",
+      "light": "If the pump stops for 10 days in July: a small loss.",
+      "unknown": "How much a pump stop hurts this crop is not known."
+    },
+    "frost": "The season here is too short for this crop.",
+    "pick": "Choose this option",
+    "earnsMost": "Your plan already earns the most in a dry year."
+  },
+  "sowing": {
+    "title": "When to sow",
+    "best": "best around {date}: less risk of heavy rain",
+    "noWindow": "The sowing window for this crop is closed or too short.",
+    "heavyRain": "Heavy rain in the sowing weeks: {pct} of years",
+    "riskyWeek": "Week from {date} — frequent heavy rain",
+    "flowering": "Flowering around {date}; on average {days} hot days at that time.",
+    "tooHot": "Flowering around {date} falls in the heat ({days} hot days) — the yield may suffer.",
+    "winter": "Winter wheat is sown in autumn; the spring sowing window does not apply."
+  },
+  "double": {
+    "title": "Two crops in one year",
+    "text": "Winter wheat, then {second}. The wheat is harvested around {date}, leaving {days} days for the second crop.",
+    "water": "Irrigation need: {mm} mm"
+  },
+  "season": {
+    "title": "Season and snow",
+    "snow": "Snow in the {basin} basin is {level} ({pct}), computed for {month}.",
+    "dryYear": "The dry year is the basin's average low-snow year: {pct} snow vs normal (years: {years}).",
+    "frostEarlier": "The last spring frost now comes about {days} days earlier than in the 1980s.",
+    "frostSame": "No clear change in the date of the last spring frost.",
+    "south": "In the south, water depends not only on snow but also on reservoirs and interstate agreements."
   }
 }

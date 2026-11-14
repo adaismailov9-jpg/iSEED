@@ -15,7 +15,7 @@ Spec: the ТЗ doc "iSEED ТЗ — Technical Specification". If the API table th
 cd backend && python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/uvicorn iseed.main:app --reload --port 8000    # API; users go to backend/iseed.db
 .venv/bin/python -m pytest                               # engine and API tests
-cd frontend && npm install && npm run dev                # VITE_USE_MOCK=false uses the API
+cd frontend && npm install && npm run dev                # /api is proxied to the API on :8000
 ```
 
 Data jobs (only to rebuild `data/`; the results are committed):
@@ -150,7 +150,7 @@ Response: `{ s, normalTurns, expectedTurns, totalHa, demandM3, expectedM3, short
 
 ## Deploy
 
-One Vercel project from the repo root: `vercel.json` builds `frontend/` and serves `api/index.py` (the FastAPI app) at `/api/*`. Set `VITE_USE_MOCK=false`. Not deployed or tested yet. On Vercel, accounts are lost between cold starts until `PostgresStore` exists.
+One Vercel project from the repo root: `vercel.json` builds `frontend/` and serves `api/index.py` (the FastAPI app) at `/api/*`. Not deployed or tested yet. On Vercel, accounts are lost between cold starts until `PostgresStore` exists.
 
 ## Numbers
 

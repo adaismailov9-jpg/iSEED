@@ -1,17 +1,18 @@
 import { useI18n } from '../i18n';
 
-// Bar chart of Feb–Mar snow per year. Triangles mark known water-shortage years.
+// Bar chart of March snow water per year (NASA FLDAS, km³). Triangles mark known water-shortage years.
 const W = 360;
 const H = 230;
 const PAD = { left: 34, right: 10, top: 22, bottom: 26 };
 
 export default function HindcastChart({ data }) {
   const { t } = useI18n();
-  const { series, norm, terciles, shortageYears, currentYear } = data;
+  const { series, normalKm3: norm, terciles, replayYear } = data;
+  const currentYear = series[series.length - 1].year;
 
   const plotW = W - PAD.left - PAD.right;
   const plotH = H - PAD.top - PAD.bottom;
-  const yMax = Math.ceil(Math.max(...series.map((s) => s.value)) * 11.5) / 10;
+  const yMax = Math.max(...series.map((s) => s.volumeKm3)) * 1.15;
   const step = plotW / series.length;
   const x = (i) => PAD.left + (i + 0.5) * step;
   const y = (v) => PAD.top + plotH - (v / yMax) * plotH;
@@ -24,18 +25,18 @@ export default function HindcastChart({ data }) {
         {[0, yMax / 2, yMax].map((v) => (
           <g key={v}>
             <line className="grid" x1={PAD.left} x2={W - PAD.right} y1={y(v)} y2={y(v)} />
-            <text className="axis" x={PAD.left - 5} y={y(v) + 3} textAnchor="end">{Math.round(v * 100)}%</text>
+            <text className="axis" x={PAD.left - 5} y={y(v) + 3} textAnchor="end">{v.toFixed(v < 1 ? 2 : 1)}</text>
           </g>
         ))}
 
         {series.map((s, i) => (
           <g key={s.year}>
-            <rect className={`bar bar-${s.level} ${s.year === currentYear ? 'bar-current' : ''}`}
-              x={x(i) - step / 3} width={step / 1.5} y={y(s.value)} height={y(0) - y(s.value)} rx="1.5">
-              <title>{`${s.year}: ${Math.round(s.value * 100)}%`}</title>
+            <rect className={`bar bar-${s.level} ${s.year === currentYear || s.year === replayYear ? 'bar-current' : ''}`}
+              x={x(i) - step / 3} width={step / 1.5} y={y(s.volumeKm3)} height={y(0) - y(s.volumeKm3)} rx="1.5">
+              <title>{`${s.year}: ${s.volumeKm3} km³`}</title>
             </rect>
-            {shortageYears.includes(s.year) && <path className="mark" d={`M${x(i) - 4.5},${y(s.value) - 10} h9 l-4.5,7 z`} />}
-            {(i % 4 === 0 || s.year === currentYear) && (
+            {s.short && <path className="mark" d={`M${x(i) - 4.5},${y(s.volumeKm3) - 10} h9 l-4.5,7 z`} />}
+            {(i % 5 === 0 || s.year === currentYear) && (
               <text className="axis" x={x(i)} y={H - PAD.bottom + 15} textAnchor="middle">{s.year}</text>
             )}
           </g>

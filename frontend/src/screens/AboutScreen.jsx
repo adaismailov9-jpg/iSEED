@@ -1,19 +1,30 @@
 import { useEffect, useState } from 'react';
 import { useI18n } from '../i18n';
 import { api } from '../api/client';
-import { BASINS } from '../data/demo';
+import { ErrorText } from '../components/Texts';
+import { BASIN_IDS } from '../data/ids';
 import HindcastChart from '../components/HindcastChart';
 
-const SOURCE_KEYS = ['modis', 'power', 'basins', 'fao', 'stats', 'tiles', 'border', 'elevation'];
+const SOURCE_KEYS = ['fldas', 'modis', 'imerg', 'power', 'srtm', 'modisNdvi', 'soilgrids', 'hydrobasins', 'tiles', 'border'];
 
-export default function AboutScreen({ basinId = 'chuy' }) {
+export default function AboutScreen({ basinId }) {
   const { t } = useI18n();
-  const [basin, setBasin] = useState(basinId);
+  const [basin, setBasin] = useState(basinId ?? 'talas');
   const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [health, setHealth] = useState(null);
 
   useEffect(() => {
-    api.getHindcast(basin).then(setData);
+    setData(null);
+    setError(null);
+    api.hindcast(basin).then(setData).catch((err) => setError(err.code));
   }, [basin]);
+
+  useEffect(() => {
+    api.health().then(setHealth).catch(() => {});
+  }, []);
+
+  const shortYears = data?.shortYears.filter((s) => data.series.some((p) => p.year === s.year && p.short)) ?? [];
 
   return (
     <div className="screen">
@@ -26,17 +37,25 @@ export default function AboutScreen({ basinId = 'chuy' }) {
         <div className="chart-head">
           <h3>{t('about.chart')}</h3>
           <select value={basin} onChange={(e) => setBasin(e.target.value)} aria-label={t('basin.label')}>
-            {BASINS.map((b) => (
-              <option key={b.id} value={b.id}>{t(`basins.${b.id}`)}</option>
-            ))}
+            {BASIN_IDS.map((id) => <option key={id} value={id}>{t(`basins.${id}`)}</option>)}
           </select>
         </div>
-        {data ? <HindcastChart data={data} /> : <p className="muted">{t('common.loading')}</p>}
+        <ErrorText code={error} />
+        {data && <HindcastChart data={data} />}
+        {!data && !error && <p className="muted">{t('common.loading')}</p>}
+        {data?.south && <p className="verdict-note">{t('season.south')}</p>}
+        {shortYears.length > 0 && (
+          <ul className="sources">
+            {shortYears.map((s) => <li key={s.year}><b>{s.year}</b>: {s.source}</li>)}
+          </ul>
+        )}
         <p className="hint">{t('about.missNote')}</p>
+        {data?.check && (
+          <p className="hint">{t('about.modisCheck', { r: data.check.r, both: data.check.lowInBoth.join(', ') || '—' })}</p>
+        )}
       </section>
 
       <section className="card">
-        <p>{t('about.seasonNote')}</p>
         <p className="note">{t('evidence.notForecast')}</p>
       </section>
 
@@ -45,7 +64,7 @@ export default function AboutScreen({ basinId = 'chuy' }) {
         <ul className="sources">
           {SOURCE_KEYS.map((key) => <li key={key}>{t(`about.src.${key}`)}</li>)}
         </ul>
-        {data?.demo && <p className="note">{t('about.demoNote')}</p>}
+        {health && <p className="hint">{t('about.computed', { date: health.data.snow ?? '—' })}</p>}
       </section>
     </div>
   );

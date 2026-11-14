@@ -1,22 +1,19 @@
 import { useState } from 'react';
 import { useI18n } from '../i18n';
-import { CROPS } from '../data/crops';
+import { CROP_IDS } from '../data/ids';
 
-const PREVIOUS_CROPS = [...CROPS.map((c) => c.id), 'wheat', 'none'];
-const PLANNED_CROPS = [...CROPS.map((c) => c.id), 'unknown'];
-
-// The questions in order. The canal question appears only for canal or pump water.
+// The questions in order, in the shape of POST /farmer. The canal question appears only for canal or pump water.
 function buildSteps(answers, t) {
-  const crop = (id) => t(id === 'unknown' ? 'q.notSure' : `crops.${id}`);
-  const onCanal = answers.source === 'river' || answers.source === 'pump';
+  const crop = (id) => t(`crops.${id}`);
+  const onCanal = answers.source === 'gravity' || answers.source === 'pump';
   return [
-    { key: 'previous', title: t('q.previous'), hint: t('q.previousHint'), options: PREVIOUS_CROPS, label: crop },
-    { key: 'plan', title: t('q.plan'), hint: t('q.planHint'), options: PLANNED_CROPS, label: crop },
-    { key: 'source', title: t('q.source'), options: ['river', 'pump', 'well', 'rain'], label: (id) => t(`q.${id}`) },
-    ...(onCanal ? [{ key: 'canal', title: t('q.canal'), options: ['start', 'middle', 'end'], label: (id) => t(`q.canal_${id}`) }] : []),
-    { key: 'usual', title: t('q.usual'), options: ['enough', 'sometimes', 'often', 'unknown'], label: (id) => t(id === 'unknown' ? 'q.notSure' : `q.${id}`) },
-    { key: 'soil', title: t('q.soil'), options: ['sandy', 'medium', 'clay', 'unknown'], label: (id) => t(`soil.${id}`) },
-    { key: 'priority', title: t('q.priority'), options: ['water', 'income', 'soil'], label: (id) => t(`priority.${id}`) },
+    { key: 'previous', title: t('q.previous'), hint: t('q.previousHint'), options: [...CROP_IDS, 'none'], label: crop },
+    { key: 'plan', title: t('q.plan'), hint: t('q.planHint'), options: CROP_IDS, label: crop },
+    { key: 'winterWheat', title: t('q.winterWheat'), hint: t('q.winterWheatHint'), options: ['yes', 'no'], label: (id) => t(`q.${id}`) },
+    { key: 'source', title: t('q.source'), options: ['gravity', 'pump', 'well'], label: (id) => t(`q.${id}`) },
+    ...(onCanal ? [{ key: 'position', title: t('q.position'), options: ['start', 'middle', 'end'], label: (id) => t(`position.${id}`) }] : []),
+    { key: 'normalYear', title: t('q.normalYear'), options: ['enough', 'sometimes', 'often', 'unknown'], label: (id) => t(`q.${id}`) },
+    { key: 'soil', title: t('q.soil'), hint: t('q.soilHint'), options: ['sandy', 'medium', 'clay', 'unknown'], label: (id) => t(`soil.${id}`) },
   ];
 }
 
@@ -64,7 +61,6 @@ export default function Questions({ answers, setAnswers, onSubmit, hasField, bus
           <button className="btn clay block" onClick={onSubmit} disabled={!hasField || busy}>
             {busy ? t('common.loading') : t('q.submit')} <span className="arrow">↗</span>
           </button>
-          <p className="hint">{t('q.springOnly')}</p>
         </div>
       )}
     </div>

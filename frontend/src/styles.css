@@ -378,3 +378,50 @@ textarea.input { resize: vertical; }
 /* Manager's message as farmers see it */
 .season-message { padding: 14px 16px; border-radius: var(--radius); background: var(--sand); border-left: 6px solid var(--clay); }
 .season-message p { margin: 4px 0 0; font-weight: 600; }
+
+/* Field check: good / careful / no use the same colours as fits / tight / short */
+.level-good { --level: var(--fits); }
+.level-careful { --level: var(--tight); }
+.level-no { --level: var(--short); }
+.field-check { margin-top: 12px; }
+.check-verdict { display: flex; align-items: center; gap: 8px; color: var(--level); }
+.field-check ul { list-style: none; margin: 8px 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem; }
+.field-check li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.field-check li .dot { flex: none; }
+
+/* Result: the options side by side */
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 14px; align-items: start; }
+.option { display: flex; flex-direction: column; gap: 10px; border-top: 8px solid var(--level); }
+.option.highlight { box-shadow: 0 0 0 3px var(--snow-high), var(--shadow); }
+.option-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.option-head .eyebrow { margin: 0; }
+.option-crop { font-size: 1.5rem; margin: 0; }
+.pill { padding: 3px 10px; border-radius: 999px; background: var(--snow-high); color: #fff; font-size: 0.72rem; font-weight: 700; }
+.years { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.year { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 14px; background: var(--sand); }
+.year-water { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 700; color: var(--level); }
+.year-income { font-weight: 800; font-variant-numeric: tabular-nums; }
+.water-left { margin: 0; font-weight: 700; color: var(--fits); }
+.water-left.more { color: var(--short); }
+.soil-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem; }
+.soil-list .good { color: var(--fits); }
+.soil-list .warn { color: var(--warn-text); }
+
+/* Sowing window */
+.sowing { display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 0.9rem; }
+.sowing p { margin: 0; }
+.weeks { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.82rem; color: var(--muted); }
+.week.risky { padding: 2px 8px; border-radius: 999px; background: var(--warn-bg); color: var(--warn-text); font-weight: 700; }
+
+/* Evidence: estimated assumptions */
+.estimates { margin-top: 14px; font-size: 0.82rem; }
+.estimates summary { cursor: pointer; font-weight: 700; color: var(--green); }
+.estimates ul { padding-left: 18px; color: var(--muted); }
+
+/* Water manager */
+.village-row { display: flex; gap: 8px; }
+.village-row .ha { width: 110px; flex: none; }
+.headline { border-top: 8px solid var(--level); }
+.headline h3 { display: flex; align-items: center; gap: 8px; color: var(--level); }
+.compare td.status { color: var(--level); font-weight: 700; }
+.pin { letter-spacing: 0.4em; max-width: 160px; }
