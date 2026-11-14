@@ -6,6 +6,7 @@
   "tabs": {
     "field": "Field",
     "plan": "Planting plan",
+    "agro": "Agronomists",
     "about": "About the data"
   },
   "lang": {
@@ -21,11 +22,11 @@
     "clear": "Clear",
     "area": "Area",
     "corners": "{n} corners",
-    "locateFailed": "Could not find your location. Tap your field on the map."
+    "checking": "Checking this place…",
+    "saved": "My fields"
   },
   "search": {
     "placeholder": "Village, town or district",
-    "go": "Find",
     "empty": "Nothing found",
     "error": "Search needs internet"
   },
@@ -177,7 +178,9 @@
       "basins": "HydroBASINS level 5 (HydroSHEDS): basin boundaries. Free with attribution.",
       "fao": "FAO-56 (Tables 11, 12) and the FAO Crop Calendar for Kyrgyzstan: crop water need.",
       "stats": "National statistics: 6.19 km³ irrigation water (2024), ≈637,000 ha irrigated, 1.7–2.3 km³ losses.",
-      "tiles": "Esri World Imagery: the map. OpenStreetMap Nominatim (ODbL): place search."
+      "tiles": "Esri World Imagery and OpenStreetMap (ODbL): the map. Photon (OpenStreetMap data): place search.",
+      "border": "geoBoundaries (OpenStreetMap, ODbL): the border of Kyrgyzstan. Lakes and reservoirs: OpenStreetMap (ODbL).",
+      "elevation": "Open-Meteo Elevation API (Copernicus DEM, 90 m): height of the spot, fields above 3,000 m are refused."
     }
   },
   "crops": {
@@ -218,6 +221,78 @@
   },
   "common": {
     "loading": "Loading…",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "close": "Close"
+  },
+  "basemap": {
+    "satellite": "Satellite",
+    "map": "Map"
+  },
+  "warning": {
+    "outside": "This is outside Kyrgyzstan. iSEED works only for fields in Kyrgyzstan.",
+    "water": "This is water: a lake or a reservoir. A field cannot be placed here.",
+    "high": "Too high here: {height} m. Above {max} m there is almost no ploughland: a short cold summer and poor stony soil.",
+    "locate": "Could not find your location. Tap your field on the map."
+  },
+  "agro": {
+    "title": "District agronomists",
+    "noField": "Choose your field on the map and the agronomist of that district is picked automatically.",
+    "yours": "Your field's agronomist",
+    "other": "Agronomist of another district",
+    "district": "{name} district",
+    "role": "District agronomist",
+    "demoSource": "Demo contact. The real list will come from the Ministry of Agriculture.",
+    "hours": "Hours: Mon–Fri, {hours}",
+    "call": "Call",
+    "pick": "Another district",
+    "hotlineTitle": "Ministry hotline",
+    "hotlineText": "If the agronomist doesn't answer, call the Ministry of Agriculture's free line for farmers."
+  },
+  "districts": {
+    "tokmok": "Tokmok city",
+    "alamudun": "Alamudun",
+    "chuy": "Chuy",
+    "jayyl": "Jayyl",
+    "kemin": "Kemin",
+    "moskva": "Moskva",
+    "panfilov": "Panfilov",
+    "sokuluk": "Sokuluk",
+    "ysyk_ata": "Ysyk-Ata",
+    "bakay_ata": "Bakay-Ata",
+    "kara_buura": "Kara-Buura",
+    "manas": "Manas",
+    "talas": "Talas",
+    "ak_suu": "Ak-Suu",
+    "jeti_oguz": "Jeti-Oguz",
+    "issyk_kul": "Issyk-Kul",
+    "tong": "Tong",
+    "tup": "Tup",
+    "ak_talaa": "Ak-Talaa",
+    "at_bashy": "At-Bashy",
+    "jumgal": "Jumgal",
+    "kochkor": "Kochkor",
+    "naryn": "Naryn",
+    "aksy": "Aksy",
+    "ala_buka": "Ala-Buka",
+    "bazar_korgon": "Bazar-Korgon",
+    "chatkal": "Chatkal",
+    "nooken": "Nooken",
+    "suzak": "Suzak",
+    "toguz_toro": "Toguz-Toro",
+    "toktogul": "Toktogul",
+    "alay": "Alay",
+    "aravan": "Aravan",
+    "chong_alay": "Chong-Alay",
+    "kara_kulja": "Kara-Kulja",
+    "kara_suu": "Kara-Suu",
+    "nookat": "Nookat",
+    "uzgen": "Uzgen",
+    "batken": "Batken",
+    "kadamjay": "Kadamjay",
+    "leilek": "Leilek"
+  },
+  "menu": {
+    "expand": "Open menu",
+    "collapse": "Collapse menu"
   }
 }

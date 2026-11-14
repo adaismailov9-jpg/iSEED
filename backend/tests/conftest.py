@@ -1,57 +1,73 @@
-"""Test fixtures.
+"""Shared fixtures for the store tests.
 
-The `engine` fixture rebuilds the iseed_test database once per test run by running the
-real migrations (upgrade -> downgrade -> upgrade, so the downgrade is tested too).
-Each test then runs inside a transaction that is rolled back at the end, so tests
-never see each other's rows and the database is left empty.
+`store` runs each test twice: on SQLiteStore and on PostgresStore. The Postgres run uses the
+separate iseed_test database (TEST_DATABASE_URL in backend/.env); it is skipped when that is
+not set, so the SQLite run still works on a machine without Docker.
 """
+import os
+from pathlib import Path
+
 import pytest
-from alembic import command
-from alembic.config import Config
-from sqlalchemy.engine import make_url
-from sqlalchemy.orm import Session
 
-from app.config import BACKEND_DIR, get_settings
-from app.db.session import make_engine
+from iseed.storage import SQLiteStore
+
+BACKEND = Path(__file__).resolve().parents[1]
+TABLES = "users, sessions, fields, canals, messages"
 
 
-def alembic_config(url: str) -> Config:
-    cfg = Config(str(BACKEND_DIR / "alembic.ini"))
-    cfg.attributes["database_url"] = url
-    return cfg
+def _env_file():
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    load_dotenv(BACKEND / ".env", override=False)
 
 
 @pytest.fixture(scope="session")
-def test_db_url() -> str:
-    s = get_settings()
-    if not s.test_database_url:
-        pytest.skip("TEST_DATABASE_URL is not set (see backend/.env.example)")
-    main, test = make_url(s.database_url), make_url(s.test_database_url)
-    if (main.host, main.port, main.database) == (test.host, test.port, test.database):
+def pg_url():
+    _env_file()
+    url = os.environ.get("TEST_DATABASE_URL")
+    if not url:
+        pytest.skip("TEST_DATABASE_URL is not set: Postgres tests skipped")
+    from sqlalchemy.engine import make_url
+    main = os.environ.get("DATABASE_URL")
+    if main and make_url(main).database == make_url(url).database:
         raise pytest.UsageError("TEST_DATABASE_URL must be a separate database: the tests wipe it")
-    return s.test_database_url
+    return url
 
 
 @pytest.fixture(scope="session")
-def engine(test_db_url):
-    cfg = alembic_config(test_db_url)
+def pg_engine(pg_url):
+    """Rebuild iseed_test with the real migrations (upgrade, downgrade, upgrade: both directions are tested)."""
+    from alembic import command
+    from alembic.config import Config
+
+    from iseed.pgstore import make_engine
+
+    cfg = Config(str(BACKEND / "alembic.ini"))
+    cfg.attributes["database_url"] = pg_url
     command.upgrade(cfg, "head")
     command.downgrade(cfg, "base")
     command.upgrade(cfg, "head")
-    eng = make_engine(test_db_url)
-    yield eng
-    eng.dispose()
+    engine = make_engine(pg_url)
+    yield engine
+    engine.dispose()
 
 
 @pytest.fixture
-def session(engine):
-    with engine.connect() as conn:
-        outer = conn.begin()
-        # Code under test may call commit(); with savepoints that only ends a savepoint,
-        # and the outer transaction is still rolled back below.
-        s = Session(bind=conn, join_transaction_mode="create_savepoint", expire_on_commit=False)
-        try:
-            yield s
-        finally:
-            s.close()
-            outer.rollback()
+def pg_store(pg_engine):
+    """An empty PostgresStore; ids restart at 1 like a fresh SQLite file."""
+    from sqlalchemy import text
+
+    from iseed.pgstore import PostgresStore
+
+    with pg_engine.begin() as db:
+        db.execute(text(f"TRUNCATE {TABLES} RESTART IDENTITY CASCADE"))
+    return PostgresStore(pg_engine)
+
+
+@pytest.fixture(params=["sqlite", "postgres"])
+def store(request, tmp_path):
+    if request.param == "sqlite":
+        return SQLiteStore(str(tmp_path / "test.db"))
+    return request.getfixturevalue("pg_store")

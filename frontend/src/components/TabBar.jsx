@@ -1,24 +1,32 @@
+import { useState } from 'react';
 import { useI18n } from '../i18n';
+import { load, save } from '../lib/storage';
+import Icon from './Icon';
 
-const ICONS = {
-  field: 'M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3zM9 4v13M15 7v13',
-  plan: 'M12 21v-9M12 12c0-4 3-6 7-6 0 4-3 6-7 6zM12 15c0-3-2-5-6-5 0 3 2 5 6 5zM5 21h14',
-  about: 'M4 20V10M10 20V4M16 20v-7M22 20H2',
-};
+const TABS = ['field', 'plan', 'agro', 'about'];
 
-// Bottom tabs on phones, top navigation on wide screens (see styles.css).
+// Tabs at the bottom on phones. On wide screens a menu on the left: icons only by default,
+// the arrow at the bottom opens it to show the names (see styles.css).
 export default function TabBar({ tab, setTab }) {
   const { t } = useI18n();
+  const [open, setOpen] = useState(load('menuOpen', false));
+
+  function toggle() {
+    setOpen(!open);
+    save('menuOpen', !open);
+  }
+
   return (
-    <nav className="tabbar">
-      {Object.entries(ICONS).map(([id, path]) => (
-        <button key={id} className={tab === id ? 'on' : ''} onClick={() => setTab(id)}>
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d={path} />
-          </svg>
-          {t(`tabs.${id}`)}
+    <nav className={open ? 'tabbar open' : 'tabbar'}>
+      {TABS.map((id) => (
+        <button key={id} className={tab === id ? 'on' : ''} onClick={() => setTab(id)} title={t(`tabs.${id}`)}>
+          <Icon name={id} />
+          <span>{t(`tabs.${id}`)}</span>
         </button>
       ))}
+      <button className="menu-toggle" onClick={toggle} title={t(open ? 'menu.collapse' : 'menu.expand')} aria-label={t(open ? 'menu.collapse' : 'menu.expand')}>
+        <Icon name={open ? 'collapse' : 'expand'} />
+      </button>
     </nav>
   );
 }

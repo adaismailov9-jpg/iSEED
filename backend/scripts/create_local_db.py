@@ -39,8 +39,7 @@ def write_env(password: str, port: int) -> None:
     ENV_FILE.write_text(
         "# Local settings. Not committed (see .gitignore). Template: .env.example\n"
         f"DATABASE_URL=postgresql+psycopg://iseed:{password}@localhost:{port}/iseed\n"
-        f"TEST_DATABASE_URL=postgresql+psycopg://iseed:{password}@localhost:{port}/iseed_test\n"
-        "SQL_ECHO=false\n",
+        f"TEST_DATABASE_URL=postgresql+psycopg://iseed:{password}@localhost:{port}/iseed_test\n",
         encoding="utf-8",
     )
 

@@ -1,0 +1,172 @@
+"""The Store contract: SQLiteStore and PostgresStore must give the same answers.
+
+Tests that take `store` run on both. Tests that take `pg_store` / `pg_engine` check what only
+Postgres adds: migrations, constraints and cascades.
+"""
+from datetime import date
+
+import pytest
+from sqlalchemy import select, text
+from sqlalchemy.exc import IntegrityError
+
+from iseed import storage, tables
+
+FIELD = {"lat": 42.5205, "lon": 72.3005, "areaHa": 0.91, "basin": "talas", "elevM": 1268,
+         "site": None, "fieldCheck": {"verdict": "careful", "checks": [{"id": "slope", "value": 1.5}]},
+         "geometry": {"type": "Polygon", "coordinates": [[[72.3, 42.52], [72.301, 42.52], [72.301, 42.521], [72.3, 42.52]]]},
+         "note": "Кёк-Сай"}
+CANAL = {"villages": [{"name": "Kök-Say", "ha": 120}], "source": "gravity", "normalTurns": 6}
+
+
+def farmer(store, name="Aibek", village="Kök-Say"):
+    return store.create_user(name, "farmer", "Talas", village, "1234")
+
+
+def manager(store, name="Mirab", village="Talas"):
+    return store.create_user(name, "manager", "Talas", village, "1234")
+
+
+# ---------------------------------------------------------------- users and sessions
+
+
+def test_create_user_returns_public_fields_only(store):
+    user = store.create_user("  Aibek ", "farmer", " Talas", "Kök-Say ", "1234")
+    assert user == {"id": 1, "name": "Aibek", "role": "farmer", "region": "Talas", "village": "Kök-Say"}
+
+
+def test_name_taken_returns_none(store):
+    aibek = farmer(store)
+    assert store.create_user("Aibek", "manager", "Chüy", "X", "9999") is None
+    assert store.check_pin("Aibek", "1234")["role"] == "farmer"  # the first account is untouched
+    # Ids only grow. They may skip (Postgres uses up an id on the rejected insert), so never rely on gaps.
+    assert farmer(store, name="Bakyt")["id"] > aibek["id"]
+
+
+def test_check_pin(store):
+    user = farmer(store)
+    assert store.check_pin(" Aibek", "1234") == user
+    assert store.check_pin("Aibek", "0000") is None
+    assert store.check_pin("Nobody", "1234") is None
+
+
+def test_sessions(store):
+    user = farmer(store)
+    a, b = store.create_session(user["id"]), store.create_session(user["id"])
+    assert a != b and len(a) >= 32
+    assert store.user_for_token(a) == user == store.user_for_token(b)
+    assert store.user_for_token("not-a-token") is None
+
+
+# ---------------------------------------------------------------- fields
+
+
+def test_fields_round_trip_in_order_and_per_user(store):
+    aibek, bakyt = farmer(store), farmer(store, name="Bakyt")
+    first = store.save_field(aibek["id"], FIELD)
+    second = store.save_field(aibek["id"], {**FIELD, "areaHa": 2})
+    store.save_field(bakyt["id"], FIELD)
+    assert [f["id"] for f in store.fields_of(aibek["id"])] == [first, second]
+    assert store.fields_of(aibek["id"])[0] == {"id": first, **FIELD}
+    assert store.field(first) == {"id": first, "userId": aibek["id"], **FIELD}
+    assert store.field(999) is None
+
+
+# ---------------------------------------------------------------- canal and season message
+
+
+def test_canal_is_saved_and_replaced(store):
+    boss = manager(store)
+    assert store.canal_of(boss["id"]) is None
+    store.save_canal(boss["id"], CANAL)
+    store.save_canal(boss["id"], {**CANAL, "normalTurns": 4})
+    assert store.canal_of(boss["id"]) == {**CANAL, "normalTurns": 4}
+
+
+def test_message_reaches_own_and_canal_villages(store):
+    boss = manager(store, village="Talas")
+    store.save_canal(boss["id"], CANAL)
+    assert store.set_message(boss["id"], "Old text") == {"text": "Old text", "date": date.today().isoformat()}
+    store.set_message(boss["id"], "Water turns start 20 April")  # replaces, one message per manager
+    expected = {"text": "Water turns start 20 April", "date": date.today().isoformat(), "manager": "Mirab"}
+    assert store.message_for(" kök-say ") == expected  # canal village; case and spaces ignored
+    assert store.message_for("TALAS") == expected      # the manager's own village
+    assert store.message_for("Elsewhere") is None
+
+
+def test_message_without_canal_uses_own_village(store):
+    boss = manager(store, village="Ak-Suu")
+    store.set_message(boss["id"], "Hello")
+    assert store.message_for("ak-suu")["manager"] == "Mirab"
+
+
+def test_same_day_newest_manager_wins(store):
+    first, second = manager(store, "Mirab"), manager(store, "Asan")
+    for boss in (first, second):
+        store.save_canal(boss["id"], CANAL)
+        store.set_message(boss["id"], f"From {boss['name']}")
+    assert store.message_for("Kök-Say")["manager"] == "Asan"  # same date: higher user id first
+
+
+# ---------------------------------------------------------------- open_store()
+
+
+def test_open_store_is_sqlite_without_database_url(monkeypatch, tmp_path):
+    monkeypatch.setenv("DATABASE_URL", "")  # empty, and .env does not override it
+    monkeypatch.setenv("ISEED_DB", str(tmp_path / "x.db"))
+    assert isinstance(storage.open_store(), storage.SQLiteStore)
+
+
+def test_open_store_is_postgres_with_database_url(monkeypatch, pg_url):
+    from iseed.pgstore import PostgresStore
+    monkeypatch.setenv("DATABASE_URL", pg_url)
+    store = storage.open_store()
+    assert isinstance(store, PostgresStore)
+    store.engine.dispose()
+
+
+def test_neon_style_url_gets_the_driver_name():
+    from iseed.pgstore import normalize_url
+    assert normalize_url("postgresql://u:p@ep-x.neon.tech/db?sslmode=require") == "postgresql+psycopg://u:p@ep-x.neon.tech/db?sslmode=require"
+    assert normalize_url("postgres://u:p@h/db") == "postgresql+psycopg://u:p@h/db"
+
+
+# ---------------------------------------------------------------- Postgres only
+
+
+def test_migrations_match_tables(pg_engine):
+    """Fails if tables.py changed without a new migration (`alembic revision --autogenerate`)."""
+    from alembic.autogenerate import compare_metadata
+    from alembic.migration import MigrationContext
+    with pg_engine.connect() as db:
+        assert compare_metadata(MigrationContext.configure(db, opts={"compare_type": True}), tables.metadata) == []
+
+
+def test_pin_is_stored_hashed(pg_store):
+    farmer(pg_store)
+    with pg_store.engine.connect() as db:
+        stored = db.execute(select(tables.users.c.pin)).scalar_one()
+    assert "1234" not in stored and storage.pin_matches("1234", stored)
+
+
+def test_database_rejects_unknown_role(pg_store):
+    with pytest.raises(IntegrityError, match="ck_users_role"):
+        pg_store.create_user("Aibek", "admin", "Talas", "X", "1234")
+
+
+def test_database_rejects_long_message(pg_store):
+    boss = manager(pg_store)
+    with pytest.raises(IntegrityError, match="ck_messages_text_length"):
+        pg_store.set_message(boss["id"], "x" * 281)
+
+
+def test_deleting_a_user_deletes_everything_of_theirs(pg_store):
+    boss = manager(pg_store)
+    pg_store.create_session(boss["id"])
+    pg_store.save_field(boss["id"], FIELD)
+    pg_store.save_canal(boss["id"], CANAL)
+    pg_store.set_message(boss["id"], "Hello")
+    with pg_store.engine.begin() as db:
+        db.execute(text("DELETE FROM users"))
+        counts = db.execute(text("SELECT (SELECT count(*) FROM sessions) + (SELECT count(*) FROM fields)"
+                                 " + (SELECT count(*) FROM canals) + (SELECT count(*) FROM messages)")).scalar_one()
+    assert counts == 0

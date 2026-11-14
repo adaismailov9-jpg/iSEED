@@ -1,0 +1,1269 @@
+{
+ "source": "NASA MODIS MOD10A1 v6.1 daily snow cover, 500 m (MODIS/061/MOD10A1), NDSI_Snow_Cover >= 40",
+ "note": "Mean March share of land above 2000 m that is snow covered. r is the Pearson correlation with the FLDAS March snow water volume, 2001-2026. Cover is not depth: a thin and a deep snowpack look the same.",
+ "computed": "2026-11-14",
+ "basins": {
+  "talas": {
+   "r": 0.45,
+   "lowInBoth": [
+    2008,
+    2020
+   ],
+   "lowInFldasOnly": [
+    2006,
+    2014,
+    2018,
+    2021,
+    2024
+   ],
+   "lowInModisOnly": [
+    2005,
+    2013,
+    2016,
+    2019,
+    2023
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 61.5
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 79.5
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 85.1
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 84.8
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 57.1
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 58.1
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 62.1
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 53.9
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 75.1
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 77.5
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 68.7
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 83.7
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 57.8
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 64.6
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 83.4
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 39.3
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 77.4
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 66.2
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 58.1
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 47.8
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 72.0
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 82.4
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 53.8
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 76.7
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 61.4
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 74.8
+    }
+   ]
+  },
+  "chuy": {
+   "r": 0.43,
+   "lowInBoth": [
+    2014,
+    2020
+   ],
+   "lowInFldasOnly": [
+    2006,
+    2008,
+    2021,
+    2024,
+    2025,
+    2026
+   ],
+   "lowInModisOnly": [
+    2007,
+    2013,
+    2016,
+    2019,
+    2023
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 53.2
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 66.8
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 81.1
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 81.7
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 63.8
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 56.0
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 48.1
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 57.1
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 69.8
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 75.4
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 69.2
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 75.9
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 44.4
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 46.3
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 70.1
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 42.4
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 72.0
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 66.5
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 49.7
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 51.9
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 57.3
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 77.8
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 50.8
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 70.2
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 58.2
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 66.8
+    }
+   ]
+  },
+  "issykkul": {
+   "r": 0.42,
+   "lowInBoth": [
+    2008,
+    2014,
+    2021,
+    2026
+   ],
+   "lowInFldasOnly": [
+    2018,
+    2020,
+    2024,
+    2025
+   ],
+   "lowInModisOnly": [
+    2013,
+    2016,
+    2019,
+    2023
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 62.0
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 70.4
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 87.7
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 80.4
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 63.2
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 64.8
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 72.4
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 61.1
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 69.7
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 77.0
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 72.6
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 85.5
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 56.0
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 58.8
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 73.8
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 52.9
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 75.5
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 69.5
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 58.5
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 66.5
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 61.1
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 72.3
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 53.2
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 71.7
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 67.4
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 60.0
+    }
+   ]
+  },
+  "naryn": {
+   "r": 0.62,
+   "lowInBoth": [
+    2014,
+    2016,
+    2020,
+    2025
+   ],
+   "lowInFldasOnly": [
+    2008,
+    2021,
+    2024
+   ],
+   "lowInModisOnly": [
+    2001,
+    2007,
+    2013
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 78.6
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 93.3
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 98.8
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 97.0
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 89.4
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 91.7
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 57.2
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 79.9
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 90.7
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 97.6
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 81.8
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 98.1
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 75.0
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 75.1
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 92.5
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 63.8
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 98.9
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 85.9
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 80.0
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 75.5
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 81.0
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 84.4
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 86.9
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 83.5
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 72.9
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 88.5
+    }
+   ]
+  },
+  "karadarya": {
+   "r": 0.47,
+   "lowInBoth": [
+    2016,
+    2020
+   ],
+   "lowInFldasOnly": [
+    2014,
+    2018,
+    2021,
+    2024,
+    2025
+   ],
+   "lowInModisOnly": [
+    2001,
+    2005,
+    2007,
+    2013,
+    2023
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 77.5
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 87.8
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 95.9
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 92.5
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 78.7
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 86.5
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 70.8
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 79.9
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 87.4
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 95.3
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 87.3
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 97.0
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 74.4
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 82.6
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 87.9
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 51.2
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 96.2
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 80.6
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 83.6
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 73.0
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 92.4
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 85.6
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 74.3
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 88.6
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 82.3
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 81.7
+    }
+   ]
+  },
+  "syrdarya_south": {
+   "r": 0.53,
+   "lowInBoth": [
+    2008,
+    2016,
+    2018,
+    2020
+   ],
+   "lowInFldasOnly": [
+    2011,
+    2014,
+    2024
+   ],
+   "lowInModisOnly": [
+    2001,
+    2023,
+    2025,
+    2026
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 77.7
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 87.2
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 93.1
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 87.0
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 84.3
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 82.8
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 87.6
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 75.9
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 84.9
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 85.3
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 85.7
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 96.5
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 81.0
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 85.3
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 86.5
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 62.9
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 90.6
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 76.9
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 86.8
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 76.4
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 85.4
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 80.4
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 75.4
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 86.8
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 76.0
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 79.0
+    }
+   ]
+  },
+  "saryjaz": {
+   "r": 0.59,
+   "lowInBoth": [
+    2007,
+    2014,
+    2016,
+    2020
+   ],
+   "lowInFldasOnly": [
+    2018,
+    2024,
+    2025,
+    2026
+   ],
+   "lowInModisOnly": [
+    2001,
+    2006,
+    2013
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 31.6
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 43.8
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 65.4
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 48.7
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 50.6
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 35.6
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 35.5
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 46.0
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 43.0
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 48.4
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 67.9
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 64.0
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 32.9
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 33.8
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 38.9
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 32.4
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 69.6
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 40.1
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 41.7
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 31.0
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 43.5
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 42.2
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 43.3
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 41.4
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 42.9
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 43.7
+    }
+   ]
+  },
+  "alay": {
+   "r": 0.54,
+   "lowInBoth": [
+    2001,
+    2008,
+    2016,
+    2020
+   ],
+   "lowInFldasOnly": [
+    2014,
+    2024,
+    2025,
+    2026
+   ],
+   "lowInModisOnly": [
+    2018,
+    2022,
+    2023
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 91.8
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 97.1
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 99.2
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 96.0
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 97.7
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 97.9
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 98.8
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 89.0
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 96.0
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 97.4
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 97.4
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 100.0
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 95.4
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 98.1
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 97.3
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 78.8
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 99.6
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 88.0
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 98.5
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 92.0
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 96.1
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 90.7
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 91.1
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 95.4
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 94.6
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 95.9
+    }
+   ]
+  },
+  "aksay": {
+   "r": 0.82,
+   "lowInBoth": [
+    2001,
+    2014,
+    2016,
+    2018,
+    2024
+   ],
+   "lowInFldasOnly": [
+    2020,
+    2025
+   ],
+   "lowInModisOnly": [
+    2002,
+    2013
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 18.6
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 29.1
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 65.4
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 36.3
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 46.6
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 38.8
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 43.0
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 29.6
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 31.9
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 39.5
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 50.0
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 75.2
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 26.2
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 28.0
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 37.1
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 26.0
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 66.5
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 23.2
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 37.0
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 33.6
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 29.5
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 30.5
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 31.1
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 27.7
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 41.0
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 44.7
+    }
+   ]
+  },
+  "karkyra": {
+   "r": 0.43,
+   "lowInBoth": [
+    2007,
+    2008,
+    2014,
+    2020
+   ],
+   "lowInFldasOnly": [
+    2018,
+    2024,
+    2025,
+    2026
+   ],
+   "lowInModisOnly": [
+    2016,
+    2019,
+    2023
+   ],
+   "series": [
+    {
+     "year": 2001,
+     "snowCoverPct": 79.1
+    },
+    {
+     "year": 2002,
+     "snowCoverPct": 86.9
+    },
+    {
+     "year": 2003,
+     "snowCoverPct": 95.8
+    },
+    {
+     "year": 2004,
+     "snowCoverPct": 94.6
+    },
+    {
+     "year": 2005,
+     "snowCoverPct": 80.2
+    },
+    {
+     "year": 2006,
+     "snowCoverPct": 79.8
+    },
+    {
+     "year": 2007,
+     "snowCoverPct": 69.7
+    },
+    {
+     "year": 2008,
+     "snowCoverPct": 65.7
+    },
+    {
+     "year": 2009,
+     "snowCoverPct": 83.5
+    },
+    {
+     "year": 2010,
+     "snowCoverPct": 96.9
+    },
+    {
+     "year": 2011,
+     "snowCoverPct": 86.0
+    },
+    {
+     "year": 2012,
+     "snowCoverPct": 91.1
+    },
+    {
+     "year": 2013,
+     "snowCoverPct": 73.5
+    },
+    {
+     "year": 2014,
+     "snowCoverPct": 71.7
+    },
+    {
+     "year": 2015,
+     "snowCoverPct": 90.5
+    },
+    {
+     "year": 2016,
+     "snowCoverPct": 62.2
+    },
+    {
+     "year": 2017,
+     "snowCoverPct": 96.0
+    },
+    {
+     "year": 2018,
+     "snowCoverPct": 86.8
+    },
+    {
+     "year": 2019,
+     "snowCoverPct": 72.2
+    },
+    {
+     "year": 2020,
+     "snowCoverPct": 71.5
+    },
+    {
+     "year": 2021,
+     "snowCoverPct": 81.4
+    },
+    {
+     "year": 2022,
+     "snowCoverPct": 90.2
+    },
+    {
+     "year": 2023,
+     "snowCoverPct": 69.4
+    },
+    {
+     "year": 2024,
+     "snowCoverPct": 90.9
+    },
+    {
+     "year": 2025,
+     "snowCoverPct": 77.0
+    },
+    {
+     "year": 2026,
+     "snowCoverPct": 91.3
+    }
+   ]
+  }
+ }
+}

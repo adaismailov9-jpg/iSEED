@@ -1,0 +1,132 @@
+{
+  "snow_sensitivity": {
+    "value": 0.5,
+    "estimate": true,
+    "source": "S = 1 + 0.5 x snow anomaly. Snow is only part of summer flow (glaciers, rain and reservoirs are the rest). 0.5 is set so that a typical low-snow year in Talas and Chuy (FLDAS: 50% below normal) gives S = 0.75; to calibrate with the water manager's short years"
+  },
+  "snow_factor_limits": {
+    "value": {
+      "min": 0.5,
+      "max": 1.1
+    },
+    "estimate": true,
+    "source": "Assumption: canals never get less than half or more than 110% of a normal season"
+  },
+  "pump_softening": {
+    "value": 0.5,
+    "estimate": true,
+    "source": "Assumption: S_pump = 1 - 0.5 x (1 - S); a big river rarely runs dry"
+  },
+  "position_factor": {
+    "value": {
+      "start": {
+        "normal": 1.0,
+        "low": 1.0
+      },
+      "middle": {
+        "normal": 1.0,
+        "low": 0.85
+      },
+      "end": {
+        "normal": 0.9,
+        "low": 0.6
+      }
+    },
+    "estimate": true,
+    "source": "Share of the allocation that reaches a field. 'normal' at S = 1 or more, 'low' at S = 0.75 or less, a straight line between. Assumption; to confirm with the water manager"
+  },
+  "position_low_at": {
+    "value": 0.75,
+    "estimate": true,
+    "source": "The S at which the canal position factor reaches its low-year value"
+  },
+  "normal_year_factor": {
+    "value": {
+      "enough": 1.1,
+      "sometimes": 0.9,
+      "often": 0.7,
+      "unknown": 1.0
+    },
+    "estimate": true,
+    "source": "Farmer's answer to: in a normal year, is water enough?"
+  },
+  "effective_rain": {
+    "value": 0.7,
+    "estimate": true,
+    "source": "FAO: about 70% of season rain is useful to the crop"
+  },
+  "field_efficiency": {
+    "value": 0.6,
+    "estimate": true,
+    "source": "FAO, typical furrow irrigation"
+  },
+  "short_fit": {
+    "value": 0.9,
+    "estimate": true,
+    "source": "Fit below 0.9 counts as falling short"
+  },
+  "saver_share": {
+    "value": 0.7,
+    "estimate": true,
+    "source": "Water-saver: net need at most 70% of the plan"
+  },
+  "season_days": {
+    "value": 183,
+    "estimate": false,
+    "source": "April-September"
+  },
+  "heat_c": {
+    "value": 35,
+    "estimate": true,
+    "source": "Days above 35 C harm flowering"
+  },
+  "heat_days_week": {
+    "value": 5,
+    "estimate": true,
+    "source": "5 or more hot days in the flowering week"
+  },
+  "frost_spare_days": {
+    "value": 10,
+    "estimate": true,
+    "source": "Days to spare between crop season and frost-free season"
+  },
+  "slope_deg": {
+    "value": {
+      "careful": 3,
+      "no": 8
+    },
+    "estimate": true,
+    "source": "Assumption: above 3 degrees water washes soil and seed; above 8 only hay or alfalfa. An agronomist should check"
+  },
+  "ndvi_most_years": {
+    "value": 0.5,
+    "estimate": true,
+    "source": "Assumption: green (NDVI 0.5 or more) or bare (under 0.3) in more than half of the years 2013-2025"
+  },
+  "soil_class": {
+    "value": {
+      "sandy_sand_pct": 65,
+      "clay_clay_pct": 35
+    },
+    "estimate": true,
+    "source": "Simplified texture classes from SoilGrids sand and clay percent"
+  },
+  "heavy_rain_share": {
+    "value": {
+      "careful": 0.15,
+      "no": 0.3
+    },
+    "estimate": true,
+    "source": "Assumption: share of years with a day of 20 mm or more in the sowing weeks"
+  },
+  "sowing_weeks": {
+    "value": 4,
+    "estimate": true,
+    "source": "Weeks after the earliest sowing date counted as the sowing period"
+  },
+  "dry_year_anomaly": {
+    "value": -0.5,
+    "estimate": true,
+    "source": "Used only where a field is outside every basin: the mean of low-snow years in Talas and Chuy (FLDAS 2001-2025)"
+  }
+}

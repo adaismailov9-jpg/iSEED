@@ -2,8 +2,21 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MIN_POINTS, midpoint } from '../lib/geo';
+import KYRGYZSTAN from '../data/kyrgyzstan.json';
 
-const IMAGERY = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+// Only Kyrgyzstan: everything else is covered by a cream mask, and the map cannot be moved far away.
+const WORLD = [[-89, -179], [-89, 179], [89, 179], [89, -179]];
+const KG_OUTLINES = KYRGYZSTAN.polygons.map(([outer]) => outer);
+const ENCLAVES = KYRGYZSTAN.polygons.flatMap(([, ...holes]) => holes); // neighbours' enclaves inside Kyrgyzstan
+const KG_BOUNDS = L.latLngBounds(KG_OUTLINES.flat());
+const MASK = { stroke: false, fillColor: '#f7f4ea', fillOpacity: 0.88, interactive: false };
+const BORDER = { color: '#2f4b2a', weight: 2.5, fill: false, interactive: false };
+
+// The two map backgrounds the farmer can switch between.
+const BASEMAPS = {
+  satellite: { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attribution: 'Imagery © Esri' },
+  map: { url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', attribution: '© OpenStreetMap' },
+};
 const CORNER = L.divIcon({ className: 'corner', iconSize: [22, 22] });
 const EDGE_DOT = L.divIcon({ className: 'edge-dot', iconSize: [16, 16] });
 const STYLE = { color: '#ffd43b', weight: 3, fillOpacity: 0.2 };
@@ -13,7 +26,7 @@ const STYLE = { color: '#ffd43b', weight: 3, fillOpacity: 0.2 };
 // - drag a corner to move it, tap a corner to remove it (if more than 4);
 // - drag the dot in the middle of an edge to add a new corner there.
 // onMove(points) fires during a drag (for the live area), onChange(points) when it ends.
-export default function FieldMap({ points, onChange, onMove, onTapEmpty, focus }) {
+export default function FieldMap({ points, onChange, onMove, onTapEmpty, focus, basemap }) {
   const boxRef = useRef(null);
   const mapRef = useRef(null);
   const layerRef = useRef(null);
@@ -22,10 +35,14 @@ export default function FieldMap({ points, onChange, onMove, onTapEmpty, focus }
 
   // Create the map once.
   useEffect(() => {
-    const map = L.map(boxRef.current, { zoomControl: false }).setView([41.5, 74.5], 7); // all of Kyrgyzstan
-    L.tileLayer(IMAGERY, { maxZoom: 19, attribution: 'Imagery © Esri' }).addTo(map);
-    map.attributionControl.setPrefix(false); // hide the "Leaflet" label with the flag, keep the Esri credit
+    const map = L.map(boxRef.current, { zoomControl: false, minZoom: 6, maxBounds: KG_BOUNDS.pad(0.15), maxBoundsViscosity: 1 });
+    map.fitBounds(KG_BOUNDS);
+    map.attributionControl.setPrefix(false); // hide the "Leaflet" label with the flag, keep the map credits
     L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    L.polygon([WORLD, ...KG_OUTLINES], MASK).addTo(map);
+    L.polygon(ENCLAVES, MASK).addTo(map);
+    L.polygon(KYRGYZSTAN.polygons, BORDER).addTo(map);
     layerRef.current = L.layerGroup().addTo(map);
 
     map.on('click', (e) => {
@@ -36,6 +53,13 @@ export default function FieldMap({ points, onChange, onMove, onTapEmpty, focus }
     mapRef.current = map;
     return () => map.remove();
   }, []);
+
+  // Show the chosen background: satellite or ordinary map.
+  useEffect(() => {
+    const { url, attribution } = BASEMAPS[basemap];
+    const tiles = L.tileLayer(url, { maxZoom: 19, attribution }).addTo(mapRef.current);
+    return () => tiles.remove();
+  }, [basemap]);
 
   // Redraw the field when the corners change.
   useEffect(() => {

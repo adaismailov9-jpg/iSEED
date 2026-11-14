@@ -1,0 +1,2294 @@
+{
+ "source": "NASA FLDAS Noah monthly 0.1 degree (NASA/FLDAS/NOAH01/C/GL/M/V001), band SWE_inst, summed per HydroBASINS level 5 basin",
+ "note": "Volume counts land above 2000 m (SRTM). FLDAS is a model fed with weather data, not a direct measurement.",
+ "normal": "mean of March 2001-2025; levels by terciles of 2001-2025",
+ "shortYears": [
+  {
+   "year": 2021,
+   "source": "24.kg, June 2021: farmers in Chui region protest over lack of irrigation water"
+  }
+ ],
+ "computed": "2026-11-14",
+ "basins": {
+  "talas": {
+   "basin": "talas",
+   "south": false,
+   "level": "normal",
+   "anomaly": -0.196,
+   "volumeKm3": 0.505,
+   "normalKm3": 0.629,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.195
+   },
+   "terciles": [
+    0.484,
+    0.769
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 0.984,
+     "wholeBasinKm3": 1.057,
+     "febKm3": 0.976,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 0.888,
+     "wholeBasinKm3": 0.93,
+     "febKm3": 0.824,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 0.63,
+     "wholeBasinKm3": 0.828,
+     "febKm3": 0.502,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 0.777,
+     "wholeBasinKm3": 0.849,
+     "febKm3": 0.689,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 0.804,
+     "wholeBasinKm3": 0.984,
+     "febKm3": 0.957,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 0.41,
+     "wholeBasinKm3": 0.425,
+     "febKm3": 0.462,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 0.591,
+     "wholeBasinKm3": 0.63,
+     "febKm3": 0.524,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 0.214,
+     "wholeBasinKm3": 0.228,
+     "febKm3": 0.234,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 1.005,
+     "wholeBasinKm3": 1.101,
+     "febKm3": 0.929,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 0.728,
+     "wholeBasinKm3": 0.821,
+     "febKm3": 0.598,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 0.484,
+     "wholeBasinKm3": 0.582,
+     "febKm3": 0.421,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 1.195,
+     "wholeBasinKm3": 1.773,
+     "febKm3": 1.058,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 0.529,
+     "wholeBasinKm3": 0.585,
+     "febKm3": 0.469,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 0.372,
+     "wholeBasinKm3": 0.385,
+     "febKm3": 0.432,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 0.861,
+     "wholeBasinKm3": 0.93,
+     "febKm3": 0.824,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 0.497,
+     "wholeBasinKm3": 0.504,
+     "febKm3": 0.777,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 0.915,
+     "wholeBasinKm3": 1.113,
+     "febKm3": 0.912,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 0.379,
+     "wholeBasinKm3": 0.4,
+     "febKm3": 0.306,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 0.769,
+     "wholeBasinKm3": 0.805,
+     "febKm3": 0.807,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 0.209,
+     "wholeBasinKm3": 0.213,
+     "febKm3": 0.288,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 0.288,
+     "wholeBasinKm3": 0.453,
+     "febKm3": 0.215,
+     "level": "low",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 0.636,
+     "wholeBasinKm3": 0.695,
+     "febKm3": 0.498,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 0.689,
+     "wholeBasinKm3": 0.699,
+     "febKm3": 0.791,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 0.343,
+     "wholeBasinKm3": 0.386,
+     "febKm3": 0.32,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 0.527,
+     "wholeBasinKm3": 0.628,
+     "febKm3": 0.56,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 0.505,
+     "wholeBasinKm3": 0.551,
+     "febKm3": 0.495,
+     "level": "normal",
+     "short": false
+    }
+   ]
+  },
+  "chuy": {
+   "basin": "chuy",
+   "south": false,
+   "level": "low",
+   "anomaly": -0.406,
+   "volumeKm3": 0.891,
+   "normalKm3": 1.499,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.419
+   },
+   "terciles": [
+    1.229,
+    1.685
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 2.122,
+     "wholeBasinKm3": 2.177,
+     "febKm3": 2.192,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 1.877,
+     "wholeBasinKm3": 1.914,
+     "febKm3": 1.75,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 1.516,
+     "wholeBasinKm3": 1.756,
+     "febKm3": 1.247,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 2.059,
+     "wholeBasinKm3": 2.137,
+     "febKm3": 1.885,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 1.505,
+     "wholeBasinKm3": 1.555,
+     "febKm3": 1.727,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 0.749,
+     "wholeBasinKm3": 0.768,
+     "febKm3": 0.77,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 1.345,
+     "wholeBasinKm3": 1.384,
+     "febKm3": 1.241,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 0.579,
+     "wholeBasinKm3": 0.594,
+     "febKm3": 0.51,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 2.163,
+     "wholeBasinKm3": 2.236,
+     "febKm3": 2.039,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 1.51,
+     "wholeBasinKm3": 1.694,
+     "febKm3": 1.255,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 1.685,
+     "wholeBasinKm3": 1.792,
+     "febKm3": 1.504,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 2.783,
+     "wholeBasinKm3": 3.226,
+     "febKm3": 2.46,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 1.229,
+     "wholeBasinKm3": 1.287,
+     "febKm3": 1.171,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 0.94,
+     "wholeBasinKm3": 0.98,
+     "febKm3": 1.006,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 2.417,
+     "wholeBasinKm3": 2.521,
+     "febKm3": 2.307,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 1.405,
+     "wholeBasinKm3": 1.419,
+     "febKm3": 1.785,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 2.65,
+     "wholeBasinKm3": 2.892,
+     "febKm3": 2.653,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 1.259,
+     "wholeBasinKm3": 1.287,
+     "febKm3": 1.12,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 1.286,
+     "wholeBasinKm3": 1.309,
+     "febKm3": 1.355,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 0.865,
+     "wholeBasinKm3": 0.878,
+     "febKm3": 0.93,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 0.579,
+     "wholeBasinKm3": 0.695,
+     "febKm3": 0.474,
+     "level": "low",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 1.538,
+     "wholeBasinKm3": 1.617,
+     "febKm3": 1.245,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 1.804,
+     "wholeBasinKm3": 1.824,
+     "febKm3": 2.027,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 0.597,
+     "wholeBasinKm3": 0.646,
+     "febKm3": 0.574,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 1.016,
+     "wholeBasinKm3": 1.101,
+     "febKm3": 0.985,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 0.891,
+     "wholeBasinKm3": 0.957,
+     "febKm3": 0.842,
+     "level": "low",
+     "short": false
+    }
+   ]
+  },
+  "issykkul": {
+   "basin": "issykkul",
+   "south": false,
+   "level": "low",
+   "anomaly": -0.494,
+   "volumeKm3": 0.281,
+   "normalKm3": 0.555,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.516
+   },
+   "terciles": [
+    0.361,
+    0.636
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 1.052,
+     "wholeBasinKm3": 1.075,
+     "febKm3": 1.158,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 0.81,
+     "wholeBasinKm3": 0.83,
+     "febKm3": 0.812,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 0.568,
+     "wholeBasinKm3": 0.606,
+     "febKm3": 0.508,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 0.896,
+     "wholeBasinKm3": 0.918,
+     "febKm3": 0.901,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 0.519,
+     "wholeBasinKm3": 0.529,
+     "febKm3": 0.686,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 0.361,
+     "wholeBasinKm3": 0.373,
+     "febKm3": 0.437,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 0.396,
+     "wholeBasinKm3": 0.411,
+     "febKm3": 0.366,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 0.319,
+     "wholeBasinKm3": 0.327,
+     "febKm3": 0.331,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 0.636,
+     "wholeBasinKm3": 0.655,
+     "febKm3": 0.64,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 0.639,
+     "wholeBasinKm3": 0.66,
+     "febKm3": 0.603,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 0.642,
+     "wholeBasinKm3": 0.681,
+     "febKm3": 0.613,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 0.97,
+     "wholeBasinKm3": 1.046,
+     "febKm3": 0.876,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 0.536,
+     "wholeBasinKm3": 0.564,
+     "febKm3": 0.588,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 0.292,
+     "wholeBasinKm3": 0.308,
+     "febKm3": 0.351,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 0.71,
+     "wholeBasinKm3": 0.737,
+     "febKm3": 0.71,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 0.465,
+     "wholeBasinKm3": 0.47,
+     "febKm3": 0.703,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 1.081,
+     "wholeBasinKm3": 1.141,
+     "febKm3": 1.129,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 0.332,
+     "wholeBasinKm3": 0.341,
+     "febKm3": 0.348,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 0.583,
+     "wholeBasinKm3": 0.6,
+     "febKm3": 0.659,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 0.187,
+     "wholeBasinKm3": 0.19,
+     "febKm3": 0.24,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 0.255,
+     "wholeBasinKm3": 0.259,
+     "febKm3": 0.254,
+     "level": "low",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 0.601,
+     "wholeBasinKm3": 0.616,
+     "febKm3": 0.541,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 0.537,
+     "wholeBasinKm3": 0.545,
+     "febKm3": 0.644,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 0.26,
+     "wholeBasinKm3": 0.271,
+     "febKm3": 0.266,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 0.218,
+     "wholeBasinKm3": 0.227,
+     "febKm3": 0.208,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 0.281,
+     "wholeBasinKm3": 0.286,
+     "febKm3": 0.282,
+     "level": "low",
+     "short": false
+    }
+   ]
+  },
+  "naryn": {
+   "basin": "naryn",
+   "south": false,
+   "level": "normal",
+   "anomaly": -0.311,
+   "volumeKm3": 1.676,
+   "normalKm3": 2.431,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.244
+   },
+   "terciles": [
+    1.551,
+    2.788
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 3.847,
+     "wholeBasinKm3": 3.887,
+     "febKm3": 4.246,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 3.27,
+     "wholeBasinKm3": 3.323,
+     "febKm3": 3.245,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 2.788,
+     "wholeBasinKm3": 2.961,
+     "febKm3": 2.154,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 3.717,
+     "wholeBasinKm3": 3.792,
+     "febKm3": 3.402,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 2.592,
+     "wholeBasinKm3": 2.636,
+     "febKm3": 3.365,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 1.791,
+     "wholeBasinKm3": 1.832,
+     "febKm3": 2.066,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 1.809,
+     "wholeBasinKm3": 1.83,
+     "febKm3": 1.697,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 0.91,
+     "wholeBasinKm3": 0.925,
+     "febKm3": 0.998,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 3.935,
+     "wholeBasinKm3": 4.031,
+     "febKm3": 3.938,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 3.36,
+     "wholeBasinKm3": 3.462,
+     "febKm3": 3.032,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 2.186,
+     "wholeBasinKm3": 2.269,
+     "febKm3": 1.889,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 6.024,
+     "wholeBasinKm3": 6.329,
+     "febKm3": 5.373,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 2.012,
+     "wholeBasinKm3": 2.065,
+     "febKm3": 2.055,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 1.222,
+     "wholeBasinKm3": 1.239,
+     "febKm3": 1.493,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 3.057,
+     "wholeBasinKm3": 3.12,
+     "febKm3": 2.999,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 1.487,
+     "wholeBasinKm3": 1.492,
+     "febKm3": 2.383,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 4.227,
+     "wholeBasinKm3": 4.307,
+     "febKm3": 4.407,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 1.551,
+     "wholeBasinKm3": 1.563,
+     "febKm3": 1.49,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 2.521,
+     "wholeBasinKm3": 2.578,
+     "febKm3": 2.744,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 0.91,
+     "wholeBasinKm3": 0.916,
+     "febKm3": 1.185,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 0.957,
+     "wholeBasinKm3": 0.971,
+     "febKm3": 0.849,
+     "level": "low",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 2.141,
+     "wholeBasinKm3": 2.162,
+     "febKm3": 1.805,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 2.37,
+     "wholeBasinKm3": 2.38,
+     "febKm3": 2.954,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 0.965,
+     "wholeBasinKm3": 0.996,
+     "febKm3": 0.972,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 1.135,
+     "wholeBasinKm3": 1.149,
+     "febKm3": 1.168,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 1.676,
+     "wholeBasinKm3": 1.701,
+     "febKm3": 1.872,
+     "level": "normal",
+     "short": false
+    }
+   ]
+  },
+  "karadarya": {
+   "basin": "karadarya",
+   "south": true,
+   "level": "normal",
+   "anomaly": -0.457,
+   "volumeKm3": 0.436,
+   "normalKm3": 0.802,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.423
+   },
+   "terciles": [
+    0.36,
+    0.929
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 1.322,
+     "wholeBasinKm3": 1.343,
+     "febKm3": 1.573,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 0.929,
+     "wholeBasinKm3": 0.944,
+     "febKm3": 1.021,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 1.072,
+     "wholeBasinKm3": 1.2,
+     "febKm3": 0.769,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 1.081,
+     "wholeBasinKm3": 1.123,
+     "febKm3": 0.928,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 0.838,
+     "wholeBasinKm3": 0.852,
+     "febKm3": 1.239,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 0.772,
+     "wholeBasinKm3": 0.792,
+     "febKm3": 0.982,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 0.436,
+     "wholeBasinKm3": 0.448,
+     "febKm3": 0.337,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 0.36,
+     "wholeBasinKm3": 0.373,
+     "febKm3": 0.491,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 1.257,
+     "wholeBasinKm3": 1.309,
+     "febKm3": 1.301,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 1.539,
+     "wholeBasinKm3": 1.636,
+     "febKm3": 1.409,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 0.608,
+     "wholeBasinKm3": 0.689,
+     "febKm3": 0.366,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 2.993,
+     "wholeBasinKm3": 3.236,
+     "febKm3": 2.673,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 0.805,
+     "wholeBasinKm3": 0.843,
+     "febKm3": 0.862,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 0.254,
+     "wholeBasinKm3": 0.263,
+     "febKm3": 0.347,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 0.897,
+     "wholeBasinKm3": 0.948,
+     "febKm3": 0.866,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 0.328,
+     "wholeBasinKm3": 0.33,
+     "febKm3": 0.626,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 1.142,
+     "wholeBasinKm3": 1.194,
+     "febKm3": 1.237,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 0.185,
+     "wholeBasinKm3": 0.188,
+     "febKm3": 0.157,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 1.029,
+     "wholeBasinKm3": 1.052,
+     "febKm3": 1.132,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 0.098,
+     "wholeBasinKm3": 0.1,
+     "febKm3": 0.185,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 0.317,
+     "wholeBasinKm3": 0.326,
+     "febKm3": 0.214,
+     "level": "low",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 0.48,
+     "wholeBasinKm3": 0.493,
+     "febKm3": 0.299,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 0.825,
+     "wholeBasinKm3": 0.826,
+     "febKm3": 1.068,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 0.138,
+     "wholeBasinKm3": 0.168,
+     "febKm3": 0.133,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 0.356,
+     "wholeBasinKm3": 0.368,
+     "febKm3": 0.363,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 0.436,
+     "wholeBasinKm3": 0.447,
+     "febKm3": 0.475,
+     "level": "normal",
+     "short": false
+    }
+   ]
+  },
+  "syrdarya_south": {
+   "basin": "syrdarya_south",
+   "south": true,
+   "level": "normal",
+   "anomaly": -0.247,
+   "volumeKm3": 1.829,
+   "normalKm3": 2.431,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.234
+   },
+   "terciles": [
+    1.627,
+    2.813
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 3.42,
+     "wholeBasinKm3": 3.72,
+     "febKm3": 3.336,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 3.703,
+     "wholeBasinKm3": 3.92,
+     "febKm3": 3.508,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 2.687,
+     "wholeBasinKm3": 3.114,
+     "febKm3": 1.89,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 2.539,
+     "wholeBasinKm3": 2.678,
+     "febKm3": 2.132,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 2.809,
+     "wholeBasinKm3": 3.044,
+     "febKm3": 3.285,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 1.973,
+     "wholeBasinKm3": 2.088,
+     "febKm3": 1.905,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 2.13,
+     "wholeBasinKm3": 2.31,
+     "febKm3": 1.715,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 1.098,
+     "wholeBasinKm3": 1.183,
+     "febKm3": 1.199,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 3.37,
+     "wholeBasinKm3": 3.627,
+     "febKm3": 3.021,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 3.192,
+     "wholeBasinKm3": 3.503,
+     "febKm3": 2.58,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 1.343,
+     "wholeBasinKm3": 1.512,
+     "febKm3": 0.962,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 5.027,
+     "wholeBasinKm3": 5.9,
+     "febKm3": 4.411,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 2.537,
+     "wholeBasinKm3": 2.827,
+     "febKm3": 2.064,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 1.345,
+     "wholeBasinKm3": 1.488,
+     "febKm3": 1.327,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 2.813,
+     "wholeBasinKm3": 3.067,
+     "febKm3": 2.451,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 1.597,
+     "wholeBasinKm3": 1.641,
+     "febKm3": 2.457,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 3.359,
+     "wholeBasinKm3": 3.708,
+     "febKm3": 3.329,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 1.543,
+     "wholeBasinKm3": 1.642,
+     "febKm3": 0.955,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 3.756,
+     "wholeBasinKm3": 4.016,
+     "febKm3": 3.77,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 0.895,
+     "wholeBasinKm3": 0.942,
+     "febKm3": 1.098,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 1.656,
+     "wholeBasinKm3": 1.812,
+     "febKm3": 0.89,
+     "level": "normal",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 1.627,
+     "wholeBasinKm3": 1.73,
+     "febKm3": 0.991,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 2.895,
+     "wholeBasinKm3": 2.979,
+     "febKm3": 3.131,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 1.514,
+     "wholeBasinKm3": 1.796,
+     "febKm3": 1.142,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 1.939,
+     "wholeBasinKm3": 2.102,
+     "febKm3": 1.873,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 1.829,
+     "wholeBasinKm3": 1.937,
+     "febKm3": 1.698,
+     "level": "normal",
+     "short": false
+    }
+   ]
+  },
+  "saryjaz": {
+   "basin": "saryjaz",
+   "south": false,
+   "level": "low",
+   "anomaly": -0.133,
+   "volumeKm3": 1.613,
+   "normalKm3": 1.861,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.134
+   },
+   "terciles": [
+    1.711,
+    1.9
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 1.967,
+     "wholeBasinKm3": 1.968,
+     "febKm3": 2.056,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 1.987,
+     "wholeBasinKm3": 1.988,
+     "febKm3": 2.021,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 1.828,
+     "wholeBasinKm3": 1.831,
+     "febKm3": 1.746,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 1.952,
+     "wholeBasinKm3": 1.953,
+     "febKm3": 1.933,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 1.886,
+     "wholeBasinKm3": 1.887,
+     "febKm3": 1.986,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 1.711,
+     "wholeBasinKm3": 1.711,
+     "febKm3": 1.808,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 1.707,
+     "wholeBasinKm3": 1.709,
+     "febKm3": 1.663,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 1.734,
+     "wholeBasinKm3": 1.735,
+     "febKm3": 1.788,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 2.009,
+     "wholeBasinKm3": 2.01,
+     "febKm3": 2.089,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 2.069,
+     "wholeBasinKm3": 2.07,
+     "febKm3": 2.006,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 1.9,
+     "wholeBasinKm3": 1.904,
+     "febKm3": 1.832,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 2.548,
+     "wholeBasinKm3": 2.55,
+     "febKm3": 2.441,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 1.791,
+     "wholeBasinKm3": 1.791,
+     "febKm3": 1.824,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 1.638,
+     "wholeBasinKm3": 1.639,
+     "febKm3": 1.706,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 1.889,
+     "wholeBasinKm3": 1.89,
+     "febKm3": 1.911,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 1.709,
+     "wholeBasinKm3": 1.71,
+     "febKm3": 1.881,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 2.37,
+     "wholeBasinKm3": 2.371,
+     "febKm3": 2.424,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 1.695,
+     "wholeBasinKm3": 1.695,
+     "febKm3": 1.746,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 2.093,
+     "wholeBasinKm3": 2.094,
+     "febKm3": 2.16,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 1.584,
+     "wholeBasinKm3": 1.584,
+     "febKm3": 1.628,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 1.766,
+     "wholeBasinKm3": 1.767,
+     "febKm3": 1.738,
+     "level": "normal",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 1.884,
+     "wholeBasinKm3": 1.885,
+     "febKm3": 1.818,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 1.787,
+     "wholeBasinKm3": 1.787,
+     "febKm3": 1.928,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 1.551,
+     "wholeBasinKm3": 1.553,
+     "febKm3": 1.554,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 1.478,
+     "wholeBasinKm3": 1.479,
+     "febKm3": 1.443,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 1.613,
+     "wholeBasinKm3": 1.613,
+     "febKm3": 1.632,
+     "level": "low",
+     "short": false
+    }
+   ]
+  },
+  "alay": {
+   "basin": "alay",
+   "south": false,
+   "level": "low",
+   "anomaly": -0.284,
+   "volumeKm3": 1.658,
+   "normalKm3": 2.317,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.293
+   },
+   "terciles": [
+    1.8,
+    2.448
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 1.771,
+     "wholeBasinKm3": 1.781,
+     "febKm3": 1.919,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 2.179,
+     "wholeBasinKm3": 2.189,
+     "febKm3": 2.179,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 2.436,
+     "wholeBasinKm3": 2.492,
+     "febKm3": 1.72,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 2.486,
+     "wholeBasinKm3": 2.493,
+     "febKm3": 2.159,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 2.444,
+     "wholeBasinKm3": 2.454,
+     "febKm3": 2.505,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 2.52,
+     "wholeBasinKm3": 2.527,
+     "febKm3": 2.339,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 1.988,
+     "wholeBasinKm3": 2.017,
+     "febKm3": 1.359,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 1.677,
+     "wholeBasinKm3": 1.682,
+     "febKm3": 1.695,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 2.892,
+     "wholeBasinKm3": 2.913,
+     "febKm3": 2.641,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 3.146,
+     "wholeBasinKm3": 3.162,
+     "febKm3": 2.531,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 2.32,
+     "wholeBasinKm3": 2.35,
+     "febKm3": 1.463,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 5.114,
+     "wholeBasinKm3": 5.219,
+     "febKm3": 4.337,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 2.448,
+     "wholeBasinKm3": 2.463,
+     "febKm3": 2.026,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 1.369,
+     "wholeBasinKm3": 1.382,
+     "febKm3": 1.131,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 2.47,
+     "wholeBasinKm3": 2.492,
+     "febKm3": 1.901,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 1.31,
+     "wholeBasinKm3": 1.312,
+     "febKm3": 1.51,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 2.954,
+     "wholeBasinKm3": 2.976,
+     "febKm3": 2.837,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 1.8,
+     "wholeBasinKm3": 1.804,
+     "febKm3": 1.16,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 3.798,
+     "wholeBasinKm3": 3.851,
+     "febKm3": 3.629,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 1.395,
+     "wholeBasinKm3": 1.399,
+     "febKm3": 1.526,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 2.161,
+     "wholeBasinKm3": 2.185,
+     "febKm3": 1.432,
+     "level": "normal",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 1.809,
+     "wholeBasinKm3": 1.813,
+     "febKm3": 1.28,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 2.23,
+     "wholeBasinKm3": 2.233,
+     "febKm3": 2.347,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 1.552,
+     "wholeBasinKm3": 1.63,
+     "febKm3": 1.217,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 1.653,
+     "wholeBasinKm3": 1.68,
+     "febKm3": 1.474,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 1.658,
+     "wholeBasinKm3": 1.662,
+     "febKm3": 1.424,
+     "level": "low",
+     "short": false
+    }
+   ]
+  },
+  "aksay": {
+   "basin": "aksay",
+   "south": false,
+   "level": "normal",
+   "anomaly": -0.16,
+   "volumeKm3": 1.441,
+   "normalKm3": 1.715,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.118
+   },
+   "terciles": [
+    1.382,
+    1.783
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 1.378,
+     "wholeBasinKm3": 1.379,
+     "febKm3": 1.442,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 1.659,
+     "wholeBasinKm3": 1.66,
+     "febKm3": 1.639,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 2.067,
+     "wholeBasinKm3": 2.077,
+     "febKm3": 1.462,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 1.575,
+     "wholeBasinKm3": 1.575,
+     "febKm3": 1.459,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 1.811,
+     "wholeBasinKm3": 1.811,
+     "febKm3": 1.861,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 1.852,
+     "wholeBasinKm3": 1.854,
+     "febKm3": 1.827,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 1.437,
+     "wholeBasinKm3": 1.442,
+     "febKm3": 1.134,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 1.382,
+     "wholeBasinKm3": 1.386,
+     "febKm3": 1.512,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 1.859,
+     "wholeBasinKm3": 1.86,
+     "febKm3": 1.839,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 2.261,
+     "wholeBasinKm3": 2.262,
+     "febKm3": 1.943,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 1.917,
+     "wholeBasinKm3": 1.933,
+     "febKm3": 1.327,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 3.625,
+     "wholeBasinKm3": 3.64,
+     "febKm3": 2.874,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 1.64,
+     "wholeBasinKm3": 1.64,
+     "febKm3": 1.581,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 1.244,
+     "wholeBasinKm3": 1.245,
+     "febKm3": 1.215,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 1.497,
+     "wholeBasinKm3": 1.497,
+     "febKm3": 1.339,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 1.233,
+     "wholeBasinKm3": 1.234,
+     "febKm3": 1.224,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 2.893,
+     "wholeBasinKm3": 2.897,
+     "febKm3": 2.857,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 1.261,
+     "wholeBasinKm3": 1.261,
+     "febKm3": 1.224,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 1.783,
+     "wholeBasinKm3": 1.785,
+     "febKm3": 1.665,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 1.307,
+     "wholeBasinKm3": 1.307,
+     "febKm3": 1.27,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 1.527,
+     "wholeBasinKm3": 1.528,
+     "febKm3": 1.334,
+     "level": "normal",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 1.522,
+     "wholeBasinKm3": 1.522,
+     "febKm3": 1.371,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 1.452,
+     "wholeBasinKm3": 1.452,
+     "febKm3": 1.561,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 1.316,
+     "wholeBasinKm3": 1.317,
+     "febKm3": 1.28,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 1.379,
+     "wholeBasinKm3": 1.38,
+     "febKm3": 1.309,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 1.441,
+     "wholeBasinKm3": 1.441,
+     "febKm3": 1.396,
+     "level": "normal",
+     "short": false
+    }
+   ]
+  },
+  "karkyra": {
+   "basin": "karkyra",
+   "south": false,
+   "level": "low",
+   "anomaly": -0.416,
+   "volumeKm3": 0.262,
+   "normalKm3": 0.449,
+   "month": "2026-03",
+   "early": {
+    "month": "2026-02",
+    "anomaly": -0.448
+   },
+   "terciles": [
+    0.291,
+    0.477
+   ],
+   "replayYear": 2021,
+   "series": [
+    {
+     "year": 2001,
+     "volumeKm3": 0.921,
+     "wholeBasinKm3": 0.99,
+     "febKm3": 1.001,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2002,
+     "volumeKm3": 0.564,
+     "wholeBasinKm3": 0.574,
+     "febKm3": 0.562,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2003,
+     "volumeKm3": 0.588,
+     "wholeBasinKm3": 0.673,
+     "febKm3": 0.512,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2004,
+     "volumeKm3": 0.475,
+     "wholeBasinKm3": 0.508,
+     "febKm3": 0.493,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2005,
+     "volumeKm3": 0.426,
+     "wholeBasinKm3": 0.436,
+     "febKm3": 0.564,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2006,
+     "volumeKm3": 0.291,
+     "wholeBasinKm3": 0.302,
+     "febKm3": 0.319,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2007,
+     "volumeKm3": 0.239,
+     "wholeBasinKm3": 0.26,
+     "febKm3": 0.192,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2008,
+     "volumeKm3": 0.263,
+     "wholeBasinKm3": 0.269,
+     "febKm3": 0.276,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2009,
+     "volumeKm3": 0.441,
+     "wholeBasinKm3": 0.456,
+     "febKm3": 0.433,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2010,
+     "volumeKm3": 0.477,
+     "wholeBasinKm3": 0.507,
+     "febKm3": 0.407,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2011,
+     "volumeKm3": 0.694,
+     "wholeBasinKm3": 0.731,
+     "febKm3": 0.652,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2012,
+     "volumeKm3": 0.681,
+     "wholeBasinKm3": 0.82,
+     "febKm3": 0.561,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2013,
+     "volumeKm3": 0.412,
+     "wholeBasinKm3": 0.446,
+     "febKm3": 0.474,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2014,
+     "volumeKm3": 0.195,
+     "wholeBasinKm3": 0.204,
+     "febKm3": 0.216,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2015,
+     "volumeKm3": 0.571,
+     "wholeBasinKm3": 0.635,
+     "febKm3": 0.561,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2016,
+     "volumeKm3": 0.393,
+     "wholeBasinKm3": 0.399,
+     "febKm3": 0.58,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2017,
+     "volumeKm3": 0.83,
+     "wholeBasinKm3": 0.934,
+     "febKm3": 0.818,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2018,
+     "volumeKm3": 0.218,
+     "wholeBasinKm3": 0.23,
+     "febKm3": 0.234,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2019,
+     "volumeKm3": 0.47,
+     "wholeBasinKm3": 0.486,
+     "febKm3": 0.562,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2020,
+     "volumeKm3": 0.172,
+     "wholeBasinKm3": 0.179,
+     "febKm3": 0.234,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2021,
+     "volumeKm3": 0.291,
+     "wholeBasinKm3": 0.301,
+     "febKm3": 0.272,
+     "level": "normal",
+     "short": true
+    },
+    {
+     "year": 2022,
+     "volumeKm3": 0.652,
+     "wholeBasinKm3": 0.692,
+     "febKm3": 0.558,
+     "level": "high",
+     "short": false
+    },
+    {
+     "year": 2023,
+     "volumeKm3": 0.469,
+     "wholeBasinKm3": 0.484,
+     "febKm3": 0.558,
+     "level": "normal",
+     "short": false
+    },
+    {
+     "year": 2024,
+     "volumeKm3": 0.252,
+     "wholeBasinKm3": 0.272,
+     "febKm3": 0.219,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2025,
+     "volumeKm3": 0.244,
+     "wholeBasinKm3": 0.271,
+     "febKm3": 0.21,
+     "level": "low",
+     "short": false
+    },
+    {
+     "year": 2026,
+     "volumeKm3": 0.262,
+     "wholeBasinKm3": 0.273,
+     "febKm3": 0.253,
+     "level": "low",
+     "short": false
+    }
+   ]
+  }
+ }
+}

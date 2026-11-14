@@ -1,0 +1,17 @@
+{
+ "step": 0.005,
+ "west": 69.2,
+ "north": 43.3,
+ "cols": 2220,
+ "rows": 840,
+ "ndviYears": 13,
+ "computed": "2026-11-14",
+ "sources": {
+  "elev": "NASA SRTM 30 m (USGS/SRTMGL1_003), mean per cell",
+  "slope": "NASA SRTM 30 m, mean slope per cell, degrees x 4",
+  "green": "NASA MODIS MOD13Q1 v6.1, 250 m: years 2013-2025 whose June-August peak NDVI was 0.5 or more",
+  "bare": "NASA MODIS MOD13Q1 v6.1, 250 m: years 2013-2025 whose June-August peak NDVI was under 0.3",
+  "sand": "SoilGrids 2.0 (ISRIC; not NASA), sand percent at 5-15 cm",
+  "clay": "SoilGrids 2.0 (ISRIC; not NASA), clay percent at 5-15 cm"
+ }
+}

@@ -42,8 +42,12 @@ p { margin: 0 0 8px; }
 .screen.empty { align-items: center; justify-content: center; text-align: center; min-height: 60%; }
 .column { display: flex; flex-direction: column; gap: 14px; }
 
+/* Wide screen: header on top, menu on the left, content on the right. */
 @media (min-width: 900px) {
-  .main { padding-bottom: 0; }
+  .app { grid-template-columns: auto 1fr; grid-template-rows: auto 1fr; grid-template-areas: 'header header' 'nav main'; }
+  .header { grid-area: header; }
+  .tabbar { grid-area: nav; }
+  .main { grid-area: main; padding-bottom: 0; }
   .screen { padding: 28px; }
   .plan-detail { max-width: 1200px; }
   .columns { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 24px; }
@@ -58,18 +62,26 @@ p { margin: 0 0 8px; }
 .lang button { border: 0; background: none; padding: 6px 10px; border-radius: 999px; font: inherit; font-size: 0.78rem; font-weight: 700; color: var(--muted); cursor: pointer; }
 .lang button.on { background: var(--green); color: #fff; }
 
-/* Phone: tabs fixed at the bottom. Wide screen: tabs in the middle of the header. */
+/* Phone: tabs fixed at the bottom. Wide screen: a menu column on the left. */
 .tabbar { position: fixed; z-index: 1000; left: 0; right: 0; bottom: 0; display: flex; background: var(--card); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
 .tabbar button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; border: 0; background: none; font: inherit; font-size: 0.75rem; font-weight: 600; color: var(--muted); cursor: pointer; }
 .tabbar button.on { color: var(--green); font-weight: 800; }
 .tabbar svg { padding: 4px; border-radius: 50%; box-sizing: content-box; }
 .tabbar button.on svg { background: var(--sage-soft); }
 
+.menu-toggle { display: none !important; } /* only on wide screens */
+
+/* Wide screen: icons only; .open shows the names. The arrow button sits at the bottom. */
 @media (min-width: 900px) {
-  .tabbar { position: static; border: 0; background: none; padding: 0; gap: 6px; }
-  .tabbar button { flex-direction: row; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 999px; font-size: 0.9rem; }
+  .tabbar { position: static; flex-direction: column; gap: 6px; padding: 16px 10px; border-top: 0; border-right: 1px solid var(--line); }
+  .tabbar button { flex: none; flex-direction: row; gap: 10px; padding: 6px; border-radius: 16px; font-size: 0.95rem; text-align: left; white-space: nowrap; }
+  .tabbar.open button { padding-right: 14px; min-width: 190px; }
+  .tabbar button span { display: none; }
+  .tabbar.open button span { display: inline; }
   .tabbar button.on { background: var(--sage-soft); }
   .tabbar svg { background: var(--sand); }
+  .tabbar .menu-toggle { display: flex !important; margin-top: auto; justify-content: center; }
+  .tabbar .menu-toggle svg { background: none; }
 }
 @media (max-width: 599px) {
   .brand small { display: none; }
@@ -97,7 +109,7 @@ p { margin: 0 0 8px; }
 .arrow { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: rgb(255 255 255 / 20%); font-size: 0.8rem; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { min-height: 40px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font: inherit; font-weight: 600; color: var(--text); cursor: pointer; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font: inherit; font-weight: 600; color: var(--text); cursor: pointer; }
 .chip:hover { border-color: var(--sage); }
 .chip.on { background: var(--green); border-color: var(--green); color: #fff; }
 
@@ -134,6 +146,7 @@ details.card[open] summary { margin-bottom: 10px; }
 .edge-dot { background: rgb(255 212 59 / 70%); border: 2px solid #fff; border-radius: 50%; }
 
 .field-card { padding: 18px 20px; border-radius: var(--radius); background: var(--sage-soft); }
+.saved-fields { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
 .field-summary { display: flex; gap: 16px; margin-top: 8px; }
 .big { font-size: 2.2rem; font-weight: 800; line-height: 1.1; color: var(--green); font-variant-numeric: tabular-nums; }
 .big small { font-size: 1rem; color: var(--muted); }
@@ -146,13 +159,28 @@ details.card[open] summary { margin-bottom: 10px; }
 
 /* Search: a sage pill like the design's search bar */
 .search { width: 100%; }
-.search-row { display: flex; gap: 6px; padding: 6px; border-radius: 999px; background: var(--sage); box-shadow: var(--shadow); }
-.search input { flex: 1; min-width: 0; padding: 8px 14px; border: 0; border-radius: 999px; background: rgb(255 255 255 / 70%); font: inherit; color: var(--text); }
+.search-row { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 14px; border-radius: 999px; background: var(--sage); box-shadow: var(--shadow); color: var(--green); }
+.search-icon { flex: none; }
+.search input { flex: 1; min-width: 0; padding: 8px 14px; border: 0; border-radius: 999px; background: rgb(255 255 255 / 75%); font: inherit; color: var(--text); }
 .search input:focus { outline: 2px solid var(--green); }
-.search-message, .search-results { margin: 6px 0 0; padding: 8px 12px; border-radius: 16px; background: var(--card); box-shadow: var(--shadow); font-size: 0.85rem; }
-.search-results { list-style: none; padding: 4px; max-height: 40vh; overflow-y: auto; }
-.search-results button { width: 100%; padding: 8px 10px; border: 0; border-radius: 12px; background: none; font: inherit; text-align: left; cursor: pointer; }
+.search-message, .search-results { margin: 6px 0 0; padding: 8px 12px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow); font-size: 0.88rem; }
+.search-results { list-style: none; padding: 4px; }
+.search-results button { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 10px; border: 0; border-radius: 14px; background: none; font: inherit; color: var(--text); text-align: left; cursor: pointer; }
+.search-results button svg { flex: none; color: var(--green); }
 .search-results button:hover { background: var(--sage-soft); }
+
+/* Message over the bottom of the map: "checking…" or a warning why a field can't go there */
+.map-message { position: absolute; z-index: 600; left: 12px; right: 12px; bottom: 76px; display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow); font-weight: 600; }
+.map-message.warning { background: #fbe9e4; color: #7a2a1c; border: 1px solid #f0c4b8; }
+.map-message button { margin-left: auto; border: 0; background: none; font-size: 1.3rem; line-height: 1; color: inherit; cursor: pointer; }
+@media (min-width: 900px) {
+  .map-message { left: 50%; right: auto; width: min(460px, 90%); transform: translateX(-50%); }
+}
+
+/* Satellite / map switch in the bottom-left corner of the map */
+.map-switch { position: absolute; z-index: 500; left: 12px; bottom: 24px; display: flex; padding: 4px; border-radius: 999px; background: var(--card); box-shadow: var(--shadow); }
+.map-switch button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 0; border-radius: 999px; background: none; font: inherit; font-size: 0.85rem; font-weight: 700; color: var(--muted); cursor: pointer; }
+.map-switch button.on { background: var(--green); color: #fff; }
 
 /* Step-by-step questions */
 .steps { display: flex; flex-direction: column; gap: 10px; }
@@ -209,6 +237,12 @@ details.card[open] summary { margin-bottom: 10px; }
 .ev-row span { color: var(--muted); }
 .ev-row b { text-align: right; }
 .formula { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: var(--sand); font-family: ui-monospace, Consolas, monospace; font-size: 0.78rem; }
+
+/* ============ Agronomists ============ */
+.agronomist { border-top: 8px solid var(--green); display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.phone { font-size: 1.6rem; font-weight: 800; color: var(--green); text-decoration: none; letter-spacing: 0.02em; }
+.select { display: block; width: 100%; margin-top: 6px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font: inherit; font-weight: 600; }
+.hotline { background: var(--sage-soft); }
 
 /* ============ About screen / chart ============ */
 .chart-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
