@@ -1,12 +1,16 @@
 {
-  "snow_factor": {
+  "snow_sensitivity": {
+    "value": 0.5,
+    "estimate": true,
+    "source": "S = 1 + 0.5 x snow anomaly. Snow is only part of summer flow (glaciers, rain and reservoirs are the rest). 0.5 is set so that a typical low-snow year in Talas and Chuy (FLDAS: 50% below normal) gives S = 0.75; to calibrate with the water manager's short years"
+  },
+  "snow_factor_limits": {
     "value": {
-      "low": 0.75,
-      "normal": 1.0,
-      "high": 1.1
+      "min": 0.5,
+      "max": 1.1
     },
     "estimate": true,
-    "source": "Assumption; to calibrate with the water manager's short years and the hindcast"
+    "source": "Assumption: canals never get less than half or more than 110% of a normal season"
   },
   "pump_softening": {
     "value": 0.5,
@@ -29,7 +33,12 @@
       }
     },
     "estimate": true,
-    "source": "Assumption; to confirm with the water manager"
+    "source": "Share of the allocation that reaches a field. 'normal' at S = 1 or more, 'low' at S = 0.75 or less, a straight line between. Assumption; to confirm with the water manager"
+  },
+  "position_low_at": {
+    "value": 0.75,
+    "estimate": true,
+    "source": "The S at which the canal position factor reaches its low-year value"
   },
   "normal_year_factor": {
     "value": {
@@ -114,5 +123,10 @@
     "value": 4,
     "estimate": true,
     "source": "Weeks after the earliest sowing date counted as the sowing period"
+  },
+  "dry_year_anomaly": {
+    "value": -0.5,
+    "estimate": true,
+    "source": "Used only where a field is outside every basin: the mean of low-snow years in Talas and Chuy (FLDAS 2001-2025)"
   }
 }

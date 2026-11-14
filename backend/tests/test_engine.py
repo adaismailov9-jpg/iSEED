@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from iseed import engine
 
 # Talas valley floor, 1,200 m band (NASA POWER 1981-2025), rounded
@@ -13,7 +15,7 @@ CLIMATE = {
 
 def ctx(**over):
     base = {"areaHa": 2.0, "position": "end", "source": "gravity", "normalYear": "enough",
-            "plan": "beans", "lastCrops": ["beans", "wheat"], "climate": CLIMATE}
+            "plan": "beans", "lastCrops": ["beans", "wheat"], "climate": CLIMATE, "dryAnomaly": -0.5}
     return {**base, **over}
 
 
@@ -70,19 +72,30 @@ def test_soil_builder_avoids_the_last_two_families():
     assert builder["soil"]["rotation"] == "plus"  # a legume after a cereal
 
 
-def test_pump_softens_the_snow_factor():
-    assert engine.season_factor("low", "gravity") == 0.75
-    assert engine.season_factor("low", "pump") == 0.875
-    assert engine.season_factor("low", "well") == 1
+def test_snow_factor_follows_the_anomaly():
+    assert engine.season_factor(0, "gravity") == 1
+    assert engine.season_factor(-0.2, "gravity") == 0.9
+    assert engine.season_factor(-0.5, "gravity") == 0.75  # a typical low-snow year in Talas
+    assert engine.season_factor(-1.0, "gravity") == 0.5 and engine.season_factor(0.9, "gravity") == 1.1  # limits
+    assert engine.season_factor(-0.5, "pump") == 0.875  # a pump softens it
+    assert engine.season_factor(-0.5, "well") == 1
+
+
+def test_end_of_canal_loses_more_as_the_season_shortens():
+    end = [engine.position_factor("end", s, "gravity") for s in (1.1, 1.0, 0.9, 0.75, 0.5)]
+    assert end == [0.9, 0.9, pytest.approx(0.78), 0.6, 0.6]
+    assert engine.position_factor("start", 0.75, "gravity") == 1 and engine.position_factor("end", 0.75, "well") == 1
 
 
 def test_manager_turns_and_short_positions():
-    view = engine.manager_view("low", "gravity", 6, [{"name": "A", "ha": 100}, {"name": "B", "ha": 150}], "beans", CLIMATE)
-    assert view["expectedTurns"] == 4 and not view["enough"]
-    assert [p["short"] for p in view["positions"]] == [True, True, True]
-    normal = engine.manager_view("normal", "gravity", 6, [{"name": "A", "ha": 250}], "beans", CLIMATE)
-    assert normal["expectedTurns"] == 6 and normal["shortM3"] == 0
-    assert [p["short"] for p in normal["positions"]] == [False, False, False]
+    villages = [{"name": "A", "ha": 100}, {"name": "B", "ha": 150}]
+    dry = engine.manager_view(-0.5, "gravity", 6, villages, "beans", CLIMATE)
+    assert dry["expectedTurns"] == 4 and not dry["enough"] and dry["totalHa"] == 250
+    assert [p["short"] for p in dry["positions"]] == [True, True, True]
+    mild = engine.manager_view(-0.2, "gravity", 6, villages, "beans", CLIMATE)  # Talas, March 2026
+    assert mild["expectedTurns"] == 5 and [p["short"] for p in mild["positions"]] == [False, True, True]
+    normal = engine.manager_view(0, "gravity", 6, villages, "beans", CLIMATE)
+    assert normal["expectedTurns"] == 6 and normal["shortM3"] == 0 and normal["enough"]
 
 
 def test_sowing_window_waits_for_frost_and_warm_soil():

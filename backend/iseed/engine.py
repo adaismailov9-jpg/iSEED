@@ -39,21 +39,26 @@ def rule(key):
     return RULES[key]["value"]
 
 
-# Step 1. Season water factor S
-def season_factor(level, source):
+# Step 1. Season water factor S, from the basin's snow anomaly (-0.2 = 20% below normal)
+def season_factor(anomaly, source):
     if source == "well":
         return 1.0
-    s = rule("snow_factor")[level]
-    if source == "pump":
+    limits = rule("snow_factor_limits")
+    s = min(limits["max"], max(limits["min"], 1 + rule("snow_sensitivity") * anomaly))
+    if source == "pump":  # a pump on a big river feels a snow deficit less
         s = 1 - rule("pump_softening") * (1 - s)
     return s
 
 
-# Step 2. Canal position factor P
-def position_factor(position, level, source):
+# Step 2. Canal position factor P: the share of the allocation that reaches the field.
+# The end of the canal loses more the shorter the season is.
+def position_factor(position, s, source):
     if source == "well":
         return 1.0
-    return rule("position_factor")[position]["low" if level == "low" else "normal"]
+    p = rule("position_factor")[position]
+    low_at = rule("position_low_at")
+    dryness = min(1.0, max(0.0, (1 - s) / (1 - low_at)))
+    return p["normal"] + (p["low"] - p["normal"]) * dryness
 
 
 # Step 3. Crop water need after useful rain (mm per season)
@@ -63,10 +68,11 @@ def net_need_mm(crop, climate):
 
 
 # Steps 4-5. Fit, yield factor and gross income of one crop in one kind of year
-def evaluate(crop, usual, ctx, level):
+def evaluate(crop, usual, ctx, anomaly):
     net = net_need_mm(crop, ctx["climate"])
     normal_supply = net_need_mm(usual, ctx["climate"]) * rule("normal_year_factor")[ctx["normalYear"]]
-    supply = normal_supply * season_factor(level, ctx["source"]) * position_factor(ctx["position"], level, ctx["source"])
+    s = season_factor(anomaly, ctx["source"])
+    supply = normal_supply * s * position_factor(ctx["position"], s, ctx["source"])
     fit = 1.0 if net == 0 else min(1.0, supply / net)
     yield_factor = max(0.0, 1 - crop["ky"] * (1 - fit))
     price = PRICES.get(crop["id"])
@@ -88,9 +94,18 @@ def rotation_note(crop, last_crops):
     return "none"
 
 
+def bare_months(crop):
+    """Months a year the soil lies uncovered: a sign of erosion and lost moisture."""
+    if crop["perennial"]:
+        return 0
+    if crop["winter"]:
+        return 3  # sown in autumn, harvested in July
+    return max(0, 12 - math.ceil(crop["days"] / 30))
+
+
 def _option(kind, crop, usual, plan, ctx):
-    normal = evaluate(crop, usual, ctx, "normal")
-    dry = evaluate(crop, usual, ctx, "low")
+    normal = evaluate(crop, usual, ctx, 0.0)
+    dry = evaluate(crop, usual, ctx, ctx["dryAnomaly"])
     net, plan_net = net_need_mm(crop, ctx["climate"]), net_need_mm(plan, ctx["climate"])
     return {
         "kind": kind,
@@ -103,7 +118,7 @@ def _option(kind, crop, usual, plan, ctx):
         "waterLeftM3": round((plan_net - net) * ctx["areaHa"] * 10 / rule("field_efficiency")),
         "soil": {
             "nitrogen": crop["fixesN"],
-            "bareMonths": 0 if crop["perennial"] else max(0, 12 - math.ceil(crop["days"] / 30)) if not crop["winter"] else 3,
+            "bareMonths": bare_months(crop),
             "rotation": rotation_note(crop, ctx["lastCrops"]),
         },
         "frostOk": crop["winter"] or crop["perennial"] or crop["days"] <= ctx["climate"]["frostFreeDays"],
@@ -148,7 +163,16 @@ def farmer_options(ctx):
     for o in options:
         o["highlight"] = o is best and best["waterLeftM3"] > 0
     plan_best = all(_dry_income(options[0]) >= _dry_income(o) for o in options[1:])
-    return {"options": options, "planEarnsMost": plan_best and options[0]["priceKnown"]}
+    return {"options": options, "planEarnsMost": plan_best and options[0]["priceKnown"], "scenarios": scenarios(ctx)}
+
+
+def scenarios(ctx):
+    """The two years every option is priced for, with the factors used, so the screen can show them."""
+    out = {}
+    for name, anomaly in (("normal", 0.0), ("dry", ctx["dryAnomaly"])):
+        s = season_factor(anomaly, ctx["source"])
+        out[name] = {"snowAnomaly": anomaly, "s": round(s, 3), "p": round(position_factor(ctx["position"], s, ctx["source"]), 3)}
+    return out
 
 
 # Step 7. What a 10-day pump stop in the peak weeks does
@@ -242,23 +266,22 @@ def field_check(site, soil_answer=None, crop=None, climate=None, sowing=None):
 
 
 # Step 2. Water manager: what the basin's snow means for his canal
-def manager_view(level, source, normal_turns, villages, main_crop, climate):
-    s = season_factor(level, source)
-    crop = CROPS[main_crop]
+def manager_view(anomaly, source, normal_turns, villages, main_crop, climate):
+    s = season_factor(anomaly, source)
     ha = sum(v["ha"] for v in villages)
-    demand = net_need_mm(crop, climate) * ha * 10 / rule("field_efficiency")
+    demand = net_need_mm(CROPS[main_crop], climate) * ha * 10 / rule("field_efficiency")
     positions = []
     for pos in POSITIONS:
-        fit = min(1.0, s * position_factor(pos, level, source))
+        fit = min(1.0, s * position_factor(pos, s, source))
         positions.append({"position": pos, "fit": round(fit, 3), "short": fit < rule("short_fit")})
     return {
         "s": round(s, 3),
         "normalTurns": normal_turns,
-        "expectedTurns": math.floor(normal_turns * s),
+        "expectedTurns": math.floor(normal_turns * s + 1e-9),
         "totalHa": ha,
         "demandM3": round(demand),
         "expectedM3": round(demand * min(1.0, s)),
         "shortM3": round(demand * max(0.0, 1 - s)),
-        "enough": s >= 1,
+        "enough": not any(p["short"] for p in positions),
         "positions": positions,
     }

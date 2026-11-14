@@ -54,6 +54,16 @@ def snow_for(basin):
     return snow["basins"].get(basin) if snow and basin else None
 
 
+def dry_year(basin):
+    """The low-snow year the farmer's options are priced for: the mean of the basin's own low years."""
+    snow = snow_for(basin)
+    lows = [p for p in (snow["series"] if snow else []) if p["level"] == "low" and p["year"] < int(snow["month"][:4])]
+    if not lows:
+        return {"anomaly": engine.rule("dry_year_anomaly"), "years": [], "basin": None}
+    mean = sum(p["volumeKm3"] for p in lows) / len(lows)
+    return {"anomaly": round(mean / snow["normalKm3"] - 1, 3), "years": [p["year"] for p in lows], "basin": basin}
+
+
 def climate_or_fail(lat, lon, elev):
     climate = climate_at(lat, lon, elev)
     if not climate:
@@ -151,7 +161,8 @@ def hindcast(basin: str):
     found = snow_for(basin)
     if not found:
         raise ApiError(404, "no_basin", "No snow series for this basin")
-    return {**found, "shortYears": load("snow.json")["shortYears"]}
+    check = load("snow_check.json")
+    return {**found, "shortYears": load("snow.json")["shortYears"], "check": check and check["basins"].get(basin)}
 
 
 # --- fields
@@ -194,7 +205,7 @@ def manager(body: dict, authorization: str = Header(None)):
     if user and user["role"] == "manager":
         store().save_canal(user["id"], {"villages": villages, "source": source, "normalTurns": turns,
                                         "mainCrop": main_crop, "lat": lat, "lon": lon})
-    view = engine.manager_view(snow_now["level"], source, turns, villages, main_crop, climate)
+    view = engine.manager_view(snow_now["anomaly"], source, turns, villages, main_crop, climate)
     return {**view, "mainCrop": main_crop, "basin": basin_id, "snow": without_series(snow_now),
             "evidence": {"rules": engine.RULES, "climate": climate_evidence(climate)}}
 
@@ -227,7 +238,9 @@ def farmer(body: dict, authorization: str = Header(None)):
     field = place(body)
     plan = need(body, "plan", tuple(engine.CROPS))
     rain = rain_at(field["lat"], field["lon"])
+    dry = dry_year(field["basin"])
     ctx = {
+        "dryAnomaly": dry["anomaly"],
         "areaHa": field["areaHa"],
         "position": need(body, "position", engine.POSITIONS),
         "source": need(body, "source", engine.SOURCES),
@@ -245,6 +258,7 @@ def farmer(body: dict, authorization: str = Header(None)):
         "message": store().message_for(user["village"]) if user else None,
         "fieldCheck": check,
         **result,
+        "dryYear": dry,
         "basin": field["basin"],
         "snow": without_series(snow_for(field["basin"])),
         "evidence": {

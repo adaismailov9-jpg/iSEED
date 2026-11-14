@@ -100,12 +100,14 @@ Response:
     "pumpGap": null
   }],
   "planEarnsMost": true,
+  "scenarios": { "normal": { "snowAnomaly": 0.0, "s": 1.0, "p": 0.9 }, "dry": { "snowAnomaly": -0.497, "s": 0.752, "p": 0.602 } },
+  "dryYear": { "anomaly": -0.497, "years": [2006, 2008, 2014, 2018, 2020, 2021, 2024], "basin": "talas" },
   "basin": "talas",
   "snow": { ...as GET /snow },
   "evidence": { "rules": {...}, "prices": {...}, "climate": {...}, "rain": {...}, "site": {...}, "formula": "..." } }
 ```
 - `options[0]` is always his plan. `saver` and `builder` may be absent (for example when his plan is already the least thirsty crop): show the ones that exist.
-- `normal` / `dry`: a normal year and a low-snow year at his place on the canal. `income` is gross income in som for the whole field; `null` when `priceKnown` is false.
+- `normal` / `dry`: a normal year and a typical low-snow year at his place on the canal. The dry year is the mean of the basin's own low-snow years (`dryYear.years`); `scenarios` has the factors used. `income` is gross income in som for the whole field; `null` when `priceKnown` is false.
 - `waterLeftM3` is against his plan; negative = the option takes more water.
 - `sowing` is `null` for winter wheat. Dates are `MM-DD`. `heavyRain.maxShare` is the share of years with a day of 20 mm or more in the sowing weeks; `riskyWeeks` are week starts at 30% or more.
 - `pumpGap` is `heavy | cut | light | unknown` when the source is a pump, else `null`.
@@ -117,7 +119,7 @@ Response:
 ### POST /manager
 Request: `{ "lat": 42.52, "lon": 72.3, "source": "gravity | pump", "normalTurns": 6, "mainCrop": "beans", "villages": [{ "name": "…", "ha": 120 }] }`. Signed in as a manager → the canal is saved.
 
-Response: `{ s, normalTurns, expectedTurns, totalHa, demandM3, expectedM3, shortM3, enough, mainCrop, basin, positions: [{ position, fit, short }], snow: {...}, evidence }`. `enough` is the headline.
+Response: `{ s, normalTurns, expectedTurns, totalHa, demandM3, expectedM3, shortM3, enough, mainCrop, basin, positions: [{ position, fit, short }], snow: {...}, evidence }`. `enough` is the headline: true when no canal position falls short. `s` follows the snow anomaly (20% less snow → `s` 0.9).
 
 - `GET /manager` → `{ "canal": {...} | null }`, the saved canal of the signed-in manager.
 - `POST /manager/message` `{ text }` (1–280 characters, manager only) → `{ text, date }`
@@ -126,7 +128,7 @@ Response: `{ s, normalTurns, expectedTurns, totalHa, demandM3, expectedM3, short
 ## Snow
 
 - `GET /snow?basin=talas` → `{ basin, south, level: "low | normal | high", anomaly, volumeKm3, normalKm3, month: "2026-03", early: { month, anomaly }, terciles: [a, b], replayYear }`. When `south` is true, show the note that reservoirs and interstate agreements matter as much as snow. Call it a signal, never a forecast.
-- `GET /hindcast?basin=talas` → the same plus `series: [{ year, volumeKm3, wholeBasinKm3, febKm3, level, short }]` (2001–2026) and `shortYears: [{ year, source }]`.
+- `GET /hindcast?basin=talas` → the same plus `series: [{ year, volumeKm3, wholeBasinKm3, febKm3, level, short }]` (2001–2026), `shortYears: [{ year, source }]` and `check: { r, lowInBoth, lowInFldasOnly, lowInModisOnly, series: [{ year, snowCoverPct }] } | null` (the MODIS satellite check).
 - `GET /health` → `{ version, data: { climate, snow, rain_weeks } }` (dates computed). `GET /crops` → `{ crops, prices, rules }`.
 
 ## Data files (`data/`, committed; the API never calls NASA)
@@ -136,6 +138,7 @@ Response: `{ s, normalTurns, expectedTurns, totalHa, demandM3, expectedM3, short
 | `climate.json` | `power_job.py` | NASA POWER daily 1981–2025, 0.5° grid; temperature shifted to field height by 6.5 °C per km (estimate) |
 | `rain_weeks.json` | `rain_job.py` | NASA GPM IMERG daily 2001–2025 (through the POWER API), same grid |
 | `snow.json` | `snow_job.py` | NASA FLDAS monthly snow water, land above 2,000 m, per basin, 2001–2026 |
+| `snow_check.json` | `modis_job.py` | NASA MODIS MOD10A1 March snow cover per basin, and its agreement with FLDAS |
 | `basins.geojson` | `build_basins.py` | HydroBASINS level 5 |
 | `grid/*` | `raster_job.py` | NASA SRTM (height, slope), NASA MODIS MOD13Q1 (summer greenness 2013–2025), SoilGrids (sand, clay; not NASA), 0.005° cells |
 
