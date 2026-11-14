@@ -3,7 +3,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from iseed import main
-from iseed.storage import SQLiteStore
 
 TALAS = {"lat": 42.52, "lon": 72.3, "areaHa": 2}
 ANSWERS = {"position": "end", "source": "gravity", "normalYear": "enough", "plan": "beans", "lastCrops": ["beans", "wheat"]}
@@ -11,9 +10,9 @@ SQUARE = {"type": "Polygon", "coordinates": [[[72.30, 42.52], [72.301, 42.52], [
 
 
 @pytest.fixture
-def api(tmp_path, monkeypatch):
-    db = SQLiteStore(str(tmp_path / "test.db"))
-    monkeypatch.setattr(main, "store", lambda: db)
+def api(store, monkeypatch):
+    """`store` (tests/conftest.py) is a fresh SQLiteStore or PostgresStore: every test runs on both."""
+    monkeypatch.setattr(main, "store", lambda: store)
     return TestClient(main.app)
 
 
