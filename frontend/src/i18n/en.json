@@ -1,0 +1,223 @@
+{
+  "app": {
+    "tagline": "Seasonal water risk from NASA snow data",
+    "demo": "Prototype: demo data"
+  },
+  "tabs": {
+    "field": "Field",
+    "plan": "Planting plan",
+    "about": "About the data"
+  },
+  "lang": {
+    "ky": "КЫР",
+    "ru": "РУС",
+    "en": "EN"
+  },
+  "field": {
+    "title": "Your field",
+    "hint": "Find your village, then tap the map where your field is.",
+    "editHint": "Drag a corner to move it. Drag a dot on an edge to add a corner. Tap a corner to remove it.",
+    "locate": "I'm on my field",
+    "clear": "Clear",
+    "area": "Area",
+    "corners": "{n} corners",
+    "locateFailed": "Could not find your location. Tap your field on the map."
+  },
+  "search": {
+    "placeholder": "Village, town or district",
+    "go": "Find",
+    "empty": "Nothing found",
+    "error": "Search needs internet"
+  },
+  "basin": {
+    "label": "River basin",
+    "snow": "Snow signal",
+    "loading": "Looking up the basin…"
+  },
+  "levels": {
+    "low": "Below normal",
+    "normal": "Normal",
+    "high": "Above normal"
+  },
+  "levelsInline": {
+    "low": "below normal",
+    "normal": "near normal",
+    "high": "above normal"
+  },
+  "q": {
+    "springOnly": "iSEED suggests spring crops only. Winter wheat is sown in autumn, before any snow falls.",
+    "source": "Where does your water come from?",
+    "river": "River or canal",
+    "well": "Well",
+    "rain": "Rain only",
+    "wellEnough": "Is the well water enough?",
+    "enough": "Usually enough",
+    "sometimes": "Sometimes short",
+    "often": "Often short",
+    "soil": "What is your soil like?",
+    "priority": "What matters most to you?",
+    "submit": "Pick a crop and add to plan",
+    "needField": "First tap your field on the map.",
+    "previous": "Previous crop",
+    "previousHint": "What grew on this field last season? iSEED picks a spring crop for this year from it."
+  },
+  "priority": {
+    "water": "Saving water",
+    "income": "Income",
+    "soil": "Soil health"
+  },
+  "income": {
+    "1": "low income",
+    "2": "medium income",
+    "3": "high income"
+  },
+  "plan": {
+    "empty": "Your planting plan is empty. Choose a field and a crop on the first tab.",
+    "goField": "Choose a field",
+    "saved": "Saved on this phone, opens without internet.",
+    "back": "All plans",
+    "delete": "Delete",
+    "confirmDelete": "Delete this plan?"
+  },
+  "verdict": {
+    "fits": "Enough water",
+    "tight": "Water is tight",
+    "short": "Not enough water",
+    "sentence": {
+      "fits": "{crop} on this {ha} ha field: enough water this year.",
+      "tight": "{crop} on this {ha} ha field: water will be tight this year.",
+      "short": "{crop} on this {ha} ha field: water may run short this year.",
+      "frost": "{crop} on this {ha} ha field: the growing season here is too short."
+    },
+    "reason": {
+      "river": "Snow in the {basin} basin is {levelText}; {cropLower} needs about {need} m³ and the field can expect about {supply} m³.",
+      "well": "Water comes from a well, so the snow signal does not change this answer; {cropLower} needs about {need} m³ and the well gives about {supply} m³.",
+      "rain": "Rain only: useful rain gives about {supply} m³, while {cropLower} needs about {need} m³ more.",
+      "frost": "{crop} needs {days} days, but the frost-free season here is about {ffd} days."
+    },
+    "need": "Water needed",
+    "supply": "Water expected",
+    "ratio": "Fit",
+    "season": "Snow value: February–March {year}. This is a risk signal, not a forecast.",
+    "pickSeason": "Check against the snow of:",
+    "current": "{year} · last full season",
+    "example": "{year} · low-snow example",
+    "tip": "Next season",
+    "hotline": "Farmer hotline: 1210",
+    "recommended": "Recommended after: {previous}",
+    "yourChoice": "Your choice"
+  },
+  "alt": {
+    "title": "Other options · your priority: {priority}",
+    "less": "needs {pct}% less water",
+    "more": "needs {pct}% more water",
+    "check": "Choose",
+    "none": "No other crop can grow on this field this season."
+  },
+  "compare": {
+    "title": "Compare all crops",
+    "crop": "Crop",
+    "need": "Water, m³",
+    "ratio": "Fit",
+    "frost": "Season too short"
+  },
+  "tip": {
+    "cereal": "After a cereal, a legume such as chickpea or beans restores nitrogen.",
+    "legume": "After a legume, nitrogen stays in the soil: barley or maize will do well.",
+    "root": "After potato or beet, sow a cereal to break the disease cycle.",
+    "oilseed": "Sow sunflower on the same field only once in 6–7 years; follow it with a cereal or a legume.",
+    "fodder": "After alfalfa, maize or a cereal makes good use of the nitrogen it leaves."
+  },
+  "evidence": {
+    "title": "What this answer is based on",
+    "snow": "Snow signal (NASA MODIS)",
+    "basin": "Basin",
+    "level": "Level",
+    "anomaly": "Difference from norm",
+    "date": "Computed on",
+    "early": "Snow so far this winter",
+    "earlyText": "{pct} vs norm, as of {date}",
+    "climate": "Climate (NASA POWER)",
+    "frostFree": "Frost-free season",
+    "rain": "Season rain (Apr–Sep)",
+    "effRain": "Useful rain for this crop",
+    "soilWet": "Root-zone soil wetness",
+    "years": "Years",
+    "soilInfo": "Soil: {soil}. Shown for information only, not used in the calculation.",
+    "numbers": "Numbers in the calculation",
+    "cropNeed": "Crop water need per season",
+    "base": "Average water per irrigated hectare",
+    "snowMultiplier": "Snow multiplier",
+    "canal": "Canal factor (losses ≈18%)",
+    "efficiency": "Field efficiency (furrow)",
+    "well": "Well factor",
+    "formula": "Need = (crop need − 0.7 × rain) × 10 × ha. Supply = 9,717 m³/ha × ha × snow × 0.82 × 0.6. Fit = supply ÷ need: ≥1.1 enough, 0.9–1.1 tight, <0.9 short.",
+    "notForecast": "The snow signal is a risk label, never a forecast. In published Naryn studies snow explains about 60% of seasonal flow; glaciers (up to half of July–August flow) and summer rain explain the rest."
+  },
+  "badge": {
+    "estimate": "estimate",
+    "demo": "demo data",
+    "source": "Source"
+  },
+  "about": {
+    "intro": "iSEED turns NASA satellite snow data into a seasonal water-risk signal for each river basin in Kyrgyzstan.",
+    "chart": "February–March snow cover, 2003–2026",
+    "low": "Low snow",
+    "normal": "Normal",
+    "high": "High snow",
+    "norm": "Norm (2003–2025)",
+    "shortage": "Known water shortage (Orto-Tokoy reservoir low)",
+    "missNote": "Shortage years the signal misses are shown too: glacier melt and summer heat explain them.",
+    "seasonNote": "It is November: next season's snow has not fallen yet. The app shows the last full season (February–March 2026) as the worked example, and snow so far this winter as an early signal.",
+    "sources": "Data sources",
+    "demoNote": "In this prototype the snow, basin, climate and income numbers are demo data. The real values are computed by the scripts in scripts/ during the event.",
+    "src": {
+      "modis": "NASA MODIS MOD10A1 v6.1: daily snow cover, 500 m. NASA open data.",
+      "power": "NASA POWER (AG): temperature, rain, soil wetness. Free, cite NASA POWER.",
+      "basins": "HydroBASINS level 5 (HydroSHEDS): basin boundaries. Free with attribution.",
+      "fao": "FAO-56 (Tables 11, 12) and the FAO Crop Calendar for Kyrgyzstan: crop water need.",
+      "stats": "National statistics: 6.19 km³ irrigation water (2024), ≈637,000 ha irrigated, 1.7–2.3 km³ losses.",
+      "tiles": "Esri World Imagery: the map. OpenStreetMap Nominatim (ODbL): place search."
+    }
+  },
+  "crops": {
+    "barley": "Barley",
+    "maize": "Maize",
+    "potato": "Potato",
+    "sunflower": "Sunflower",
+    "beans": "Beans",
+    "chickpea": "Chickpea",
+    "sugarbeet": "Sugar beet",
+    "alfalfa": "Alfalfa",
+    "wheat": "Wheat",
+    "none": "Nothing / don't know"
+  },
+  "basins": {
+    "chuy": "Chüy",
+    "talas": "Talas",
+    "issykkul": "Issyk-Kul",
+    "naryn_upper": "Upper Naryn",
+    "naryn_toktogul": "Toktogul (Middle Naryn)",
+    "atbashy": "At-Bashy",
+    "chatkal": "Chatkal",
+    "karadarya": "Kara-Darya",
+    "batken": "Batken (Sokh–Isfara)",
+    "saryjaz": "Sary-Jaz"
+  },
+  "soil": {
+    "sandy": "Sandy",
+    "medium": "Medium",
+    "clay": "Clay",
+    "unknown": "Don't know"
+  },
+  "units": {
+    "ha": "ha",
+    "m3": "m³",
+    "mm": "mm",
+    "days": "days"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong. Please try again."
+  }
+}

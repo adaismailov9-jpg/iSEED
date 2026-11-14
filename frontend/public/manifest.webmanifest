@@ -1,0 +1,10 @@
+{
+  "name": "iSEED",
+  "short_name": "iSEED",
+  "description": "Seasonal water-risk signal from NASA snow data",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ea",
+  "theme_color": "#2f4b2a",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
