@@ -100,6 +100,33 @@ class SQLiteStore:
         with self.db:
             self.db.execute("DELETE FROM sessions WHERE token_hash=?", (token_hash(token),))
 
+    def delete_sessions_of(self, user_id, keep=None):
+        """Sign out everywhere, except the session of the token `keep` if given."""
+        with self.db:
+            self.db.execute("DELETE FROM sessions WHERE user_id=? AND token_hash IS NOT ?",
+                            (user_id, keep and token_hash(keep)))
+
+    def update_user(self, user_id, name=None, region=None, village=None, pin=None):
+        """Change the given values. The updated user, or None if the new name is taken."""
+        changes = {k: v.strip() for k, v in (("name", name), ("region", region), ("village", village)) if v is not None}
+        if pin is not None:
+            changes["pin"] = hash_pin(pin)
+        if changes:
+            try:
+                with self.db:
+                    self.db.execute(f"UPDATE users SET {', '.join(k + '=?' for k in changes)} WHERE id=?",
+                                    (*changes.values(), user_id))
+            except sqlite3.IntegrityError:
+                return None
+        return self._user(self.db.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone())
+
+    def delete_user(self, user_id):
+        """The account and everything of it: sessions, fields, canal and season message."""
+        with self.db:
+            for table in ("sessions", "fields", "canals", "messages"):
+                self.db.execute(f"DELETE FROM {table} WHERE user_id=?", (user_id,))
+            self.db.execute("DELETE FROM users WHERE id=?", (user_id,))
+
     # wrong-PIN records, for the /login limit
     def failed_logins(self, name, ip, since):
         """(wrong PINs for this name, wrong PINs from this IP) after `since`."""
@@ -131,6 +158,17 @@ class SQLiteStore:
         r = self.db.execute("SELECT * FROM fields WHERE id=?", (field_id,)).fetchone()
         return r and {"id": r["id"], "userId": r["user_id"], **json.loads(r["data"])}
 
+    def update_field(self, user_id, field_id, data):
+        """Replace a field's data. False if there is no such field of this user."""
+        with self.db:
+            return self.db.execute("UPDATE fields SET data=? WHERE id=? AND user_id=?",
+                                   (json.dumps(data), field_id, user_id)).rowcount > 0
+
+    def delete_field(self, user_id, field_id):
+        """False if there is no such field of this user."""
+        with self.db:
+            return self.db.execute("DELETE FROM fields WHERE id=? AND user_id=?", (field_id, user_id)).rowcount > 0
+
     # the manager's canal and season message
     def save_canal(self, user_id, data):
         with self.db:
@@ -139,6 +177,16 @@ class SQLiteStore:
     def canal_of(self, user_id):
         r = self.db.execute("SELECT data FROM canals WHERE user_id=?", (user_id,)).fetchone()
         return r and json.loads(r["data"])
+
+    def delete_canal(self, user_id):
+        """False if this manager had no canal."""
+        with self.db:
+            return self.db.execute("DELETE FROM canals WHERE user_id=?", (user_id,)).rowcount > 0
+
+    def delete_message(self, user_id):
+        """Take the season message down. False if there was none."""
+        with self.db:
+            return self.db.execute("DELETE FROM messages WHERE user_id=?", (user_id,)).rowcount > 0
 
     def set_message(self, user_id, text):
         today = date.today().isoformat()

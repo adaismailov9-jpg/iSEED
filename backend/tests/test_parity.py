@@ -102,6 +102,24 @@ def scenario(store, monkeypatch):
     call("locked, right pin", "POST", "/login", json={"name": "Asan", "pin": "2222"})
     call("other name still fine", "POST", "/login", json={"name": "Mirab", "pin": "4321"})
 
+    # changing and deleting
+    call("me", "GET", "/me", "aibek")
+    call("change village", "PATCH", "/me", "aibek", json={"village": "Ak-Bulak"})
+    call("change pin, wrong current", "PATCH", "/me", "aibek", json={"pin": "9876", "currentPin": "0000"})
+    call("change pin", "PATCH", "/me", "aibek", json={"pin": "9876", "currentPin": "1234"})
+    call("change role (refused)", "PATCH", "/me", "aibek", json={"role": "manager"})
+    call("rename to a taken name", "PATCH", "/me", "aibek", json={"name": "Mirab", "currentPin": "9876"})
+    call("redraw field", "PUT", f"/fields/{first['id']}", "aibek", json={"geometry": SQUARE})
+    call("redraw someone else's field", "PUT", f"/fields/{first['id']}", "asan", json=TALAS)
+    call("delete field", "DELETE", f"/fields/{first['id']}", "aibek")
+    call("fields after delete", "GET", "/fields", "aibek")
+    call("delete message", "DELETE", "/manager/message", "boss")
+    call("message after delete", "GET", "/message", params={"village": "Kök-Say"})
+    call("delete canal", "DELETE", "/manager", "boss")
+    call("canal after delete", "GET", "/manager", "boss")
+    call("delete account", "DELETE", "/me", "boss", json={"pin": "4321"})
+    call("deleted account", "GET", "/me", "boss")
+
     # last, because a rejected sign-up uses up an id in Postgres (ids may skip; see module docstring)
     call("name taken", "POST", "/register", json={"name": "Aibek", "role": "manager", "region": "Chüy", "village": "X", "pin": "9999"})
     return steps
@@ -129,3 +147,8 @@ def test_sqlite_and_postgres_give_the_same_answers(tmp_path, monkeypatch, pg_sto
     assert statuses["copy a field via /fields"] == 422 and statuses["fieldId not a number"] == 422
     assert statuses["logout"] == 200 and statuses["after logout"] == 401
     assert statuses["locked, right pin"] == 429 and statuses["other name still fine"] == 200
+    assert statuses["change pin"] == 200 and statuses["change role (refused)"] == 422
+    assert statuses["rename to a taken name"] == 409 and statuses["redraw someone else's field"] == 404
+    assert [f["id"] for f in bodies["fields after delete"]["fields"]] == [2]
+    assert bodies["message after delete"]["message"] is None and bodies["canal after delete"]["canal"] is None
+    assert statuses["deleted account"] == 401

@@ -42,7 +42,7 @@ cd scripts && ../backend/.venv/bin/pip install earthengine-api numpy   # then: e
 
 ## API rules
 
-- JSON, camelCase keys. Errors: `{ "code": "...", "message": "..." }` with codes `bad_input`, `not_signed_in`, `wrong_role`, `wrong_login`, `name_taken`, `too_many_tries`, `no_basin`, `no_field`, `data_missing`.
+- JSON, camelCase keys. Errors: `{ "code": "...", "message": "..." }` with codes `bad_input`, `not_signed_in`, `wrong_role`, `wrong_login`, `wrong_pin`, `name_taken`, `too_many_tries`, `no_basin`, `no_field`, `data_missing`.
 - Every route answers at `/x` (Vite dev proxy strips `/api`) and at `/api/x` (Vercel).
 - Signed-in requests send `Authorization: Bearer <token>`.
 - The API returns codes and numbers (`"kind": "saver"`, `"level": "careful"`); the frontend turns codes into text through i18n keys.
@@ -56,6 +56,9 @@ cd scripts && ../backend/.venv/bin/pip install earthengine-api numpy   # then: e
 - `POST /login` `{ name, pin }` → same. `401 wrong_login`. After 5 wrong PINs for one name, or 20 from one address, within 15 minutes: `429 too_many_tries` (even with the right PIN) until 15 minutes pass. Show "wait and try again", not "wrong PIN".
 - `POST /logout` (signed in) → `{ ok: true }`: that token stops working; other devices stay signed in.
 - A token lasts 30 days. After that, signed-in routes answer `401 not_signed_in`: send the user to sign in again.
+- `GET /me` (signed in) → `{ user }`. Use it on start-up to check the saved token is still valid.
+- `PATCH /me` (signed in) `{ name?, region?, village?, pin?, currentPin? }` → `{ user }`. Changing `name` or `pin` needs `currentPin` (`403 wrong_pin`; wrong tries count toward the login limit, `429 too_many_tries`). A new `pin` signs out every other device; this one stays signed in. `role` cannot be changed (`422 bad_input`, as for any other key). `409 name_taken`.
+- `DELETE /me` (signed in) `{ pin }` → `{ ok: true }`: deletes the account with its fields, canal and season message. `403 wrong_pin`.
 
 A farmer sees the season message of the manager whose village, or one of whose canal villages, has the same name as the farmer's village (case and spaces ignored).
 
@@ -76,6 +79,12 @@ Request: `{ "geometry": <GeoJSON Polygon> }` or `{ "lat", "lon", "areaHa" }` (`f
 
 ### GET /fields
 Signed in → `{ "fields": [ ...as above ] }`.
+
+### PUT /fields/{id}
+Signed in, own field only. Body as `POST /fields`; height, basin, site and field check are recomputed. → the field as above, same `id`. `404 no_field` for a missing field or someone else's; `422 bad_input` for an id that is not a positive whole number.
+
+### DELETE /fields/{id}
+Signed in, own field only → `{ ok: true }`. `404 no_field` as above.
 
 ### GET /basin?lat=&lon=
 `{ "basin": "talas", "snow": { ...as GET /snow } }`; `404 no_basin` outside Kyrgyzstan's river basins.
@@ -137,6 +146,8 @@ Response: `{ s, normalTurns, expectedTurns, totalHa, demandM3, expectedM3, short
 - `GET /manager` → `{ "canal": {...} | null }`, the saved canal of the signed-in manager.
 - `POST /manager/message` `{ text }` (1–280 characters, manager only) → `{ text, date }`
 - `GET /message?village=` → `{ "message": { text, date, manager } | null }`
+- `DELETE /manager/message` (manager only) → `{ ok: true }`: takes the message down.
+- `DELETE /manager` (manager only) → `{ ok: true }`: forgets the canal; the message then reaches only his own village.
 
 ## Snow
 

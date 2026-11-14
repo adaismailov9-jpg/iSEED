@@ -256,3 +256,75 @@ def test_database_refuses_a_plain_token(pg_store):
     with pytest.raises(IntegrityError, match="ck_sessions_token_is_hash"):
         with pg_store.engine.begin() as db:
             db.execute(text("INSERT INTO sessions (token_hash, user_id, expires_at) VALUES ('plain', 1, now())"))
+
+
+# ---------------------------------------------------------------- update and delete (both stores)
+
+
+def test_update_user_changes_only_what_is_given(store):
+    user = farmer(store)
+    updated = store.update_user(user["id"], village=" Ak-Suu ", region="Chüy")
+    assert updated == {**user, "village": "Ak-Suu", "region": "Chüy"}
+    assert store.update_user(user["id"]) == updated  # nothing given: unchanged
+
+
+def test_update_user_name_and_pin(store):
+    user = farmer(store)
+    farmer(store, name="Bakyt")
+    assert store.update_user(user["id"], name="Bakyt") is None  # taken
+    assert store.update_user(user["id"], name="Aibek K.", pin="9876")["name"] == "Aibek K."
+    assert store.check_pin("Aibek K.", "9876")["id"] == user["id"]
+    assert store.check_pin("Aibek K.", "1234") is None
+    assert store.check_pin("Aibek", "9876") is None
+
+
+def test_delete_sessions_of_keeps_one(store):
+    user = farmer(store)
+    a, b, c = (store.create_session(user["id"]) for _ in range(3))
+    store.delete_sessions_of(user["id"], keep=b)
+    assert [store.user_for_token(x) is not None for x in (a, b, c)] == [False, True, False]
+    store.delete_sessions_of(user["id"])
+    assert store.user_for_token(b) is None
+
+
+def test_delete_user_removes_everything_of_theirs_only(store):
+    boss, other = manager(store), manager(store, name="Asan", village="Ak-Suu")
+    for who in (boss, other):
+        store.create_session(who["id"])
+        store.save_field(who["id"], FIELD)
+        store.save_canal(who["id"], CANAL)
+        store.set_message(who["id"], f"From {who['name']}")
+    store.delete_user(boss["id"])
+    for table, left in (("users", 1), ("sessions", 1), ("fields", 1), ("canals", 1), ("messages", 1)):
+        assert count_rows(store, table) == left, table
+    assert store.check_pin("Mirab", "1234") is None
+    assert store.message_for("Talas") is None              # Mirab's own village: his message is gone
+    assert store.message_for("Kök-Say")["manager"] == "Asan"
+    assert store.create_user("Mirab", "farmer", "Talas", "X", "1234") is not None  # the name is free again
+
+
+def test_update_and_delete_field_only_for_its_owner(store):
+    aibek, bakyt = farmer(store), farmer(store, name="Bakyt")
+    field_id = store.save_field(aibek["id"], FIELD)
+    redrawn = {**FIELD, "areaHa": 3.4}
+    assert store.update_field(bakyt["id"], field_id, redrawn) is False
+    assert store.delete_field(bakyt["id"], field_id) is False
+    assert store.field(field_id)["areaHa"] == FIELD["areaHa"]
+    assert store.update_field(aibek["id"], field_id, redrawn) is True
+    assert store.field(field_id) == {"id": field_id, "userId": aibek["id"], **redrawn}
+    assert store.update_field(aibek["id"], 999, redrawn) is False
+    assert store.delete_field(aibek["id"], field_id) is True
+    assert store.field(field_id) is None and store.fields_of(aibek["id"]) == []
+    assert store.delete_field(aibek["id"], field_id) is False
+
+
+def test_delete_canal_and_message(store):
+    boss = manager(store, village="Talas")
+    store.save_canal(boss["id"], CANAL)
+    store.set_message(boss["id"], "Hello")
+    assert store.message_for("Kök-Say")["manager"] == "Mirab"
+    assert store.delete_canal(boss["id"]) is True and store.canal_of(boss["id"]) is None
+    assert store.message_for("Kök-Say") is None             # canal villages no longer reached
+    assert store.message_for("Talas")["text"] == "Hello"    # his own village still is
+    assert store.delete_message(boss["id"]) is True and store.message_for("Talas") is None
+    assert store.delete_canal(boss["id"]) is False and store.delete_message(boss["id"]) is False

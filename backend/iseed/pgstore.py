@@ -8,8 +8,10 @@ import os
 import secrets
 from datetime import date, timedelta
 
-from sqlalchemy import Engine, create_engine, delete, func, insert, select
+from psycopg.errors import UniqueViolation
+from sqlalchemy import Engine, create_engine, delete, func, insert, select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.pool import NullPool
 
 from . import storage
@@ -82,6 +84,36 @@ class PostgresStore:
         with self.engine.begin() as db:
             db.execute(delete(t.sessions).where(t.sessions.c.token_hash == token_hash(token)))
 
+    def delete_sessions_of(self, user_id, keep=None):
+        """Sign out everywhere, except the session of the token `keep` if given."""
+        stmt = delete(t.sessions).where(t.sessions.c.user_id == user_id)
+        if keep is not None:
+            stmt = stmt.where(t.sessions.c.token_hash != token_hash(keep))
+        with self.engine.begin() as db:
+            db.execute(stmt)
+
+    def update_user(self, user_id, name=None, region=None, village=None, pin=None):
+        """Change the given values. The updated user, or None if the new name is taken."""
+        changes = {k: v.strip() for k, v in (("name", name), ("region", region), ("village", village)) if v is not None}
+        if pin is not None:
+            changes["pin"] = hash_pin(pin)
+        if changes:
+            try:
+                with self.engine.begin() as db:
+                    db.execute(update(t.users).where(t.users.c.id == user_id).values(**changes))
+            except IntegrityError as err:
+                if isinstance(err.orig, UniqueViolation):
+                    return None
+                raise
+        with self.engine.connect() as db:
+            row = db.execute(select(*USER).where(t.users.c.id == user_id)).mappings().first()
+        return dict(row) if row else None
+
+    def delete_user(self, user_id):
+        """The account and everything of it: the foreign keys delete sessions, fields, canal and message."""
+        with self.engine.begin() as db:
+            db.execute(delete(t.users).where(t.users.c.id == user_id))
+
     # wrong-PIN records, for the /login limit
     def failed_logins(self, name, ip, since):
         """(wrong PINs for this name, wrong PINs from this IP) after `since`."""
@@ -117,6 +149,18 @@ class PostgresStore:
             r = db.execute(stmt).first()
         return r and {"id": r.id, "userId": r.user_id, **r.data}
 
+    def update_field(self, user_id, field_id, data):
+        """Replace a field's data. False if there is no such field of this user."""
+        f = t.fields
+        with self.engine.begin() as db:
+            return db.execute(update(f).where(f.c.id == field_id, f.c.user_id == user_id).values(data=data)).rowcount > 0
+
+    def delete_field(self, user_id, field_id):
+        """False if there is no such field of this user."""
+        f = t.fields
+        with self.engine.begin() as db:
+            return db.execute(delete(f).where(f.c.id == field_id, f.c.user_id == user_id)).rowcount > 0
+
     # the manager's canal and season message
     def save_canal(self, user_id, data):
         stmt = pg_insert(t.canals).values(user_id=user_id, data=data)
@@ -128,6 +172,16 @@ class PostgresStore:
     def canal_of(self, user_id):
         with self.engine.connect() as db:
             return db.execute(select(t.canals.c.data).where(t.canals.c.user_id == user_id)).scalar_one_or_none()
+
+    def delete_canal(self, user_id):
+        """False if this manager had no canal."""
+        with self.engine.begin() as db:
+            return db.execute(delete(t.canals).where(t.canals.c.user_id == user_id)).rowcount > 0
+
+    def delete_message(self, user_id):
+        """Take the season message down. False if there was none."""
+        with self.engine.begin() as db:
+            return db.execute(delete(t.messages).where(t.messages.c.user_id == user_id)).rowcount > 0
 
     def set_message(self, user_id, text):
         today = date.today()
