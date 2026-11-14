@@ -109,4 +109,7 @@ class SQLiteStore:
 
 
 def open_store():
-    return SQLiteStore(os.environ.get("ISEED_DB", str(Path(__file__).resolve().parents[1] / "iseed.db")))
+    """SQLite file. On Vercel only /tmp is writable and it is wiped between cold starts,
+    so accounts do not last there until the database lane adds PostgresStore."""
+    default = "/tmp/iseed.db" if os.environ.get("VERCEL") else str(Path(__file__).resolve().parents[1] / "iseed.db")
+    return SQLiteStore(os.environ.get("ISEED_DB", default))

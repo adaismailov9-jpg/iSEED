@@ -1,4 +1,5 @@
 import json
+import math
 
 import pytest
 
@@ -11,6 +12,11 @@ CLIMATE = {
     "weekMeanTempC": [-5] * 12 + [4, 6, 8, 10, 12, 13, 14, 16, 18, 19, 20, 21, 22, 23, 23, 24, 24, 23, 22, 21, 20, 18, 16, 14, 12, 10, 8, 6] + [0] * 12,
     "weekHotDays": [0.0] * 52,
 }
+
+
+# The same place with weekly reference evapotranspiration (mm per day) and rain (mm per week)
+ET_CLIMATE = {**CLIMATE, "weekEt0MmDay": [0.5] * 12 + [3 + 3 * math.sin(math.pi * i / 27) for i in range(28)] + [0.5] * 12,
+              "weekRainMm": [6.0] * 52, "lastSpringFrostByYear": [140 - y // 2 for y in range(45)]}
 
 
 def ctx(**over):
@@ -40,9 +46,9 @@ def test_same_request_gives_same_json():
 
 
 def test_zero_net_need_does_not_divide_by_zero():
-    wet = {**CLIMATE, "seasonRainMm": 5000}
-    p = plan(engine.farmer_options(ctx(climate=wet)))
-    assert p["netNeedMm"] == 0 and p["dry"]["fit"] == 1
+    for wet in ({**CLIMATE, "seasonRainMm": 5000}, {**ET_CLIMATE, "weekRainMm": [500.0] * 52}):
+        p = plan(engine.farmer_options(ctx(climate=wet)))
+        assert p["netNeedMm"] == 0 and p["dry"]["fit"] == 1
 
 
 def test_every_crop_and_factor_has_a_source():
@@ -103,3 +109,36 @@ def test_sowing_window_waits_for_frost_and_warm_soil():
     barley = engine.sowing_window(engine.CROPS["barley"], CLIMATE)
     assert beans["earliest"] >= barley["earliest"] >= "05-06"  # day 126 = 6 May
     assert beans["fits"] and engine.sowing_window(engine.CROPS["wheat"], CLIMATE) is None
+
+
+def test_water_need_from_evapotranspiration():
+    beans = engine.water_need(engine.CROPS["beans"], ET_CLIMATE)
+    alfalfa = engine.water_need(engine.CROPS["alfalfa"], ET_CLIMATE)
+    assert beans["source"] == "hargreaves" and 250 < beans["grossMm"] < alfalfa["grossMm"] < 1000
+    assert beans["netMm"] == pytest.approx(beans["grossMm"] - 0.7 * beans["rainMm"], abs=0.1)
+    assert engine.water_need(engine.CROPS["beans"], CLIMATE)["source"] == "typical"  # no ET data: FAO's typical value
+    kc = [engine.crop_coefficient(engine.CROPS["beans"], d) for d in (0, 24, 37, 50, 79, 99)]
+    assert kc[0] == kc[1] == 0.4 and kc[1] < kc[2] < kc[3] == 1.15 == kc[4] and 0.35 < kc[5] < 1.15
+
+
+def test_frost_trend_is_said_only_when_significant():
+    trend = engine.frost_trend(ET_CLIMATE)  # falls half a day a year
+    assert trend["significant"] and trend["daysEarlier"] == 18
+    flat = engine.frost_trend({"lastSpringFrostByYear": [120, 131, 118, 127, 122] * 9})
+    assert not flat["significant"]
+
+
+def test_two_crops_only_where_the_season_is_long_enough():
+    sown = ctx(climate=ET_CLIMATE, winterWheatSown=True)
+    assert engine.farmer_options(sown)["doubleCrop"] is None  # Talas: 84 days after wheat
+    south = {**ET_CLIMATE, "firstAutumnFrostDoy": 310, "frostFreeDays": 220}
+    double = engine.farmer_options(ctx(climate=south, plan="maize", winterWheatSown=True))["doubleCrop"]
+    assert double["first"] == "wheat" and double["second"] == "beans" and double["windowDays"] == 119
+
+
+def test_winter_wheat_is_offered_only_if_already_sown():
+    south = {**ET_CLIMATE, "firstAutumnFrostDoy": 310, "frostFreeDays": 220}
+    for climate in (CLIMATE, ET_CLIMATE, south):
+        result = engine.farmer_options(ctx(climate=climate, plan="maize"))
+        assert "wheat" not in [o["crop"] for o in result["options"]] and result["doubleCrop"] is None
+    assert engine.farmer_options(ctx(plan="wheat"))["options"][0]["crop"] == "wheat"  # his own plan: already sown

@@ -128,5 +128,33 @@
     "value": -0.5,
     "estimate": true,
     "source": "Used only where a field is outside every basin: the mean of low-snow years in Talas and Chuy (FLDAS 2001-2025)"
+  },
+  "crop_tables": {
+    "value": "FAO-56 Tables 11 and 12",
+    "estimate": true,
+    "source": "Stage lengths and crop coefficients are FAO's typical values, not measured in Kyrgyzstan; to check against the tables and with an agronomist"
+  },
+  "winter_restart_doy": {
+    "value": 91,
+    "estimate": true,
+    "source": "Winter wheat and its irrigation are counted from 1 April"
+  },
+  "double_crop_spare_days": {
+    "value": 10,
+    "estimate": true,
+    "source": "A second crop must mature 10 days before the first autumn frost"
+  },
+  "trend_p": {
+    "value": 0.05,
+    "estimate": false,
+    "source": "Mann-Kendall trend test, two-sided"
+  },
+  "winter_sowing": {
+    "value": {
+      "from": "09-01",
+      "to": "10-31"
+    },
+    "estimate": true,
+    "source": "Winter wheat in Kyrgyzstan is sown in September-October (FAO Crop Calendar). After that it can be planned for next season only if it is already in the ground"
   }
 }
