@@ -10,6 +10,17 @@ const EMPTY = { name: '', role: '', region: '', village: '', phone: '', pin: '' 
 // The character beside the form follows the chosen role.
 const ART = { farmer: '/art/farmer-full.webp', manager: '/art/mirab-full.webp' };
 
+// A Kyrgyz number: +996 and 9 digits, or 0 and the same 9 digits (+996 700 123 456 / 0700 123 456).
+// The 9 digits start with an operator or city code (2–9), never 0 or 1.
+export function phoneProblem(phone) {
+  const digits = phone.replace(/\D/g, '');
+  const local = digits.startsWith('996') ? digits.slice(3) : digits.startsWith('0') ? digits.slice(1) : digits;
+  if (local && !/^[2-9]/.test(local)) return { key: 'phoneStart' };
+  if (local.length > 9) return { key: 'phoneLong', n: local.length };
+  if (local.length < 9) return { key: 'phoneShort', n: local.length };
+  return null;
+}
+
 // First visit: register in three short steps, or sign in with name and PIN.
 export default function StartScreen({ onDone }) {
   const { t } = useI18n();
@@ -18,14 +29,18 @@ export default function StartScreen({ onDone }) {
   const [user, setUser] = useState(EMPTY);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+  const [phoneLeft, setPhoneLeft] = useState(false); // the field was left once: now say what is missing
   const set = (key, value) => setUser({ ...user, [key]: value });
   const byName = (a, b) => t(`districts.${a}`).localeCompare(t(`districts.${b}`));
 
   const pinOk = /^\d{4}$/.test(user.pin);
+  const phoneIssue = phoneProblem(user.phone);
+  // "Too short" waits until the farmer leaves the field; a wrong start or too many digits shows at once.
+  const showPhoneIssue = phoneIssue && user.phone && (phoneLeft || phoneIssue.key !== 'phoneShort');
   const stepOk = {
     1: user.name.trim() && user.role,
     2: user.region && user.village.trim(),
-    3: pinOk,
+    3: pinOk && !phoneIssue,
   };
   const ready = mode === 'login' ? user.name.trim() && pinOk : stepOk[1] && stepOk[2] && stepOk[3];
   const character = user.role || 'farmer';
@@ -126,8 +141,12 @@ export default function StartScreen({ onDone }) {
         {mode === 'register' && step === 3 && (
           <label className="field-label">
             {t('start.phone')}
-            <input className="input" type="tel" inputMode="tel" value={user.phone} onChange={(e) => set('phone', e.target.value.replace(/[^\d+ ]/g, ''))}
-              placeholder="+996 700 123 456" autoComplete="tel" />
+            <input className="input" type="tel" inputMode="tel" value={user.phone} maxLength="20"
+              onChange={(e) => set('phone', e.target.value.replace(/[^\d+ ]/g, ''))} onBlur={() => setPhoneLeft(true)}
+              placeholder="+996 700 123 456" autoComplete="tel" aria-invalid={Boolean(showPhoneIssue)} aria-describedby="phone-rule" />
+            <span id="phone-rule" className={showPhoneIssue ? 'hint error' : 'hint'}>
+              {showPhoneIssue ? t(`start.${phoneIssue.key}`, { n: phoneIssue.n }) : t('start.phoneRule')}
+            </span>
             <span className="demo-note">{t('start.phoneDemo')}</span>
           </label>
         )}

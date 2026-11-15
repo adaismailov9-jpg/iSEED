@@ -310,6 +310,10 @@
     "villageManager": "Your own village; add the villages on your canal later.",
     "phone": "Phone number",
     "phoneDemo": "Demo for the judges: no SMS is sent and the number is not saved.",
+    "phoneRule": "+996 and 9 digits, for example +996 700 123 456. You can also start with 0: 0700 123 456.",
+    "phoneShort": "Not enough digits: {n} of 9 after +996.",
+    "phoneLong": "Too many digits: {n} of 9 after +996.",
+    "phoneStart": "After +996 comes the operator code, such as 700, 555 or 220.",
     "say": {
       "farmer": "Which crop will still earn this year?",
       "manager": "How much water will this year’s snow give?"
