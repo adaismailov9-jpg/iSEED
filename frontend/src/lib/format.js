@@ -16,9 +16,13 @@ export const fmtShare = (x) => `${Math.round(x * 100)}%`; // share: 81%
 export const fmtSomRange = ({ low, high }, lang) =>
   `${fmtInt(Math.round(low / 1000) * 1000, lang)}–${fmtInt(Math.round(high / 1000) * 1000, lang)}`;
 
-// API dates are "MM-DD": show "6 мая" / "6 May".
+// Chrome has no Kyrgyz month names (it falls back to English), so they are written out here.
+const KY_MONTHS = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+
+// API dates are "MM-DD": show "6-май" / "6 мая" / "May 6".
 export function fmtDay(mmdd, lang) {
   const [m, d] = mmdd.split('-').map(Number);
+  if (lang === 'ky') return `${d}-${KY_MONTHS[m - 1]}`;
   try {
     return new Date(2027, m - 1, d).toLocaleDateString(lang, { day: 'numeric', month: 'long' });
   } catch {

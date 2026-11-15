@@ -9,6 +9,8 @@ import json
 import os
 import secrets
 import sqlite3
+import threading
+from functools import wraps
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -51,8 +53,22 @@ def same_place(a, b):
     return a.strip().casefold() == b.strip().casefold()
 
 
+def one_at_a_time(cls):
+    """FastAPI runs requests in several threads, and they share one SQLite connection:
+    without this, two requests at once fail ("bad parameter or other API misuse")."""
+    for name, fn in list(vars(cls).items()):
+        if callable(fn) and not name.startswith("__"):
+            def locked(self, *args, _fn=fn, **kwargs):
+                with self._lock:
+                    return _fn(self, *args, **kwargs)
+            setattr(cls, name, wraps(fn)(locked))
+    return cls
+
+
+@one_at_a_time
 class SQLiteStore:
     def __init__(self, path):
+        self._lock = threading.RLock()
         self.db = sqlite3.connect(path, check_same_thread=False)
         self.db.row_factory = sqlite3.Row
         # An older iseed.db kept plain-text tokens: drop that table (everyone simply signs in again).

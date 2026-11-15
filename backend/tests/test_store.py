@@ -328,3 +328,18 @@ def test_delete_canal_and_message(store):
     assert store.message_for("Talas")["text"] == "Hello"    # his own village still is
     assert store.delete_message(boss["id"]) is True and store.message_for("Talas") is None
     assert store.delete_canal(boss["id"]) is False and store.delete_message(boss["id"]) is False
+
+
+def test_many_requests_at_once(store):
+    """The API runs requests in several threads: a manager screen sends two at once."""
+    from concurrent.futures import ThreadPoolExecutor
+    boss = manager(store)
+    token = store.create_session(boss["id"])
+
+    def one(i):
+        store.save_canal(boss["id"], {**CANAL, "normalTurns": i % 9 + 1})
+        assert store.user_for_token(token)["id"] == boss["id"]
+        return store.canal_of(boss["id"])["normalTurns"]
+
+    with ThreadPoolExecutor(8) as pool:
+        assert all(1 <= n <= 9 for n in pool.map(one, range(200)))

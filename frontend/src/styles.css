@@ -483,6 +483,12 @@ textarea.input { resize: vertical; }
   .lang button { padding: 6px 7px; font-size: 0.72rem; }
   .profile span { display: none; }
 }
+@media (max-width: 360px) { /* the smallest phones (320 px): the header must not push the page sideways */
+  .header { padding: 8px; }
+  .brand .logo { height: 32px; }
+  .profile { padding: 6px 9px; }
+  .lang button { padding: 6px 5px; }
+}
 .screen > * { min-width: 0; }
 
 /* ============ Guides: the farmer or the mirab with a tip on every screen ============ */
