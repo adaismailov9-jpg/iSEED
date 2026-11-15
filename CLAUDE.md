@@ -131,7 +131,7 @@ Response:
   "snow": { ...as GET /snow },
   "evidence": { "rules": {...}, "prices": {...}, "climate": {...}, "rain": {...}, "site": {...}, "formula": "..." } }
 ```
-- `options[0]` is always his plan. `saver` and `builder` may be absent (for example when his plan is already the least thirsty crop): show the ones that exist.
+- There are always three options: `plan`, `saver`, `builder`, in that order. Each is first picked from crops that ripen before the autumn frost; where none fits, it may be a crop with `frostOk: false` (show the warning), and the saver may need more water than the plan when the plan is already the least thirsty crop (`waterLeftM3` negative).
 - `normal` / `dry`: a normal year and a typical low-snow year at his place on the canal. The dry year is the mean of the basin's own low-snow years (`dryYear.years`); `scenarios` has the factors used. `income` is gross income in som for the whole field; `null` when `priceKnown` is false.
 - `waterLeftM3` is against his plan; negative = the option takes more water.
 - `sowing` is `null` for winter wheat. Dates are `MM-DD`. `heavyRain.maxShare` is the share of years with a day of 20 mm or more in the sowing weeks; `riskyWeeks` are week starts at 30% or more.

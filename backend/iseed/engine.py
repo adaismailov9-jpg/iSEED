@@ -282,29 +282,37 @@ def can_still_sow(crop, ctx):
     return not crop["winter"] or ctx.get("winterWheatSown", False) or crop["id"] == ctx["plan"]
 
 
+def pick_saver(others, plan):
+    """Best dry-year income among crops needing at most 70% of the plan's water (with no price known
+    the thriftiest wins). If none is that thrifty, the thriftiest below the plan."""
+    thrifty = [o for o in others if o["netNeedMm"] <= rule("saver_share") * plan["netNeedMm"]]
+    if thrifty:
+        return max(thrifty, key=lambda o: (_dry_income(o), -o["netNeedMm"]))
+    return min((o for o in others if o["netNeedMm"] < plan["netNeedMm"]), key=lambda o: o["netNeedMm"], default=None)
+
+
+def pick_builder(others, last_crops):
+    """No rotation warning after his last two crops; a legume after a cereal first."""
+    recent = {CROPS[c]["family"] for c in last_crops}
+    builders = [o for o in others if CROPS[o["crop"]]["family"] not in recent]
+    return max(builders, key=lambda o: (o["soil"]["rotation"] == "plus", o["soil"]["nitrogen"], _dry_income(o), -o["netNeedMm"]), default=None)
+
+
 def farmer_options(ctx):
     needs = {c["id"]: water_need(c, ctx["climate"]) for c in CROPS.values()}
     plan = _option("plan", CROPS[ctx["plan"]], needs, ctx)
     others = [_option("other", c, needs, ctx) for c in CROPS.values()
               if c["id"] != ctx["plan"] and can_still_sow(c, ctx)]
-    others = [o for o in others if o["frostOk"]]
-    options = [plan]
 
-    # Water-saver: best dry-year income among crops needing at most 70% of the plan's water.
-    # With no price known the thriftiest crop wins. If none is that thrifty, the thriftiest below the plan.
-    savers = [o for o in others if o["netNeedMm"] <= rule("saver_share") * plan["netNeedMm"]]
-    if not savers:
-        savers = sorted((o for o in others if o["netNeedMm"] < plan["netNeedMm"]), key=lambda o: o["netNeedMm"])[:1]
-    saver = max(savers, key=lambda o: (_dry_income(o), -o["netNeedMm"]), default=None)
-    if saver:
-        options.append({**saver, "kind": "saver"})
-
-    # Soil-builder: no rotation warning after his last two crops; a legume after a cereal first.
-    recent = {CROPS[c]["family"] for c in ctx["lastCrops"]}
-    builders = [o for o in others if o is not saver and CROPS[o["crop"]]["family"] not in recent]
-    builder = max(builders, key=lambda o: (o["soil"]["rotation"] == "plus", o["soil"]["nitrogen"], _dry_income(o), -o["netNeedMm"]), default=None)
-    if builder:
-        options.append({**builder, "kind": "builder"})
+    # Always three options, picked first from crops that ripen before the autumn frost.
+    # Saver, if none of those fits: any thrifty crop (the card warns the season is too short), else the thriftiest.
+    # Builder, if none of those fits: a crop that ripens first, then one that feeds the soil.
+    ripe = [o for o in others if o["frostOk"]]
+    saver = pick_saver(ripe, plan) or pick_saver(others, plan) or min(others, key=lambda o: o["netNeedMm"])
+    rest = [o for o in others if o is not saver]
+    builder = (pick_builder([o for o in rest if o["frostOk"]], ctx["lastCrops"])
+               or max(rest, key=lambda o: (o["frostOk"], o["soil"]["nitrogen"], _dry_income(o), -o["netNeedMm"])))
+    options = [plan, {**saver, "kind": "saver"}, {**builder, "kind": "builder"}]
 
     # Highlight the option that leaves the most water for the end of the canal, if any leaves more than 0.
     best = max(options, key=lambda o: o["waterLeftM3"])

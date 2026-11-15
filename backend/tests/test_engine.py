@@ -64,6 +64,14 @@ def test_options_are_never_the_same_crop():
             assert len(crops) == len(set(crops)) and crops[0] == crop
 
 
+def test_always_three_options_even_where_the_season_is_short():
+    high = {**CLIMATE, "frostFreeDays": 75}  # ~2,700 m in Naryn: only alfalfa ripens
+    for crop in engine.CROPS:
+        for last in (["alfalfa"], ["wheat"], []):
+            options = engine.farmer_options(ctx(plan=crop, lastCrops=last, climate=high))["options"]
+            assert [o["kind"] for o in options] == ["plan", "saver", "builder"]
+
+
 def test_water_left_for_the_end_of_the_canal():
     result = engine.farmer_options(ctx(plan="alfalfa"))
     assert plan(result)["waterLeftM3"] == 0
