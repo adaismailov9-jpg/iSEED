@@ -29,12 +29,18 @@ def normalize_url(url: str) -> str:
     return url
 
 
+CONNECT_TIMEOUT_S = 10  # give up instead of hanging when the database is unreachable (Neon wakes in ~1 s)
+
+
 def make_engine(url: str) -> Engine:
     if os.environ.get("VERCEL"):
         # A serverless function is frozen between requests: open connections would leak.
-        # Connect per request instead (use Neon's pooled connection string).
-        return create_engine(normalize_url(url), poolclass=NullPool)
-    return create_engine(normalize_url(url), pool_size=5, max_overflow=5, pool_pre_ping=True)
+        # Connect per request instead (use Neon's pooled connection string). Behind that pooler a
+        # connection is shared between clients, so psycopg must not keep server-side prepared statements.
+        return create_engine(normalize_url(url), poolclass=NullPool,
+                             connect_args={"connect_timeout": CONNECT_TIMEOUT_S, "prepare_threshold": None})
+    return create_engine(normalize_url(url), pool_size=5, max_overflow=5, pool_pre_ping=True,
+                         connect_args={"connect_timeout": CONNECT_TIMEOUT_S})
 
 
 class PostgresStore:

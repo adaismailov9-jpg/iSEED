@@ -4,11 +4,13 @@ The API talks only to the Store methods below. SQLiteStore is for local work; th
 lane adds PostgresStore with the same methods (Vercel functions keep no files).
 NASA results are never stored here: they stay in the committed files under data/.
 """
+import functools
 import hashlib
 import json
 import os
 import secrets
 import sqlite3
+import threading
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -51,8 +53,26 @@ def same_place(a, b):
     return a.strip().casefold() == b.strip().casefold()
 
 
+def _one_at_a_time(cls):
+    """Run every public method under the store's lock. FastAPI runs requests in parallel threads,
+    and one sqlite3 connection shared by several threads mixes up their transactions and results."""
+    def locked(method):
+        @functools.wraps(method)
+        def run(self, *args, **kwargs):
+            with self._lock:
+                return method(self, *args, **kwargs)
+        return run
+
+    for name, value in list(vars(cls).items()):
+        if callable(value) and not name.startswith("_"):
+            setattr(cls, name, locked(value))
+    return cls
+
+
+@_one_at_a_time
 class SQLiteStore:
     def __init__(self, path):
+        self._lock = threading.RLock()
         self.db = sqlite3.connect(path, check_same_thread=False)
         self.db.row_factory = sqlite3.Row
         # An older iseed.db kept plain-text tokens: drop that table (everyone simply signs in again).
@@ -214,15 +234,18 @@ def _load_env_file():
     load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=False)
 
 
+def sqlite_path():
+    """ISEED_DB if set; on Vercel /tmp (the only writable place, wiped between cold starts, so
+    accounts do not last: set DATABASE_URL there); else backend/iseed.db."""
+    default = "/tmp/iseed.db" if os.environ.get("VERCEL") else str(Path(__file__).resolve().parents[1] / "iseed.db")
+    return os.environ.get("ISEED_DB") or default
+
+
 def open_store():
-    """PostgresStore when DATABASE_URL is set (Neon on Vercel, Docker locally); otherwise SQLite in backend/iseed.db."""
+    """PostgresStore when DATABASE_URL is set (Neon on Vercel, Docker locally); otherwise SQLiteStore."""
     _load_env_file()
     url = os.environ.get("DATABASE_URL")
     if url:
         from .pgstore import PostgresStore  # imported only here: SQLite users need no Postgres packages
         return PostgresStore(url)
-    return SQLiteStore(os.environ.get("ISEED_DB", str(Path(__file__).resolve().parents[1] / "iseed.db")))
-    """SQLite file. On Vercel only /tmp is writable and it is wiped between cold starts,
-    so accounts do not last there until the database lane adds PostgresStore."""
-    default = "/tmp/iseed.db" if os.environ.get("VERCEL") else str(Path(__file__).resolve().parents[1] / "iseed.db")
-    return SQLiteStore(os.environ.get("ISEED_DB", default))
+    return SQLiteStore(sqlite_path())

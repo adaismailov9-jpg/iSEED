@@ -1,5 +1,7 @@
 """iSEED API. Shapes are in CLAUDE.md. Routes answer at /x (dev proxy) and /api/x (Vercel)."""
+import logging
 import os
+import sqlite3
 from datetime import timedelta
 from functools import lru_cache
 
@@ -41,6 +43,23 @@ async def bad_request(_: Request, err: RequestValidationError):
     where = ".".join(str(x) for x in first.get("loc", ()) if x not in ("body", "query", "path"))
     message = f"'{where}' is missing or wrong" if where else "The request body must be a JSON object"
     return JSONResponse({"code": "bad_input", "message": message}, status_code=422)
+
+
+async def db_unavailable(_: Request, err: Exception):
+    """The database cannot be reached (down, waking up, wrong DATABASE_URL): a clear 503 in the usual
+    error shape instead of a bare 500. The real error goes to the server log (Vercel: Logs)."""
+    logging.getLogger("iseed").error("database unavailable: %s", err)
+    return JSONResponse({"code": "db_unavailable", "message": "The database is not reachable. Try again in a minute"},
+                        status_code=503)
+
+
+app.add_exception_handler(sqlite3.OperationalError, db_unavailable)
+try:  # SQLAlchemy is only needed for PostgresStore
+    from sqlalchemy.exc import InterfaceError, OperationalError
+    app.add_exception_handler(OperationalError, db_unavailable)
+    app.add_exception_handler(InterfaceError, db_unavailable)
+except ImportError:
+    pass
 
 
 def need(body, key, allowed=None):

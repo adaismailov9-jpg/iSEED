@@ -42,7 +42,7 @@ cd scripts && ../backend/.venv/bin/pip install earthengine-api numpy   # then: e
 
 ## API rules
 
-- JSON, camelCase keys. Errors: `{ "code": "...", "message": "..." }` with codes `bad_input`, `not_signed_in`, `wrong_role`, `wrong_login`, `wrong_pin`, `name_taken`, `too_many_tries`, `no_basin`, `no_field`, `data_missing`.
+- JSON, camelCase keys. Errors: `{ "code": "...", "message": "..." }` with codes `bad_input`, `not_signed_in`, `wrong_role`, `wrong_login`, `wrong_pin`, `name_taken`, `too_many_tries`, `no_basin`, `no_field`, `data_missing`, `db_unavailable` (503: the database cannot be reached; show "try again in a minute").
 - Every route answers at `/x` (Vite dev proxy strips `/api`) and at `/api/x` (Vercel).
 - Signed-in requests send `Authorization: Bearer <token>`.
 - The API returns codes and numbers (`"kind": "saver"`, `"level": "careful"`); the frontend turns codes into text through i18n keys.
