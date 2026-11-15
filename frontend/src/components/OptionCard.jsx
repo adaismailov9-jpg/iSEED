@@ -11,7 +11,7 @@ export default function OptionCard({ option, shortFit, onPick, busy }) {
   const { kind, crop, highlight, normal, dry, priceKnown, waterLeftM3, soil, frostOk, sowing, pumpGap } = option;
 
   return (
-    <section className={`card option level-${fitLevel(normal.fit, shortFit)}${highlight ? ' highlight' : ''}`}>
+    <section id={`option-${kind}`} className={`card option level-${fitLevel(normal.fit, shortFit)}${highlight ? ' highlight' : ''}`}>
       <div className="option-head">
         <div className="eyebrow">{t(`option.${kind}`)}</div>
         {highlight && <span className="pill">💧 {t('option.highlight')}</span>}

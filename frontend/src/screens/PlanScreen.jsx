@@ -7,6 +7,7 @@ import SeasonMessage, { MessageBox } from '../components/SeasonMessage';
 import { ErrorText, waterLeftText } from '../components/Texts';
 import { SourceBadge } from '../components/Badge';
 import Guide from '../components/Guide';
+import ResultSummary from '../components/ResultSummary';
 import { CanalDiagram, CropIcon, SnowMountain } from '../components/Art';
 import { fitLevel, fmtDay, fmtDec, fmtInt, fmtPct, fmtShare, snowDirection } from '../lib/format';
 
@@ -109,20 +110,14 @@ function PlanDetail({ plan, onBack, onPick, onDelete, busy, error }) {
       <ErrorText code={error} />
       <MessageBox message={message} />
 
-      <header className="result-hero">
-        <CropIcon id={options[0].crop} size={64} />
-        <div>
-          <div className="eyebrow">{t('result.for', { ha: fmtDec(result.field.areaHa, 2, lang), basin: t(`basins.${result.field.basin}`) })}</div>
-          <h2>{t('result.title')}</h2>
-        </div>
-      </header>
+      <ResultSummary result={result} shortFit={shortFit} />
 
+      <h2 className="options-title">{t('summary.details')}</h2>
       <div className="options">
         {options.map((o) => (
           <OptionCard key={o.kind} option={o} shortFit={shortFit} onPick={o.kind === 'plan' ? null : onPick} busy={busy} />
         ))}
       </div>
-      {planEarnsMost && <p className="verdict-note good">✓ {t('option.earnsMost')}</p>}
 
       {doubleCrop && (
         <section className="card">

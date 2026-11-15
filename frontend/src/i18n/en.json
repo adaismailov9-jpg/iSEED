@@ -501,7 +501,7 @@
         "soil": "Not sure about the soil? Pick “Don’t know” and I’ll use the soil map."
       },
       "ready": "All done! Tap the button and I’ll show you three crops for next season.",
-      "result": "Each card shows a normal and a dry year. The blue card leaves the most water for the neighbours at the end of the canal. Tap “estimate” to see where a number comes from.",
+      "result": "At the top: what a dry year does to your plan. Below: the options side by side. Tap one to see it in detail.",
       "plans": "Your saved checks. Open one to see the three options again.",
       "noPlans": "No results yet. Mark your field and answer a few questions first.",
       "agro": "Your district’s agronomist is picked from your field. If nobody answers, call 1210."
@@ -517,5 +517,24 @@
     "for": "{ha} ha · {basin} basin",
     "title": "Three options for next season",
     "youAre": "Your field: {place}"
+  },
+  "summary": {
+    "eyebrow": "If next year is dry",
+    "title": {
+      "fits": "{crop}: enough water",
+      "tight": "{crop}: water will be tight",
+      "short": "{crop}: not enough water"
+    },
+    "water": "of the water it needs",
+    "income": "for the whole field in a dry year",
+    "incomeNormal": "Normal year: {income} som",
+    "better": "Earns more in a dry year: {crop}, {income}",
+    "betterThirsty": "Earns more in a dry year: {crop}, {income}, but it needs {m3} m³ more water",
+    "saves": "Leaves the most water for the end of the canal: {crop}, {m3} m³",
+    "compare": "The options in a dry year",
+    "waterShort": "{pct} of the water",
+    "leftMore": "+{m3} m³ for the canal",
+    "leftLess": "{m3} m³ more water",
+    "details": "Each option in detail"
   }
 }

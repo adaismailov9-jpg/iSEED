@@ -19,6 +19,12 @@ export const fmtSomRange = ({ low, high }, lang) =>
 // Chrome has no Kyrgyz month names (it falls back to English), so they are written out here.
 const KY_MONTHS = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
 
+// Short income for comparing: "97–238 thousand som". Rounding only; the numbers are the API's.
+export const fmtSomK = ({ low, high }, lang) => {
+  const unit = { ky: 'миң сом', ru: 'тыс. сом', en: 'thousand som' }[lang] ?? 'thousand som';
+  return `${fmtInt(low / 1000, lang)}–${fmtInt(high / 1000, lang)} ${unit}`;
+};
+
 // API dates are "MM-DD": show "6-май" / "6 мая" / "May 6".
 export function fmtDay(mmdd, lang) {
   const [m, d] = mmdd.split('-').map(Number);

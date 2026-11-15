@@ -534,3 +534,43 @@ textarea.input { resize: vertical; }
 .chips.tiles .chip-icon svg { width: 46px; height: 46px; }
 .chip .chip-icon svg { width: 32px; height: 32px; }
 .chips.tiles .chip-icon svg { width: 46px; height: 46px; }
+
+/* ============ Result: the answer first, then the options side by side ============ */
+.answer { position: relative; overflow: hidden; border-top: 10px solid var(--level); display: flex; flex-direction: column; gap: 14px; animation: bubble-in 320ms ease-out both; }
+.answer::after { content: ''; position: absolute; right: -60px; top: -60px; width: 180px; height: 180px; border-radius: 50%; background: var(--level); opacity: 0.08; pointer-events: none; }
+.answer .eyebrow { margin: 0; }
+.answer-top { display: flex; align-items: center; gap: 14px; }
+.answer-top svg { flex: none; }
+.answer-if { font-size: 0.9rem; font-weight: 700; color: var(--muted); }
+.answer-title { margin: 2px 0 0; font-size: clamp(1.45rem, 5.2vw, 2.1rem); line-height: 1.15; color: var(--level); }
+.answer-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 12px; }
+.stat { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border-radius: 18px; background: var(--sand); min-width: 0; }
+.stat-big { font-size: clamp(1.6rem, 6.5vw, 2.4rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; color: var(--text); overflow-wrap: anywhere; }
+.stat:first-child .stat-big { color: var(--level); }
+.stat-label { font-size: 0.92rem; font-weight: 700; color: var(--muted); }
+.stat-note { font-size: 0.85rem; color: var(--muted); }
+.answer-tips { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.answer-tips li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: var(--sage-soft); font-weight: 700; line-height: 1.35; }
+.answer-tips li svg, .tip-drop { flex: none; }
+.answer-tips .good { color: var(--fits); }
+
+.compare-options { display: flex; flex-direction: column; gap: 10px; }
+.compare-options h3 { margin: 0 0 2px; }
+.cmp-row { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; border: 2px solid var(--line); border-left: 8px solid var(--level); color: inherit; text-decoration: none; transition: transform 120ms ease, border-color 120ms ease; }
+.cmp-row:hover { transform: translateY(-1px); border-color: var(--sage); border-left-color: var(--level); }
+.cmp-row.best { background: var(--sage-soft); }
+.cmp-row svg { flex: none; }
+.cmp-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.cmp-name { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; }
+.cmp-name b { font-size: 1.1rem; }
+.cmp-name .eyebrow { margin: 0; }
+.cmp-water { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; font-weight: 800; color: var(--level); }
+.cmp-water .meter-track { flex: 1; min-width: 60px; }
+.cmp-water span { white-space: nowrap; }
+.cmp-facts { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.88rem; }
+.cmp-income { font-weight: 800; }
+.cmp-left { color: var(--muted); font-weight: 700; }
+.cmp-left.plus { color: var(--fits); }
+.cmp-left.minus { color: var(--short); }
+.options-title { margin: 8px 0 0; font-size: 1.2rem; }
+.option { scroll-margin-top: 80px; }
