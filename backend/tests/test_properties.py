@@ -76,11 +76,14 @@ def test_options_start_with_the_plan_and_never_repeat_a_crop_or_a_kind():
 
 
 def test_a_saver_uses_less_water_than_the_plan_and_says_so():
+    """Unless the plan is already the least thirsty crop: then the saver is the next thriftiest and shows it takes more."""
     for c in all_situations():
         options = engine.farmer_options(c)["options"]
-        for o in options[1:]:
-            if o["kind"] == "saver":
-                assert o["netNeedMm"] < options[0]["netNeedMm"] and o["waterLeftM3"] > 0, (c["plan"], o["crop"])
+        saver = next(o for o in options if o["kind"] == "saver")
+        if saver["netNeedMm"] < options[0]["netNeedMm"]:
+            assert saver["waterLeftM3"] > 0, (c["plan"], saver["crop"])
+        else:
+            assert saver["waterLeftM3"] <= 0, (c["plan"], saver["crop"])
 
 
 def test_only_one_option_is_highlighted_and_only_if_it_saves_water():
