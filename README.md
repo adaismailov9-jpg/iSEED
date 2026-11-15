@@ -112,7 +112,7 @@ The API contract is in `CLAUDE.md`.
 
 Python 3.12, FastAPI, pytest, SQLite; React, Vite, Leaflet; Google Earth Engine Python API, NumPy. Map data: OpenStreetMap (ODbL), geoBoundaries.
 
-AI tools: Claude (Anthropic) was used to help write code and documents. The data, sources and formulas above were checked by the team.
+AI tools: Claude (Anthropic) was used to help write code and documents. The data, sources and formulas above were checked by the team. The characters, logo and field picture (`frontend/public/art/`) were made with ChatGPT image generation (OpenAI, "2.5"); the small crop, water and canal drawings are SVG written in code.
 
 ## Sources
 
