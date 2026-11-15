@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useI18n } from '../i18n';
 import { api } from '../api/client';
 import { ErrorText } from '../components/Texts';
-import Badge from '../components/Badge';
+import Badge, { SourceBadge } from '../components/Badge';
 import Guide from '../components/Guide';
 import { CanalDiagram, SnowMountain } from '../components/Art';
 import { CROP_IDS } from '../data/ids';
@@ -145,7 +145,7 @@ function CanalSignal({ result }) {
       </section>
 
       <section className="card">
-        <h3>{t('canal.snow')} <Badge source={t('sources.fldas')} /></h3>
+        <h3>{t('canal.snow')} <SourceBadge id="fldas" /></h3>
         <SnowMountain anomaly={snow.anomaly} size={96} label={t(`levels.${snowDirection(snow.anomaly)}`)} />
         <span className={`snow-chip snow-${snowDirection(snow.anomaly)}`}>{t(`levels.${snowDirection(snow.anomaly)}`)} · {fmtPct(snow.anomaly)}</span>
         <p className="hint">{t('canal.snowDate', { month: snow.month })}</p>

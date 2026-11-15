@@ -5,7 +5,7 @@ import PlaceSearch from '../components/PlaceSearch';
 import Questions, { buildSteps } from '../components/Questions';
 import Guide from '../components/Guide';
 import { SnowMountain } from '../components/Art';
-import Badge from '../components/Badge';
+import { SourceBadge } from '../components/Badge';
 import FieldCheck from '../components/FieldCheck';
 import Icon from '../components/Icon';
 import SavedFields from '../components/SavedFields';
@@ -132,7 +132,7 @@ function BasinInfo({ place }) {
       <SnowMountain anomaly={snow.anomaly} size={72} label={t(`levels.${snowDirection(snow.anomaly)}`)} />
       <div className="label">{t('basin.label')}</div>
       <div className="basin-name">{t(`basins.${basin}`)}</div>
-      <div className="label">{t('basin.snow')} <Badge source={t('sources.fldas')} /></div>
+      <div className="label">{t('basin.snow')} <SourceBadge id="fldas" /></div>
       <span className={`snow-chip snow-${snowDirection(snow.anomaly)}`}>
         {t(`levels.${snowDirection(snow.anomaly)}`)} · {fmtPct(snow.anomaly)}
       </span>

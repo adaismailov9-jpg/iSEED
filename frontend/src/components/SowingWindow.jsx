@@ -1,6 +1,6 @@
 import { useI18n } from '../i18n';
 import { fmtDay, fmtDec, fmtShare } from '../lib/format';
-import Badge from './Badge';
+import { SourceBadge } from './Badge';
 
 // When to sow: the safe window, the suggested date away from heavy-rain weeks, and the flowering heat.
 export default function SowingWindow({ sowing }) {
@@ -10,14 +10,14 @@ export default function SowingWindow({ sowing }) {
 
   return (
     <div className="sowing">
-      <div className="label">{t('sowing.title')} <Badge source={t('sources.power')} /></div>
+      <div className="label">{t('sowing.title')} <SourceBadge id="power" /></div>
       {fits ? (
         <p><b>{fmtDay(earliest, lang)} – {fmtDay(latest, lang)}</b> · {t('sowing.best', { date: fmtDay(heavyRain.suggested, lang) })}</p>
       ) : (
         <p className="error">{t('sowing.noWindow')}</p>
       )}
       <div className="weeks">
-        <span>{t('sowing.heavyRain', { pct: fmtShare(heavyRain.maxShare) })} <Badge source={t('sources.imerg')} /></span>
+        <span>{t('sowing.heavyRain', { pct: fmtShare(heavyRain.maxShare) })} <SourceBadge id="imerg" /></span>
         {heavyRain.riskyWeeks.map((week) => <span key={week} className="week risky">{t('sowing.riskyWeek', { date: fmtDay(week, lang) })}</span>)}
       </div>
       {flowering && (

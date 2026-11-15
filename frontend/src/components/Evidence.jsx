@@ -1,6 +1,6 @@
 import { useI18n } from '../i18n';
 import { fmtDec, fmtInt, fmtPct, snowDirection } from '../lib/format';
-import Badge from './Badge';
+import Badge, { SourceBadge } from './Badge';
 
 function Row({ label, children }) {
   return (
@@ -22,24 +22,24 @@ export default function Evidence({ result }) {
 
   return (
     <div className="evidence">
-      <h4>{t('evidence.snow')} <Badge source={t('sources.fldas')} /></h4>
+      <h4>{t('evidence.snow')} <SourceBadge id="fldas" /></h4>
       <Row label={t('evidence.basin')}>{t(`basins.${snow.basin}`)}</Row>
       <Row label={t('evidence.level')}>{t(`levels.${snowDirection(snow.anomaly)}`)} ({fmtPct(snow.anomaly)})</Row>
       <Row label={t('evidence.month')}>{snow.month}</Row>
       <Row label={t('evidence.dry')}>{fmtPct(scenarios.dry.snowAnomaly)} · S {fmtDec(scenarios.dry.s, 2, lang)} · P {fmtDec(scenarios.dry.p, 2, lang)}</Row>
       <Row label={t('evidence.normal')}>S {fmtDec(scenarios.normal.s, 2, lang)} · P {fmtDec(scenarios.normal.p, 2, lang)}</Row>
 
-      <h4>{t('evidence.need', { crop: t(`crops.${options[0].crop}`) })} <Badge source={t(`evidence.needSource.${need.source}`)} /></h4>
+      <h4>{t('evidence.need', { crop: t(`crops.${options[0].crop}`) })} {need.source === 'hargreaves' ? <SourceBadge id="power" /> : <Badge source={t('evidence.needSource.typical')} />}</h4>
       <Row label={t('evidence.gross')}>{mm(need.grossMm)}</Row>
       <Row label={t('evidence.rain')}>{mm(need.rainMm)}</Row>
       <Row label={t('evidence.net')}>{mm(need.netMm)}</Row>
 
-      <h4>{t('evidence.climate')} <Badge source={climate.source} /></h4>
+      <h4>{t('evidence.climate')} <SourceBadge id="power" /></h4>
       <Row label={t('evidence.frostFree')}>{climate.frostFreeDays} {t('units.days')}</Row>
       <Row label={t('evidence.seasonRain')}>{mm(climate.seasonRainMm)}</Row>
       <Row label={t('evidence.height')}>{fmtInt(climate.elevM, lang)} {t('units.m')}</Row>
       <Row label={t('evidence.years')}>{climate.window}</Row>
-      {rain && <Row label={t('evidence.rainData')}>{rain.window} <Badge source={rain.source} /></Row>}
+      {rain && <Row label={t('evidence.rainData')}>{rain.window} <SourceBadge id="imerg" /></Row>}
 
       {Object.keys(prices).length > 0 && <h4>{t('evidence.prices')}</h4>}
       {Object.entries(prices).map(([crop, p]) => (
