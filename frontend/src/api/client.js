@@ -33,6 +33,7 @@ async function request(path, body, { auth = true } = {}) {
 export const api = {
   register: (user) => request('/register', user, { auth: false }),
   login: (name, pin) => request('/login', { name, pin }, { auth: false }),
+  logout: () => request('/logout', {}), // the token stops working on the server too
   health: () => request('/health'),
   basin: (lat, lon) => request(`/basin?lat=${lat}&lon=${lon}`),
   hindcast: (basin) => request(`/hindcast?basin=${basin}`),

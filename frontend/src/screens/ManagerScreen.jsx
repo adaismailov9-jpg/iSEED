@@ -23,21 +23,27 @@ export default function ManagerScreen({ user, onSignOut }) {
     setError(err.code);
   }
 
-  // The canal saved on the server, if any.
+  // The canal saved on the server, if any, and its season signal (POST /manager answers with the signal).
   useEffect(() => {
-    api.myCanal().then((res) => setCanal(res.canal)).catch(fail).finally(() => setLoaded(true));
+    api.myCanal()
+      .then((res) => {
+        setCanal(res.canal);
+        if (res.canal) return api.manager(res.canal).then(setResult);
+      })
+      .catch(fail)
+      .finally(() => setLoaded(true));
   }, []);
 
-  // Its season signal (POST /manager also saves the canal).
-  useEffect(() => {
-    setResult(null);
-    if (canal) api.manager(canal).then(setResult).catch(fail);
-  }, [canal]);
-
-  function saveCanal(next) {
+  // Saved only when the server accepts it: on an error the form stays open with the message.
+  async function saveCanal(next) {
     setError(null);
-    setCanal(next);
-    setEditing(false);
+    try {
+      setResult(await api.manager(next));
+      setCanal(next);
+      setEditing(false);
+    } catch (err) {
+      fail(err);
+    }
   }
 
   if (!loaded) return <div className="screen"><p className="muted">{t('common.loading')}</p></div>;
@@ -189,11 +195,13 @@ function SeasonMessageForm({ user, villages, onError }) {
   const [text, setText] = useState('');
 
   useEffect(() => {
+    // GET /message answers for the village, possibly with another manager's message: show only his own.
     api.message(user.village).then((res) => {
-      setSent(res.message);
-      setText(res.message?.text ?? '');
+      const own = res.message?.manager === user.name ? res.message : null;
+      setSent(own);
+      setText(own?.text ?? '');
     }).catch(() => {});
-  }, [user.village]);
+  }, [user.village, user.name]);
 
   async function send(e) {
     e.preventDefault();

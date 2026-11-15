@@ -68,7 +68,7 @@ export default function App() {
     try {
       return await api.farmer(input);
     } catch (err) {
-      if (err.code === 'not_signed_in') signOut(); // the server forgot the session
+      if (err.code === 'not_signed_in') sessionEnded(); // the server forgot the session
       setError(err.code);
       return null;
     } finally {
@@ -105,9 +105,20 @@ export default function App() {
     setTab(TABS[next.user.role][0]);
   }
 
-  function signOut() {
+  // The session ran out: sign in again, the field and plans stay for the same person.
+  function sessionEnded() {
     rememberSession(null);
     setSession(null);
+  }
+
+  // The person signs out (the phone may be shared): end the token on the server and forget this account's field and plans.
+  function signOut() {
+    api.logout().catch(() => {}); // reads the token before it is cleared below
+    sessionEnded();
+    setPoints([]);
+    setAnswers(EMPTY_ANSWERS);
+    setPlans([]);
+    setOpenId(null);
   }
 
   function closeTour() {
@@ -172,7 +183,7 @@ export default function App() {
             goField={() => setTab('field')}
           />
         )}
-        {tab === 'canal' && <ManagerScreen user={user} onSignOut={signOut} />}
+        {tab === 'canal' && <ManagerScreen user={user} onSignOut={sessionEnded} />}
         {tab === 'about' && <AboutScreen basinId={place?.basin} role={user.role} />}
       </main>
       {tour && <Tour onClose={closeTour} />}

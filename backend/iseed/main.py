@@ -51,6 +51,18 @@ def need(body, key, allowed=None):
     return value
 
 
+def is_number(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def point_of(body):
+    """lat and lon as numbers on the globe, else 422."""
+    lat, lon = need(body, "lat"), need(body, "lon")
+    if not (is_number(lat) and is_number(lon) and -90 <= lat <= 90 and -180 <= lon <= 180):
+        raise ApiError(422, "bad_input", "'lat' and 'lon' must be numbers (degrees)")
+    return lat, lon
+
+
 def text_of(body, key):
     """A text value that is not blank once spaces are trimmed."""
     value = need(body, key)
@@ -161,13 +173,14 @@ def place(body, user=None):
     if body.get("geometry"):
         try:
             points = geo.ring_of(body["geometry"])
-            assert len(points) >= 3
+            assert len(points) >= 3 and all(is_number(a) and is_number(b) for a, b in points)
+            (lat, lon), area = geo.centroid(points), geo.area_ha(points)
+            point_of({"lat": lat, "lon": lon})
         except Exception:
-            raise ApiError(422, "bad_input", "'geometry' must be a GeoJSON Polygon with at least 3 corners")
-        (lat, lon), area = geo.centroid(points), geo.area_ha(points)
+            raise ApiError(422, "bad_input", "'geometry' must be a GeoJSON Polygon with at least 3 corners, in degrees")
     else:
-        lat, lon, area, points = need(body, "lat"), need(body, "lon"), need(body, "areaHa"), None
-    if not isinstance(area, (int, float)) or area <= 0:
+        (lat, lon), area, points = point_of(body), need(body, "areaHa"), None
+    if not is_number(area) or area <= 0:
         raise ApiError(422, "bad_input", "The field area must be above 0")
     site = site_at(points or [(lat, lon)])
     return {
@@ -338,15 +351,19 @@ def remove_field(field_id: int, authorization: str = Header(None)):
 def manager(body: dict, authorization: str = Header(None)):
     user = user_of(authorization, required=False)
     villages = need(body, "villages")
-    if not villages or any(not v.get("name") or not isinstance(v.get("ha"), (int, float)) or v["ha"] <= 0 for v in villages):
+    if not isinstance(villages, list) or not villages or any(
+            not isinstance(v, dict) or not isinstance(v.get("name"), str) or not v["name"].strip()
+            or not is_number(v.get("ha")) or v["ha"] <= 0 for v in villages):
         raise ApiError(422, "bad_input", "'villages' needs at least one {name, ha} with ha above 0")
     source = need(body, "source", ("gravity", "pump"))
     turns = need(body, "normalTurns")
+    if not isinstance(turns, int) or isinstance(turns, bool) or not 1 <= turns <= 60:
+        raise ApiError(422, "bad_input", "'normalTurns' must be a whole number from 1 to 60")
     main_crop = body.get("mainCrop", "beans")
     if main_crop not in engine.CROPS:
         raise ApiError(422, "bad_input", "'mainCrop' is not in the crop table")
-    lat, lon = need(body, "lat"), need(body, "lon")
-    basin_id = body.get("basin") or basin_at(lat, lon)
+    lat, lon = point_of(body)
+    basin_id = body.get("basin") if isinstance(body.get("basin"), str) else basin_at(lat, lon)
     snow_now = snow_for(basin_id)
     if not snow_now:
         raise ApiError(404, "no_basin", "This point is outside the river basins of Kyrgyzstan")
@@ -400,6 +417,8 @@ def message(village: str):
 def farmer(body: dict, authorization: str = Header(None)):
     user = user_of(authorization, required=False)
     field = place(body, user)
+    if not snow_for(field["basin"]):  # no snow signal outside the river basins: no options to price
+        raise ApiError(404, "no_basin", "This point is outside the river basins of Kyrgyzstan")
     plan = need(body, "plan", tuple(engine.CROPS))
     rain = rain_at(field["lat"], field["lon"])
     dry = dry_year(field["basin"])

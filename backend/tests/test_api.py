@@ -66,3 +66,26 @@ def test_manager_message_reaches_farmers_in_his_villages(api):
 def test_errors_are_code_and_message(api):
     assert api.post("/farmer", json={"lat": 42.5}).json()["code"] == "bad_input"
     assert api.get("/basin", params={"lat": 43.24, "lon": 76.9}).json()["code"] == "no_basin"  # Almaty
+
+
+def test_wrong_types_get_422_not_500(api):
+    canal = {"lat": 42.52, "lon": 72.3, "source": "gravity", "normalTurns": 6, "villages": [{"name": "Kök-Say", "ha": 120}]}
+    bad = [
+        ("/fields", {"lat": "42.5", "lon": 72.3, "areaHa": 1}),
+        ("/fields", {"lat": 999, "lon": 72.3, "areaHa": 1}),
+        ("/fields", {"geometry": {"type": "Polygon", "coordinates": [[["a", "b"], ["c", "d"], ["e", "f"], ["a", "b"]]]}}),
+        ("/farmer", {"lat": True, "lon": 72.3, "areaHa": 1, **ANSWERS}),
+        ("/manager", {**canal, "villages": "abc"}),
+        ("/manager", {**canal, "villages": [1]}),
+        ("/manager", {**canal, "normalTurns": "6"}),
+        ("/manager", {**canal, "lat": "42"}),
+    ]
+    for path, body in bad:
+        res = api.post(path, json=body)
+        assert res.status_code in (404, 422), (path, body, res.status_code)
+
+
+def test_farmer_outside_the_basins_is_no_basin(api):
+    """No snow signal there, so no options (the result screen needs snow)."""
+    res = api.post("/farmer", json={"lat": 43.5, "lon": 76.9, "areaHa": 1, **ANSWERS})
+    assert res.status_code == 404 and res.json()["code"] == "no_basin"
