@@ -50,5 +50,44 @@
     "region": "kyrgyzstan",
     "date": "2026-10-07",
     "source": "Yield: grain average 29.6 c/ha in 2025 (Kabar, 17 Nov 2025) to 30-40 c/ha in Manas district, Talas (economist.kg, 6 Jul 2026). Price: average retail price of feed wheat, early October 2026 (State Antimonopoly monitoring via economist.kg, 7 Oct 2026); farmers selling in bulk get less, so this is an upper bound"
+  },
+  "maize": {
+    "yield_t_ha": [
+      6.95,
+      6.95
+    ],
+    "price_som_kg": [
+      29.4,
+      29.4
+    ],
+    "region": "kyrgyzstan",
+    "date": "2026-10-07",
+    "source": "Yield: grain maize national average 69.5 c/ha, 2024 harvest (Ministry of Agriculture via economist.kg, 29 Oct 2024). Price: average retail price of maize, early October 2026 (State Antimonopoly monitoring via economist.kg, 7 Oct 2026); farmers selling in bulk get less, so this is an upper bound"
+  },
+  "barley": {
+    "yield_t_ha": [
+      1.83,
+      2.59
+    ],
+    "price_som_kg": [
+      20.8,
+      25.0
+    ],
+    "region": "kyrgyzstan",
+    "date": "2026-07-31",
+    "source": "Yield: national average 18.3 c/ha in 2025 (economist.kg, 26 Jan 2026) to 25.9 c/ha in 2024 (Ministry of Agriculture via economist.kg, 29 Oct 2024). Price: average producer price 20,849 som/t in July 2026 to 24,971 som/t in March 2026 (National Statistical Committee via zerno.ru)"
+  },
+  "safflower": {
+    "yield_t_ha": [
+      1.01,
+      1.09
+    ],
+    "price_som_kg": [
+      32,
+      34
+    ],
+    "region": "kyrgyzstan",
+    "date": "2025-02-06",
+    "source": "Yield: national average 10.1 c/ha in 2025 (Ministry of Agriculture via economist.kg, 28 Apr 2026) to 10.9 c/ha in 2024 (24.kg, 14 Jul 2025). Price: seed bought by a Chuy safflower-oil maker at 32-34 som/kg (economist.kg interview, 6 Feb 2025); 2026 sale ads ask 35-40 som/kg for cleaned seed"
   }
 }
